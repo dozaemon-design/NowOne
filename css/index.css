@@ -1,0 +1,48 @@
+main ul.movie_list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+  row-gap: 10px;
+  padding: 10px;
+}
+@media screen and (max-width: 768px) {
+  main ul.movie_list {
+    grid-template-columns: 1fr;
+  }
+}
+main ul.movie_list li iframe {
+  aspect-ratio: 16/9;
+}
+@media screen and (max-width: 768px) {
+  main ul.movie_list li {
+    max-width: 100%;
+  }
+  main ul.movie_list li iframe::-webkit-scrollbar {
+    display: none;
+  }
+}
+main ul.music_list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+  row-gap: 10px;
+  padding: 10px;
+}
+@media screen and (max-width: 768px) {
+  main ul.music_list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+main ul.music_list li iframe {
+  aspect-ratio: 16/9;
+}
+@media screen and (max-width: 768px) {
+  main ul.music_list li {
+    max-width: 100%;
+  }
+  main ul.music_list li iframe::-webkit-scrollbar {
+    display: none;
+  }
+}/*# sourceMappingURL=index.css.map */

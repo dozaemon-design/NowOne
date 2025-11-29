@@ -1,0 +1,135 @@
+@charset "UTF-8";
+/*** The new CSS reset - version 1.7.2 (last updated 23.6.2022) ***/
+*:where(:not(html,iframe,canvas,img,svg,video):not(svg*,symbol*)){all:unset;display:revert}*,*::before,*::after{box-sizing:border-box}
+a,button{cursor:revert}
+ol,ul,menu{list-style:none}
+img{max-width:100%}
+table{border-collapse:collapse}
+input,textarea{-webkit-user-select:auto}
+textarea{white-space:revert}
+meter{-webkit-appearance:revert;appearance:revert}::placeholder{color:unset}:where([hidden]){display:none}:where([contenteditable]:not([contenteditable="false"])){-moz-user-modify:read-write;-webkit-user-modify:read-write;overflow-wrap:break-word;-webkit-line-break:after-white-space;-webkit-user-select:auto}:where([draggable="true"]){-webkit-user-drag:element}
+
+/*追加*/
+body{
+  margin:0px ;
+}
+
+.clearfix:after,article:after,div:after,dl:after,figure:after,header:after,section:after,ul:after {
+  clear: both;
+  content: ".";
+  display: block;
+  font-size: 0;
+  height: 0;
+  visibility: hidden
+}
+
+.clearfix,article,div,dl figure,header,section,ul {
+  display: block
+}
+
+abbr,address,article,aside,audio,b,blockquote,body,caption,cite,code,dd,del,dfn,dialog,div,dl,dt,em,fieldset,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,p,pre,q,samp,section,small,span,strong,sub,sup,table,tbody,td,tfoot,th,thead,time,tr,ul,var,video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: top;
+  background: 0 0
+}
+
+body {
+  line-height: 1
+}
+
+aside,dialog,footer,hgroup,nav {
+  display: block
+}
+
+ul {
+  list-style: none
+}
+
+blockquote,q {
+  quotes: none
+}
+
+blockquote:after,blockquote:before,q:after,q:before {
+  content: none
+}
+
+a,hr {
+  border: 0;
+  padding: 0
+}
+
+a {
+  font-size: 100%;
+  vertical-align: baseline;
+  background: 0 0;
+  margin: 0
+}
+
+ins,mark {
+  background-color: #ff9;
+  color: #000
+}
+
+ins {
+  text-decoration: none
+}
+
+mark {
+  font-style: italic;
+  font-weight: 700
+}
+
+del {
+  text-decoration: line-through
+}
+
+abbr[title],dfn[title] {
+  border-bottom: 1px dotted #000;
+  cursor: help
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border-top: 1px solid #ccc;
+  margin: 1em 0
+}
+
+input,select {
+  vertical-align: middle
+}
+
+.clearfix:after,article:after,div:after,dl:after,figure:after,header:after,section:after,ul:after {
+  clear: both;
+  content: ".";
+  display: block;
+  font-size: 0;
+  height: 0;
+  visibility: hidden
+}
+
+dl,figure {
+  display: inline-block
+}
+
+* html .clearfix,* html article,* html div,* html dl,* html figure,* html header,* html section,* html ul {
+  height: 1%
+}
+
+.clearfix,article,div,dl figure,header,section,ul {
+  display: block
+}
+
+* {
+  -webkit-appearance: none;
+  border-radius: 0
+}
