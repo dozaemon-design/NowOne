@@ -1,9 +1,26 @@
-# 念のため全部除外してからテーマだけ管理
+# ─────────────────────────────
+# WordPress プロジェクト全体を除外して、
+# このテーマ（NowOne）だけを Git 管理する設定
+# ─────────────────────────────
+
+# まず一度すべて除外
 /*
+
+# 除外した中からテーマに必要なものだけ許可する
 !.gitignore
-!/functions.php
-!/style.css
+!.vscode/
 !/acf-json/
-!/assets/
-!/inc/
+!/css/
+!/font/
+!/images/
+!/js/
+!/scss/
+
+# PHP テンプレート類
 !/*.php
+
+# テーマの主要ファイル
+!/style.css
+!/README.md
+!/LICENSE
+!/screenshot.png
