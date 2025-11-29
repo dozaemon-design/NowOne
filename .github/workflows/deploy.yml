@@ -1,0 +1,44 @@
+name: Deploy WordPress Theme to Core-X
+
+on:
+  push:
+    branches:
+      - main  # main ブランチに push されたらデプロイ
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. リポジトリをチェックアウト
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. lftp をインストール（SFTP 転送用）
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      # 3. SSH キーをセットアップ（パスフレーズ付き対応）
+      - name: Setup SSH key
+        env:
+          PRIVATE_KEY: ${{ secrets.COREX_SFTP_PRIVATE_KEY }}
+          PASSPHRASE: ${{ secrets.COREX_SFTP_PASSPHRASE }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/id_rsa <<< "$PASSPHRASE"
+
+      # 4. Core-X にテーマを SFTP で同期
+      - name: Deploy theme via SFTP
+        env:
+          HOST: ${{ secrets.COREX_SFTP_HOST }}
+          USER: ${{ secrets.COREX_SFTP_USER }}
+          PORT: ${{ secrets.COREX_SFTP_PORT }}
+        run: |
+          lftp -e "
+            set sftp:auto-confirm yes
+            mirror -R --delete /domains/nowone.jp/public_html/wp-content/themes/nowone
+            bye
+          " -u $USER sftp://$HOST:$PORT
