@@ -28,14 +28,15 @@ jobs:
           echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           eval $(ssh-agent -s)
+          # パスフレーズ付き鍵を追加
           echo "$PASSPHRASE" | ssh-add ~/.ssh/id_rsa
 
       # 4. Core-X に WordPress テーマをデプロイ
       - name: Deploy theme via SFTP
         env:
-          HOST: ${{ secrets.COREX_SFTP_HOST }}
-          USER: ${{ secrets.COREX_SFTP_USER }}
-          PORT: ${{ secrets.COREX_SFTP_PORT }}
+          HOST: ${{ secrets.COREX_SFTP_HOST }}      # v2012.coreserver.jp
+          USER: ${{ secrets.COREX_SFTP_USER }}      # nowonestudio
+          PORT: ${{ secrets.COREX_SFTP_PORT }}      # 22
         run: |
           lftp -c "
             set sftp:auto-confirm yes
