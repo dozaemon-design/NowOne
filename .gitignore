@@ -15,6 +15,7 @@
 !/images/
 !/js/
 !/scss/
+!/.github/
 
 # PHP テンプレート類
 !/*.php
