@@ -1,0 +1,9 @@
+# 念のため全部除外してからテーマだけ管理
+/*
+!.gitignore
+!/functions.php
+!/style.css
+!/acf-json/
+!/assets/
+!/inc/
+!/*.php
