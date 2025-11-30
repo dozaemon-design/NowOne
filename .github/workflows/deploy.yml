@@ -3,42 +3,36 @@ name: Deploy WordPress Theme to Core-X
 on:
   push:
     branches:
-      - main   # main に push されたら自動デプロイ
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. リポジトリのチェックアウト
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. SSH の known_hosts を登録（Core-X 接続用）
-      - name: Add known hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -p ${{ secrets.COREX_SFTP_PORT }} ${{ secrets.COREX_SFTP_HOST }} >> ~/.ssh/known_hosts
-
-      # 3. scp-action によるデプロイ
-      - name: Deploy via SCP
-        uses: appleboy/scp-action@v0.1.6
+      - name: Secure copy to server
+        uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.COREX_SFTP_HOST }}          # SFTP ホスト（例：v2012.coreserver.jp）
-          username: ${{ secrets.COREX_SFTP_USER }}      # SFTP ユーザー名
-          port: ${{ secrets.COREX_SFTP_PORT }}          # ポート（例：22）
-          key: ${{ secrets.COREX_SFTP_PRIVATE_KEY }}    # SSH 秘密鍵
-          passphrase: ${{ secrets.COREX_SFTP_PASSPHRASE }} # 鍵パスフレーズ
-
-          # 送るファイル（テーマフォルダ）
-          source: "."
-
-          # Core-X 側のテーマの場所
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "./"
           target: "/home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/"
-
-          # 不要ファイルは削除（サーバーをローカルと同期）
           rm: true
           overwrite: true
+          strip_components: 0
 
-          # 転送ログを詳しく
+          # アップしないもの
+          exclude: |
+            .git*
+            .github/*
+            .vscode/*
+            README.md
+            deploy.yml
+
+          # 🔍 ログを詳細表示（任意）
           debug: true
