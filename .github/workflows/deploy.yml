@@ -1,5 +1,6 @@
 name: Deploy WordPress Theme to Core-X
 
+# main ブランチに push があったら自動実行
 on:
   push:
     branches:
@@ -10,28 +11,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. GitHub リポジトリをチェックアウト
+      # 1. リポジトリをチェックアウト
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. SCP でテーマをアップロード
-      - name: Deploy theme via SCP
-        uses: appleboy/scp-action@v0.1.7
+      # 2. SSH用の秘密鍵をセット
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.9.1
         with:
-          host: ${{ secrets.COREX_SFTP_HOST }}
-          username: ${{ secrets.COREX_SFTP_USER }}
-          key: ${{ secrets.COREX_SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.COREX_SSH_PASSPHRASE }}
-          port: ${{ secrets.COREX_SFTP_PORT }}
+          ssh-private-key: ${{ secrets.COREX_SSH_PRIVATE_KEY }}
 
-          # 📌 テーマフォルダだけアップロードする
-          source: "wp-content/themes/nowone/*"
-          target: "/home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/"
-
-          # 📌 rsync ではないので exclude の記法が違う
-          # SCP の exclude は「スペース区切り」で OK
-          exclude: ".git .github .gitignore README.md .DS_Store node_modules vendor"
-
-          rm: true        # 既存フォルダ削除（安全にクリーンアップ）
-          overwrite: true # 上書き
-          debug: true
+      # 3. rsync でテーマをアップロード
+      - name: Deploy theme via rsync
+        run: |
+          rsync -avz --delete \
+            --exclude ".git" \
+            --exclude ".github" \
+            --exclude ".gitignore" \
+            --exclude "README.md" \
+            --exclude ".DS_Store" \
+            --exclude "node_modules" \
+            --exclude "vendor" \
+            wp-content/themes/NowOne/ \
+            ${{ secrets.COREX_SFTP_USER }}@${{ secrets.COREX_SFTP_HOST }}:/home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/
