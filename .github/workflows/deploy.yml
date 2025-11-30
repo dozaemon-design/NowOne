@@ -1,6 +1,5 @@
 name: Deploy WordPress Theme to Core-X
 
-# main ブランチに push があったら自動実行
 on:
   push:
     branches:
@@ -11,22 +10,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. リポジトリをチェックアウト
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. SCPアクションで Core-X にテーマをアップロード
       - name: Deploy theme via SCP
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.COREX_SFTP_HOST }}
           username: ${{ secrets.COREX_SFTP_USER }}
           key: ${{ secrets.COREX_SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.COREX_SSH_PASSPHRASE }} # 鍵にパスワードがある場合のみ
+          passphrase: ${{ secrets.COREX_SSH_PASSPHRASE }}
           port: ${{ secrets.COREX_SFTP_PORT }}
-          source: "./*"
+
+          # リポジトリ直下のファイルをそのまま送る
+          source: "./"
+
+          # テーマのディレクトリ
           target: /home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/
-          rm: true                  # 既存ファイル削除
-          overwrite: true           # 上書き
-          strip_components: 3       # フォルダ階層の調整
-          debug: true               # 転送ログを詳しく出力
+
+          # rsync の除外設定（最重要）
+          args: >
+            -avz --delete
+            --exclude=".git/"
+            --exclude=".github/"
+            --exclude=".gitignore"
+            --exclude="README.md"
+            --exclude=".DS_Store"
+            --exclude="*/.DS_Store"
+            --exclude="._*"
+            --exclude="node_modules/"
+            --exclude="*.map"
+            --exclude="vendor/"
+
+          rm: true
+          overwrite: true
+
+          # 階層を削除しない（= 必ず 0）
+          strip_components: 0
+
+          debug: true
