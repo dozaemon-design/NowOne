@@ -13,26 +13,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Secure copy to server
+      - name: Upload theme via scp
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-          source: "./"
+
+          # ▶ これが重要！
+          source: "wp-content/themes/nowone/*"
           target: "/home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/"
+
           rm: true
           overwrite: true
-          strip_components: 0
+          strip_components: 3
 
-          # アップしないもの
-          exclude: |
-            .git*
-            .github/*
-            .vscode/*
-            README.md
-            deploy.yml
-
-          # 🔍 ログを詳細表示（任意）
           debug: true
