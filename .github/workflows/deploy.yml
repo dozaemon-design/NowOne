@@ -1,6 +1,5 @@
-name: Deploy WordPress Theme via rsync
+name: Deploy WordPress Theme to Core-X
 
-# main ブランチに push があったら自動実行
 on:
   push:
     branches:
@@ -15,13 +14,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. SSH鍵をセットアップ
+      # 2. SSH エージェントセットアップ
       - name: Setup SSH Key
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.COREX_SSH_PRIVATE_KEY }}
 
-      # 3. rsyncでサーバーにアップロード
+      # 3. サーバー公開鍵を known_hosts に追加
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.COREX_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+
+      # 4. rsync でテーマをデプロイ
       - name: Deploy theme via rsync
         run: |
           rsync -avz --delete \
@@ -36,4 +41,4 @@ jobs:
             --exclude='*.map' \
             --exclude='vendor/' \
             ./wp-content/themes/nowone/ \
-            ${{ secrets.COREX_SFTP_USER }}@${{ secrets.COREX_SFTP_HOST }}:/home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/
+            ${{ secrets.COREX_SSH_USER }}@${{ secrets.COREX_SSH_HOST }}:/home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/
