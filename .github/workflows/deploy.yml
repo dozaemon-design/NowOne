@@ -24,7 +24,7 @@ jobs:
           key: ${{ secrets.COREX_SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.COREX_SSH_PASSPHRASE }} # 鍵にパスワードがある場合のみ
           port: ${{ secrets.COREX_SFTP_PORT }}
-          source: wp-content/themes/nowone/*
+          source: "./*"
           target: /home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/
           rm: true                  # 既存ファイル削除
           overwrite: true           # 上書き
