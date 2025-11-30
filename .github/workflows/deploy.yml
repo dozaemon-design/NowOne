@@ -1,5 +1,6 @@
 name: Deploy WordPress Theme to Core-X
 
+# main ブランチに push があったら自動実行
 on:
   push:
     branches:
@@ -10,23 +11,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. リポジトリをチェックアウト
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Upload theme via scp
+      # 2. SCPアクションで Core-X にテーマをアップロード
+      - name: Deploy theme via SCP
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-
-          # ▶ これが重要！
-          source: "wp-content/themes/nowone/*"
-          target: "/home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/"
-
-          rm: true
-          overwrite: true
-          strip_components: 3
-
-          debug: true
+          host: ${{ secrets.COREX_SFTP_HOST }}
+          username: ${{ secrets.COREX_SFTP_USER }}
+          key: ${{ secrets.COREX_SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.COREX_SSH_PASSPHRASE }} # 鍵にパスワードがある場合のみ
+          port: ${{ secrets.COREX_SFTP_PORT }}
+          source: wp-content/themes/nowone/*
+          target: /home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/
+          rm: true                  # 既存ファイル削除
+          overwrite: true           # 上書き
+          strip_components: 3       # フォルダ階層の調整
+          debug: true               # 転送ログを詳しく出力
