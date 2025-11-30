@@ -10,9 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. GitHub リポジトリをチェックアウト
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2. SCP でテーマをアップロード
       - name: Deploy theme via SCP
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -22,30 +24,14 @@ jobs:
           passphrase: ${{ secrets.COREX_SSH_PASSPHRASE }}
           port: ${{ secrets.COREX_SFTP_PORT }}
 
-          # リポジトリ直下のファイルをそのまま送る
-          source: "./"
+          # 📌 テーマフォルダだけアップロードする
+          source: "wp-content/themes/nowone/*"
+          target: "/home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/"
 
-          # テーマのディレクトリ
-          target: /home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/
+          # 📌 rsync ではないので exclude の記法が違う
+          # SCP の exclude は「スペース区切り」で OK
+          exclude: ".git .github .gitignore README.md .DS_Store node_modules vendor"
 
-          # rsync の除外設定（最重要）
-          args: >
-            -avz --delete
-            --exclude=".git/"
-            --exclude=".github/"
-            --exclude=".gitignore"
-            --exclude="README.md"
-            --exclude=".DS_Store"
-            --exclude="*/.DS_Store"
-            --exclude="._*"
-            --exclude="node_modules/"
-            --exclude="*.map"
-            --exclude="vendor/"
-
-          rm: true
-          overwrite: true
-
-          # 階層を削除しない（= 必ず 0）
-          strip_components: 0
-
+          rm: true        # 既存フォルダ削除（安全にクリーンアップ）
+          overwrite: true # 上書き
           debug: true
