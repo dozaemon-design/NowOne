@@ -24,7 +24,7 @@ jobs:
       - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.COREX_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+          ssh-keyscan ${{ secrets.COREX_SSH_HOST }} >> ~/.ssh/known_hosts
 
       # 4. rsync でテーマをデプロイ
       - name: Deploy theme via rsync
