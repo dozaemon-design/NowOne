@@ -40,5 +40,5 @@ jobs:
             --exclude='node_modules/' \
             --exclude='*.map' \
             --exclude='vendor/' \
-            ./wp-content/themes/nowone/ \
+            ./ \
             ${{ secrets.COREX_SSH_USER }}@${{ secrets.COREX_SSH_HOST }}:/home/nowonestudio/domains/nowone.jp/public_html/wp-content/themes/nowone/
