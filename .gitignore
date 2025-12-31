@@ -5,16 +5,15 @@
 
 # まず一度すべて除外
 /*
-
+/.DS_Store
 # 除外した中からテーマに必要なものだけ許可する
 !.gitignore
 !.vscode/
 !/acf-json/
 !/css/
 !/font/
-!/images/
-!/js/
-!/scss/
+!/assets/
+!/inc/
 !/.github/
 !/template-parts/
 
