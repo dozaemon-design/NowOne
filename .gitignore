@@ -16,6 +16,7 @@
 !/js/
 !/scss/
 !/.github/
+!/template-parts/
 
 # PHP テンプレート類
 !/*.php
