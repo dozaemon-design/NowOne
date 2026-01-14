@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * DOM取得
    * ===================================================== */
   const toggle = document.querySelector('.c-menu-toggle');
-  const nav = document.querySelector('.p-global-nav');
+  const nav = document.querySelector('.c-global-nav');
   const body = document.body;
 
   // ナビが存在しないページでは何もしない

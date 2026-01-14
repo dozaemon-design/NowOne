@@ -25,29 +25,79 @@ function nowone_enqueue_assets() {
 	/* =========================
 	 * JS
 	 * ========================= */
-	wp_enqueue_script(
+	wp_enqueue_script( // jQuery Easing JS
 		'nowone-easing',
 		get_template_directory_uri() . '/assets/js/lib/jquery.easing.1.3.js',
 		array('jquery'),
 		filemtime(get_template_directory() . '/assets/js/lib/jquery.easing.1.3.js'),
 		true
 	);
-
+	// Splitting.js
 	wp_enqueue_script(
+		'splitting',
+		get_template_directory_uri() . '/assets/js/vendor/splitting.min.js',
+		[],
+		'1.0.6',
+		true
+	);
+	// Splitting用CSS
+	wp_enqueue_style(
+		'splitting',
+		get_template_directory_uri() . '/assets/css/vendor/splitting.css'
+	);
+	// Home text用JS
+	wp_enqueue_script(
+		'home-text',
+		get_template_directory_uri() . '/assets/js/creation/production/home-text.js',
+		['splitting'],
+		null,
+		true
+	);
+	wp_enqueue_script( // Base JS
 		'nowone-base',
 		get_template_directory_uri() . '/assets/js/base.js',
 		array('jquery'),
 		filemtime(get_template_directory() . '/assets/js/base.js'),
 		true
 	);
-	wp_enqueue_script(
+	wp_enqueue_script( // Global Navigation JS
 		'nowone-global-nav',
-		get_template_directory_uri() . '/assets/js/component/global-nav.js',
+		get_template_directory_uri() . '/assets/js/creation/component/global-nav.js',
 		array('jquery'),
-		filemtime(get_template_directory() . '/assets/js/component/global-nav.js'),
+		filemtime(get_template_directory() . '/assets/js/creation/component/global-nav.js'),
 		true
 	);
-}
+	wp_enqueue_script( // YouTube embed JS
+		'nowone-youtube',
+		get_template_directory_uri() . '/assets/js/creation/component/youtube.js',
+		array('jquery'),
+		filemtime(get_template_directory() . '/assets/js/creation/component/youtube.js'),
+		true
+	);
+	if (is_front_page()) { //トップページのみ読み込み
+		wp_enqueue_script(
+			'nowone-home',
+			get_template_directory_uri() . '/assets/js/creation/production/home.js',
+			['jquery'],
+			filemtime(get_template_directory() . '/assets/js/creation/production/home.js'),
+			true
+		);
+	}
+	wp_enqueue_script( // list animation JS
+		'nowone-reveal',
+		get_template_directory_uri() . '/assets/js/creation/component/reveal.js',
+		array('jquery'),
+		filemtime(get_template_directory() . '/assets/js/creation/component/reveal.js'),
+		true
+	);
+	wp_enqueue_script( // list animation JS
+		'nowone-header',
+		get_template_directory_uri() . '/assets/js/creation/component/header.js',
+		array('jquery'),
+		filemtime(get_template_directory() . '/assets/js/creation/component/header.js'),
+		true
+	);
+} //end
 add_action('wp_enqueue_scripts', 'nowone_enqueue_assets');
 
 

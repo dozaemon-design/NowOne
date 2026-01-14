@@ -1,3 +1,4 @@
+</div><!-- l-wrap end -->
 <footer class="l-footer c-footer">
   <div class="l-footer__inner">
 

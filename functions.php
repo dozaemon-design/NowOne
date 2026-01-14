@@ -4,6 +4,7 @@
  */
 $inc_files = [
     'acf.php',
+    'helpers-image.php',
     'post-types.php',
     'seed.php',
     'image-sizes.php',
@@ -23,23 +24,65 @@ foreach ($inc_files as $file) {
  * Enable title tag support
  */
 add_theme_support('title-tag');
+
 /**
- * Generate meta description
+ * Generate meta description (NowOne final)
  */
 function nowone_meta_description() {
+
+  // フロント
   if (is_front_page()) {
-    return 'NowOneのDTM制作、Web制作公式サイト';
+    return 'NowOneの公式サイト。音楽・映像・デザイン制作。';
   }
-  if (is_singular()) {
-    return get_the_excerpt();
+
+  // singular（ACF前提）
+  if (is_singular('creation')) {
+    $post_id = get_queried_object_id();
+    if (!$post_id) {
+      return '';
+    }
+
+    // ① ACF 明示指定
+    if (function_exists('get_field')) {
+      $acf_meta = get_field('creation_meta_description', $post_id);
+      if (!empty($acf_meta)) {
+        return wp_strip_all_tags($acf_meta);
+      }
+    }
+
+    // ② fallback：タイトル + tax
+    $title = get_the_title($post_id);
+    $terms = wp_get_post_terms($post_id, 'creation_type');
+    $suffix = (!empty($terms) && !is_wp_error($terms)) ? $terms[0]->name : '';
+
+    return trim($title . '｜' . $suffix . '｜NowOne');
   }
+
+  // taxonomy
+  if (is_tax() || is_category() || is_tag()) {
+    $term = get_queried_object();
+    if (!empty($term->description)) {
+      return wp_strip_all_tags($term->description);
+    }
+    return $term->name . '一覧｜NowOne';
+  }
+
   return get_bloginfo('description');
 }
 
 /**
- * Enable site icon support
+ * favicon support
  */
-add_theme_support('site-icon');
+add_action('wp_head', function () {
+  $dir = get_template_directory_uri() . '/assets/img/common/favicon';
+
+  echo <<<HTML
+<link rel="icon" href="{$dir}/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="{$dir}/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="{$dir}/apple-touch-icon.png">
+<link rel="manifest" href="{$dir}/site.webmanifest">
+HTML;
+});
 
 /**
  * 現在のグローバルナビ判定
@@ -48,18 +91,19 @@ add_theme_support('site-icon');
  * @return bool
  */
 function nowone_is_current_nav($type) {
-
-  // HOME
   if ($type === 'home') {
-    return is_front_page();
+    return is_front_page() || is_home();
   }
 
-  // creation_type 判定
-  if (is_post_type_archive('creation') || is_singular('creation')) {
-    return get_query_var('creation_type') === $type;
-  }
+  $request = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+  $segments = explode('/', $request);
 
-  return false;
+  return isset($segments[0]) && $segments[0] === $type;
+}
+
+function nowone_get_current_segment() {
+  $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+  return explode('/', $path)[0] ?? '';
 }
 
 /**
@@ -155,4 +199,67 @@ add_action('init', function () {
         status_header(404);
         exit;
     }
+});
+
+/* --------------------------------
+ * YouTube動画ID取得
+ * -------------------------------- */
+function nowone_get_youtube_id($url) {
+  if (!$url) return '';
+
+  // youtu.be/xxxx
+  if (preg_match('~youtu\.be/([^\?&]+)~', $url, $m)) {
+    return $m[1];
+  }
+
+  // youtube.com/watch?v=xxxx
+  if (preg_match('~v=([^\?&]+)~', $url, $m)) {
+    return $m[1];
+  }
+
+  return '';
+}
+
+/* --------------------------------
+ * Sitemap 不要URL削除 inc/seo.phpに移動させること。
+ * アクセスは/wp-sitemap.xmlにアクセスする。
+ * -------------------------------- */
+// author削除
+add_filter( 'wp_sitemaps_add_provider', function( $provider, $name ) {
+	if ( $name === 'users' ) {
+		return false;
+	}
+	return $provider;
+}, 10, 2 );
+// portfolio 投稿削除
+add_filter( 'wp_sitemaps_post_types', function( $post_types ) {
+	unset( $post_types['portfolio'] );
+	return $post_types;
+});
+
+/**
+ * portfolio_genre を sitemap から除外
+ */
+add_filter('wp_sitemaps_taxonomies', function ($taxonomies) {
+  unset($taxonomies['portfolio_genre']);
+  return $taxonomies;
+});
+
+
+// add_filter('get_the_archive_description', function ($description) {
+//   if (is_tax('creation_type')) {
+//     $term = get_queried_object();
+//     return 'NowOneの' . $term->name . '作品一覧。音楽・映像作品を掲載しています。';
+//   }
+//   return $description;
+// });
+
+add_action('wp_head', function () {
+  if (is_tax()) {
+    $term = get_queried_object();
+    if ($term && !is_wp_error($term)) {
+      $desc = 'NowOneの' . esc_html($term->name) . '作品一覧ページ。';
+      echo '<meta name="description" content="' . esc_attr($desc) . '">' . "\n";
+    }
+  }
 });

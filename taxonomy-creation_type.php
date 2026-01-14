@@ -5,21 +5,18 @@ $term = get_queried_object();
 $type = $term->slug;
 ?>
 
-<main class="l-main p-creation-archive p-creation-archive--<?php echo esc_attr($type); ?>">
-
-  <header class="p-creation-archive__header">
-    <h1 class="c-heading c-heading--primary">
-      <?php single_term_title(); ?>
-    </h1>
-  </header>
-
-  <?php
-  get_template_part(
-    'template-parts/creation/archive/archive',
-    $type
-  );
-  ?>
-
+<main class="l-main">
+  <section class="l-content l-content--inline">
+      <h1 class="c-heading-2xl">
+        <?php single_term_title(); ?> - Discography
+      </h1>
+      <?php
+      get_template_part(
+        'template-parts/creation/archive/archive',
+        $type
+      );
+      ?>
+  </section>
 </main>
-
+</div> <?php //div end ?>
 <?php get_footer(); ?>

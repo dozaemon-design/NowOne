@@ -28,9 +28,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>
 <?php endif; ?>
 <!-- End Google Tag Manager (noscript) -->
 
-<div class="l-main">
+<div class="l-wrap">
 <!-- aria属性改訂版 -->
-<header class="l-header c-global-nav">
+<header class="l-header">
 	<div class="l-header__inner">
 		<!-- ロゴ -->
 		<div class="c-site-logo">
@@ -50,10 +50,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>
 			<!-- グローバルナビ -->
 			<nav
 				id="global-nav"
-				class="c-global-nav p-global-nav"
+				class="l-global-nav c-global-nav"
 				aria-hidden="true"
 			>
-				<?php get_template_part('template-parts/creation/global-nav'); ?>
+				<?php get_template_part('template-parts/creation/component/global-nav'); ?>
 			</nav>
 	</div>
 

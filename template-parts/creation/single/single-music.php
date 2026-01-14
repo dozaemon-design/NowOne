@@ -5,50 +5,127 @@
 
 $title = get_the_title();
 
-$detail_image = get_field('creation_thumbnail'); // 統一
-$bpm  = get_field('music_bpm');
-$key  = get_field('music_key');
-$time = get_field('music_time');
-$url  = get_field('music_url');
-$desc = get_field('music_description');
+// ACF（生データ）
+$music = get_field('music_fields'); // ACFグループ化フィールド取得
+$img = get_creation_image('detail', 'creation_detail');
+// メイン画像 inc/helpers-image.phpより取得
+$composer  = $music['music_composer'] ?? ''; // 作曲者 musicのみ使用
+$bpm  = get_field('music_bpm'); // 再生時間 musicのみ使用
+$key  = get_field('music_key'); // 再生時間 musicのみ使用
+$time = get_field('music_time'); // 再生時間 musicのみ使用
+$desc = get_field('creation_description'); // 共通フィールドの説明文の取得
+$video_id = nowone_get_youtube_id( //youtubeの動画IDを取得
+	$music['music_youtube_link'] ?? ''
+);
+$tc_url = $music['music_tunecore_link'] ?? ''; // TuneCoreリンク取得
+$spotify_url = $music['music_spotify_link'] ?? ''; // Spotifyリンク取得
+$apple_url = $music['music_applemusic_link'] ?? ''; // Apple Musicリンク取得
+
+$has_streaming =
+	$tc_url || $spotify_url || $apple_url;
 ?>
-<!-- SINGLE MUSIC TEMPLATE LOADED -->
-<section class="p-music">
 
-  <?php if ($detail_image && isset($detail_image['sizes']['creation_detail'])): ?>
-    <figure class="p-music__hero">
-      <img
-        src="<?php echo esc_url($detail_image['sizes']['creation_detail']); ?>"
-        alt="<?php echo esc_attr($detail_image['alt'] ?: $title); ?>"
-        loading="lazy"
-      >
-    </figure>
-  <?php endif; ?>
+<article class="c-single-music p-creation-single">
+	<?php if ($img): ?>
+		<figure class="p-creation-single__img">
+			<?= render_creation_picture($img, 'single', true); ?>
+		</figure>
+	<?php endif; ?>
 
-  <h1 class="c-heading c-heading--primary">
-    <?php echo esc_html($title); ?>
-  </h1>
+	<article class="l-content l-content--inline">
+			<h1>
+				<?php echo esc_html($title); ?>
+			</h1>
+			<?php if ($composer || $bpm || $key || $time):  //作曲者,bpm,コード,再生時間があれば ?>
+				<ul class="l-cluster c-single-music__labels ">
+					<?php if ($composer): ?>
+						<li class="c-single-music__label">Composer：<?php echo esc_html($composer); ?></li>
+					<?php endif; ?>
+					<?php if ($bpm): ?>
+						<li class="c-single-music__label">BPM：<?php echo esc_html($bpm); ?></li>
+						<?php endif; ?>
+					<?php if ($key): ?><li class="c-single-music__label">Key：<?php echo esc_html($key); ?></li>
+						<?php endif; ?>
+					<?php if ($time): ?><li class="c-single-music__label">Time：<?php echo esc_html($time); ?></li><?php endif; ?>
+				</ul>
+			<?php endif; ?>
+			<?php if ($desc): //共通の説明文があれば ?>
+				<div class="c-text c-single-music__text">
+					<?php echo wp_kses_post($desc); ?>
+				</div>
+			<?php endif; ?>
+			<?php if ($video_id): //youtubeの動画があれば ?>
+				<h3 class="c-media-badge c-media-badge--youtube">
+					<img src="<?= get_template_directory_uri(); ?>/assets/img/creation/single/youtube.svg" alt="YouTube icon">
+					<span class="c-media-badge__title">YouTube</span>
+				</h3>
+				<div
+					class="c-video js-youtube"
+					data-video-id="<?= esc_attr($video_id); ?>"
+				>
+				<img
+					src="https://img.youtube.com/vi/<?= esc_attr($video_id); ?>/hqdefault.jpg"
+					srcset="
+						https://img.youtube.com/vi/<?= esc_attr($video_id); ?>/mqdefault.jpg 320w,
+						https://img.youtube.com/vi/<?= esc_attr($video_id); ?>/hqdefault.jpg 480w,
+						https://img.youtube.com/vi/<?= esc_attr($video_id); ?>/maxresdefault.jpg 1280w
+					"
+					sizes="(max-width: 768px) 100vw, 800px"
+					alt="<?= esc_attr($title); ?> のサムネイル"
+					loading="lazy"
+					decoding="async"
+				>
+			<?php endif; ?>
+			<?php if ($has_streaming): ?>
+				<h3 class="c-media-badge c-media-badge--streaming">
+					<img
+						src="<?= get_template_directory_uri(); ?>/assets/img/creation/single/icon_streaming.svg"
+						alt="Streaming Icon"
+						width="100%"
+						height="auto"
+					>
+					<span class="c-media-badge__title">
+						Streaming Playback – <?= esc_html($title); ?>
+					</span>
+				</h3>
+				<ul class="c-streaming-card c-streaming-card--streaming">
+					<?php if ($tc_url): ?>
+					<li class="c-streaming-card__item">
+						<a class="c-streaming-card--tunecore" href="<?= esc_url($tc_url); ?>" target="_blank" rel="noopener">
+							<figure class="c-streaming-card__img c-streaming-card__img--logo">
+								<img src="<?= get_template_directory_uri(); ?>/assets/img/creation/single/tunecore.svg" alt="TuneCore" width="100%" height="auto">
+							</figure>
+						</a>
+					</li>
+					<?php endif; ?>
+					<?php if ($spotify_url): ?>
+					<li class="c-streaming-card__item">
+						<a class="c-streaming-card--spotify" href="<?= esc_url($spotify_url); ?>" target="_blank" rel="noopener">
+							<figure class="c-streaming-card__img c-streaming-card__img--logo">
+								<img src="<?= get_template_directory_uri(); ?>/assets/img/creation/single/spotify.svg" alt="Spotify" width="100%" height="auto">
+							</figure>
+						</a>
+					</li>
+					<?php endif; ?>
+					<?php if ($apple_url): ?>
+					<li class="c-streaming-card__item">
+						<a class="c-streaming-card--applemusic" href="<?= esc_url($apple_url); ?>" target="_blank" rel="noopener">
+							<figure class="c-streaming-card__img c-streaming-card__img--logo">
+								<img src="<?= get_template_directory_uri(); ?>/assets/img/creation/single/apple-music.svg" alt="Apple Music" width="100%" height="auto">
+							</figure>
+						</a>
+					</li>
+					<?php endif; ?>
+				</ul>
+			<?php endif; ?>
+		<?php
+		// var_dump($music);
+		?>
+	</article>
+</article>
 
-  <?php if ($bpm || $key || $time): ?>
-    <ul class="p-music__meta c-text">
-      <?php if ($bpm): ?><li>BPM: <?php echo esc_html($bpm); ?></li><?php endif; ?>
-      <?php if ($key): ?><li>Key: <?php echo esc_html($key); ?></li><?php endif; ?>
-      <?php if ($time): ?><li>Time: <?php echo esc_html($time); ?></li><?php endif; ?>
-    </ul>
-  <?php endif; ?>
-
-  <?php if ($desc): ?>
-    <div class="p-music__description c-text">
-      <?php echo wp_kses_post($desc); ?>
-    </div>
-  <?php endif; ?>
-
-  <?php if ($url): ?>
-    <p class="p-music__link">
-      <a href="<?php echo esc_url($url); ?>" target="_blank" rel="noopener">
-        Listen
-      </a>
-    </p>
-  <?php endif; ?>
-
-</section>
+<?php
+// echo '<pre>';
+// var_dump(get_fields());
+// echo '</pre>';
+		?>

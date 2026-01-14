@@ -21,20 +21,7 @@ add_filter('acf/settings/load_json', function ($paths) {
  * ACF hooks
  */
 
-/**
- * creation_type_ui → creation_type taxonomy 同期
- */
-// add_action('acf/save_post', function ($post_id) {
 
-//     if (get_post_type($post_id) !== 'creation') return;
-//     if (wp_is_post_revision($post_id)) return;
-
-//     $type = get_field('creation_type_ui', $post_id);
-//     if (!$type) return;
-
-//     wp_set_object_terms($post_id, $type, 'creation_type', false);
-
-// }, 20);
 add_action('acf/save_post', function ($post_id) {
 
     if (get_post_type($post_id) !== 'creation') return;

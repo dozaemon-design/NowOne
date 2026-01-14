@@ -1,7 +1,9 @@
 <?php
 /**
  * Archive Creation
- */
+ * 保険のアーカイブテンプレート
+ * taxonomy-creation_type.phpが入口となる
+*/
 
 get_header();
 
@@ -10,7 +12,7 @@ $term = get_queried_object();
 $type = ($term && isset($term->slug)) ? $term->slug : 'default';
 ?>
 
-<main class="l-main p-creation-archive p-creation-archive--<?php echo esc_attr($type); ?>">
+<main class="l-content p-creation-archive p-creation-archive--<?php echo esc_attr($type); ?>">
 
   <?php
   /**

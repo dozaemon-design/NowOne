@@ -178,3 +178,28 @@ function nowone_register_portfolio_genre_taxonomy() {
     ]);
 }
 add_action('init', 'nowone_register_portfolio_genre_taxonomy');
+
+
+/* --------------------------------
+ * taxonomyジャンル追加時変更必須（内容は自動同期）
+ * -------------------------------- */
+add_action('save_post_creation', function ($post_id) {
+
+    if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
+        return;
+    }
+
+    $map = [
+        'genre_music'   => 'music',
+        'genre_movie'   => 'movie',
+        'genre_artwork' => 'artwork',
+    ];
+
+    foreach ($map as $genre_tax => $type_slug) {
+        if (has_term('', $genre_tax, $post_id)) {
+            wp_set_object_terms($post_id, $type_slug, 'creation_type', false);
+            return; // ★ 1つ決まったら終了（前提：1作品1タイプ）
+        }
+    }
+
+}, 10, 1);

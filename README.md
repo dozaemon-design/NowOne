@@ -75,6 +75,19 @@ disabled  :disabled   作らない
 	•	movie_fields（条件：creation_type_ui == movie）
 	•	artwork_fields（条件：creation_type_ui == artwork）
 
+# Creation 拡張手順
+## Creation Type 自動同期
+
+creation_type は管理画面では選択しない。
+genre_* taxonomy に基づいて自動付与される。
+
+### 追加方法
+- genre taxonomy を追加
+- post-types.php の $map に1行追加
+
+例：
+'genre_music' => 'music'
+
 # Portfolio 拡張手順
 全体方針
 	•	Portfolio は 1 CPT で一元管理
@@ -140,3 +153,22 @@ theme/
   Portfolio を作る時の判断基準（重要）
 	•	Creation と思想が同じ → 統合
 	•	表示・入力・責務が違う → post_type 分離
+
+
+	foundation/
+├─ _reset.scss          // ブラウザ差異を消す（最小・安全）
+├─ _base.scss           // html, body, 基本要素の初期状態
+├─ _space.scss          // space scale（余白の正規値）
+├─ _typography.scss     // font-size / line-height scale
+├─ _breakpoints.scss    // メディアクエリ用の「値」
+├─ _z-index.scss        // 任意（レイヤー管理）
+└─ index.scss           // ↑を集約
+
+
+layout/
+├─ _stack.scss     // 縦に積む
+├─ _cluster.scss   // 横並び＋折り返し
+├─ _switcher.scss  // 一定幅で縦横切替
+├─ _center.scss    // 横中央寄せ
+├─ _cover.scss     // ヘッダー＋メイン＋フッター
+└─ index.scss

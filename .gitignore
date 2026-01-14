@@ -1,26 +1,32 @@
 # ─────────────────────────────
-# WordPress プロジェクト全体を除外して、
-# このテーマ（NowOne）だけを Git 管理する設定
+# WordPress プロジェクト全体を除外
+# テーマ（NowOne）のみを Git 管理
 # ─────────────────────────────
 
-# まず一度すべて除外
+# まず全部除外
 /*
-/.DS_Store
-# 除外した中からテーマに必要なものだけ許可する
+
+# macOS ゴミは絶対に除外
+.DS_Store
+**/.DS_Store
+.AppleDouble
+.LSOverride
+# 必要なものだけ許可
 !.gitignore
 !.vscode/
+!/.github/
+
 !/acf-json/
 !/css/
 !/font/
 !/assets/
 !/inc/
-!/.github/
 !/template-parts/
 
-# PHP テンプレート類
+# PHP テンプレート
 !/*.php
 
-# テーマの主要ファイル
+# テーマ主要ファイル
 !/style.css
 !/README.md
 !/LICENSE
