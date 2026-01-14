@@ -12,6 +12,7 @@
 
 # .AppleDouble .LSOverride対策
 ._*
+**/._*
 
 # 必要なものだけ許可
 !.gitignore
@@ -23,9 +24,15 @@
 !/acf-json/
 !/css/
 !/font/
+# assets 配下すべて許可
 !/assets/
+!/assets/**
+# inc 配下すべて許可
 !/inc/
+!/inc/**
+# template-parts 配下すべて許可
 !/template-parts/
+!/template-parts/**
 
 # PHP テンプレート
 !/*.php
