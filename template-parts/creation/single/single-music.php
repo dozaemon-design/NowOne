@@ -10,9 +10,9 @@ $music = get_field('music_fields'); // ACFグループ化フィールド取得
 $img = get_creation_image('detail', 'creation_detail');
 // メイン画像 inc/helpers-image.phpより取得
 $composer  = $music['music_composer'] ?? ''; // 作曲者 musicのみ使用
-$bpm  = get_field('music_bpm'); // 再生時間 musicのみ使用
-$key  = get_field('music_key'); // 再生時間 musicのみ使用
-$time = get_field('music_time'); // 再生時間 musicのみ使用
+$bpm  = $music['music_bpm'] ?? ''; // 再生時間 musicのみ使用
+$music_key  = $music['music_key'] ?? ''; // 再生時間 musicのみ使用 keyはphp内部で関数があるので使わない事。
+$time = $music['music_length'] ?? ''; // 再生時間 musicのみ使用
 $desc = get_field('creation_description'); // 共通フィールドの説明文の取得
 $video_id = nowone_get_youtube_id( //youtubeの動画IDを取得
 	$music['music_youtube_link'] ?? ''
@@ -36,7 +36,7 @@ $has_streaming =
 			<h1>
 				<?php echo esc_html($title); ?>
 			</h1>
-			<?php if ($composer || $bpm || $key || $time):  //作曲者,bpm,コード,再生時間があれば ?>
+			<?php if ($composer || $bpm || $music_key || $time):  //作曲者,bpm,コード,再生時間があれば ?>
 				<ul class="l-cluster c-single-music__labels ">
 					<?php if ($composer): ?>
 						<li class="c-single-music__label">Composer：<?php echo esc_html($composer); ?></li>
@@ -44,7 +44,7 @@ $has_streaming =
 					<?php if ($bpm): ?>
 						<li class="c-single-music__label">BPM：<?php echo esc_html($bpm); ?></li>
 						<?php endif; ?>
-					<?php if ($key): ?><li class="c-single-music__label">Key：<?php echo esc_html($key); ?></li>
+					<?php if ($music_key): ?><li class="c-single-music__label">Key：<?php echo esc_html($music_key); ?></li>
 						<?php endif; ?>
 					<?php if ($time): ?><li class="c-single-music__label">Time：<?php echo esc_html($time); ?></li><?php endif; ?>
 				</ul>
@@ -75,6 +75,7 @@ $has_streaming =
 					loading="lazy"
 					decoding="async"
 				>
+			</div>
 			<?php endif; ?>
 			<?php if ($has_streaming): ?>
 				<h3 class="c-media-badge c-media-badge--streaming">
@@ -118,14 +119,11 @@ $has_streaming =
 					<?php endif; ?>
 				</ul>
 			<?php endif; ?>
-		<?php
-		// var_dump($music);
-		?>
 	</article>
 </article>
 
-<?php
+		<?php
 // echo '<pre>';
-// var_dump(get_fields());
+// var_dump($music);
 // echo '</pre>';
 		?>
