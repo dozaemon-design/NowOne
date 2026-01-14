@@ -9,10 +9,14 @@
 # macOS ゴミは絶対に除外
 .DS_Store
 **/.DS_Store
-.AppleDouble
-.LSOverride
+
+# .AppleDouble .LSOverride対策
+._*
+
 # 必要なものだけ許可
 !.gitignore
+
+# VSCode
 !.vscode/
 !/.github/
 
