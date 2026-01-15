@@ -19,3 +19,9 @@ $image = has_post_thumbnail()
 <meta property="og:description" content="<?php echo esc_attr($description); ?>">
 <meta property="og:url" content="<?php echo esc_url($url); ?>">
 <meta property="og:image" content="<?php echo esc_url($image); ?>">
+
+<!-- Xcard対応 -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<?php echo esc_attr($title); ?>">
+<meta name="twitter:description" content="<?php echo esc_attr($description); ?>">
+<meta name="twitter:image" content="<?php echo esc_url($image); ?>">
