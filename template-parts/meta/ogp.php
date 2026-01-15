@@ -11,7 +11,7 @@ $url = is_front_page()
 
 $image = has_post_thumbnail()
   ? get_the_post_thumbnail_url(null, 'full')
-  : get_template_directory_uri() . '/assets/img/common/ogp.png';
+  : get_template_directory_uri() . '/assets/img/common/ogp/ogp.png';
 ?>
 
 <meta property="og:type" content="<?php echo is_front_page() ? 'website' : 'article'; ?>">
