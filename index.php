@@ -72,6 +72,3 @@ $creations = new WP_Query($args);
 </main>
 
 <?php get_footer(); ?>
-
-<?php
-echo __DIR__;
