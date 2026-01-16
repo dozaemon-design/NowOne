@@ -65,11 +65,13 @@ $creations = new WP_Query($args);
 //   taxonomy_exists('creation_type'),
 //   is_object_in_taxonomy('creation', 'creation_type')
 // );
-<?php
-echo __DIR__;
+
 ?>
     </section>
 
 </main>
 
 <?php get_footer(); ?>
+
+<?php
+echo __DIR__;
