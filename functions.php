@@ -121,7 +121,21 @@ function nowone_get_current_segment() {
  * - rewrite は最小限・明示的
  * ==================================================
  */
+add_action('init', function () {
+  add_rewrite_rule(
+    '^music/([^/]+)/?$',
+    'index.php?post_type=creation&name=$matches[1]',
+    'bottom'
+  );
+}, 20);
 
+add_action('init', function () {
+  add_rewrite_rule(
+    '^music/?$',
+    'index.php?creation_type=music',
+    'bottom'
+  );
+}, 20);
 
 /**
  * ----------------------------------
