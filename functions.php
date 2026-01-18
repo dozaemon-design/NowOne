@@ -107,59 +107,115 @@ function nowone_get_current_segment() {
 }
 
 /**
- * Creation Single パーマリンク構造のカスタマイズ
+ *rewrith 設計
+*/
+
+
+/**
+ * ==================================================
+ * Creation パーマリンク設計（最終凍結版）
+ *
+ * 方針：
+ * - 固定ページと絶対に衝突させない
+ * - /creation/ 以下を完全な名前空間とする
+ * - rewrite は最小限・明示的
+ * ==================================================
+ */
+
+
+/**
+ * ----------------------------------
+ * Creation Single URL 生成
+ * /creation/music/slug/
+ * ----------------------------------
  */
 add_filter('post_type_link', function ($link, $post) {
-    if ($post->post_type !== 'creation') return $link;
 
-    $terms = get_the_terms($post->ID, 'creation_type');
-    if (empty($terms) || is_wp_error($terms)) return $link;
+  // creation 以外は触らない
+  if ($post->post_type !== 'creation') {
+    return $link;
+  }
 
-    return home_url('/' . $terms[0]->slug . '/' . $post->post_name . '/');
+  // creation_type ターム取得
+  $terms = get_the_terms($post->ID, 'creation_type');
+
+  // タームが無い場合はデフォルト挙動
+  if (empty($terms) || is_wp_error($terms)) {
+    return $link;
+  }
+
+  return home_url(
+    '/creation/' . $terms[0]->slug . '/' . $post->post_name . '/'
+  );
+
 }, 10, 2);
 
 
 /**
- * Creation Single 用のリライトルール追加
+ * ----------------------------------
+ * Creation Single rewrite
+ * /creation/music/slug/
+ * ----------------------------------
  */
 add_action('init', function () {
 
-    // /music/slug/ → creation の single
-    add_rewrite_rule(
-        '^(music|movie|artwork)/([^/]+)/?$',
-        'index.php?post_type=creation&name=$matches[2]',
-        'top'
-    );
+  add_rewrite_rule(
+    '^creation/(music|movie|artwork)/([^/]+)/?$',
+    'index.php?post_type=creation&name=$matches[2]',
+    'top'
+  );
 
 });
+
 
 /**
- * Creation アーカイブ パーマリンク構造のカスタマイズ
+ * ----------------------------------
+ * Creation Type Archive rewrite
+ * /creation/music/
+ * ----------------------------------
  */
-
-add_filter('term_link', function ($url, $term, $taxonomy) {
-    if ($taxonomy === 'creation_type') {
-        return home_url('/' . $term->slug . '/');
-    }
-    return $url;
-}, 10, 3);
 add_action('init', function () {
 
-  $reserved = [
-    'about',
-    'blog',
-    'contact',
-    'privacy',
-    'wp-admin',
-    'wp-login.php',
-  ];
+  add_rewrite_rule(
+    '^creation/(music|movie|artwork)/?$',
+    'index.php?creation_type=$matches[1]',
+    'top'
+  );
 
-  // add_rewrite_rule(  // creation_type 専用（music / movie / artwork のみ ※コンテンツ追加時は忘れないこと。 ）
-  //   '^(?!' . implode('|', $reserved) . ')(music|movie|artwork)/?$',
-  //   'index.php?creation_type=$matches[1]',
-  //   'top'
-  // );
 });
+
+
+/**
+ * ----------------------------------
+ * creation_type タームリンク生成
+ * ----------------------------------
+ */
+add_filter('term_link', function ($url, $term, $taxonomy) {
+
+  if ($taxonomy !== 'creation_type') {
+    return $url;
+  }
+
+  return home_url('/creation/' . $term->slug . '/');
+
+}, 10, 3);
+
+
+/**
+ * ----------------------------------
+ * 注意事項（重要）
+ *
+ * - 固定ページ（about / contact 等）は
+ *   WordPress 標準の rewrite に完全委譲
+ *
+ * - この設計では
+ *   /music/ や /about/ に rewrite を
+ *   一切割り込ませない
+ *
+ * - rewrite 変更後は必ず
+ *   「パーマリンク設定の保存」を行うこと
+ * ----------------------------------
+ */
 
 
 /* --------------------------------
