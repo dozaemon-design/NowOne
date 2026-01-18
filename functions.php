@@ -129,26 +129,26 @@ function nowone_get_current_segment() {
  * /creation/music/slug/
  * ----------------------------------
  */
-add_filter('post_type_link', function ($link, $post) {
+// add_filter('post_type_link', function ($link, $post) {
 
-  // creation 以外は触らない
-  if ($post->post_type !== 'creation') {
-    return $link;
-  }
+//   // creation 以外は触らない
+//   if ($post->post_type !== 'creation') {
+//     return $link;
+//   }
 
-  // creation_type ターム取得
-  $terms = get_the_terms($post->ID, 'creation_type');
+//   // creation_type ターム取得
+//   $terms = get_the_terms($post->ID, 'creation_type');
 
-  // タームが無い場合はデフォルト挙動
-  if (empty($terms) || is_wp_error($terms)) {
-    return $link;
-  }
+//   // タームが無い場合はデフォルト挙動
+//   if (empty($terms) || is_wp_error($terms)) {
+//     return $link;
+//   }
 
-  return home_url(
-    '/creation/' . $terms[0]->slug . '/' . $post->post_name . '/'
-  );
+//   return home_url(
+//     '/creation/' . $terms[0]->slug . '/' . $post->post_name . '/'
+//   );
 
-}, 10, 2);
+// }, 10, 2);
 
 
 /**
@@ -157,15 +157,15 @@ add_filter('post_type_link', function ($link, $post) {
  * /creation/music/slug/
  * ----------------------------------
  */
-add_action('init', function () {
+// add_action('init', function () {
 
-  add_rewrite_rule(
-    '^creation/(music|movie|artwork)/([^/]+)/?$',
-    'index.php?post_type=creation&name=$matches[2]',
-    'top'
-  );
+//   add_rewrite_rule(
+//     '^creation/(music|movie|artwork)/([^/]+)/?$',
+//     'index.php?post_type=creation&name=$matches[2]',
+//     'top'
+//   );
 
-});
+// });
 
 
 /**
@@ -174,15 +174,15 @@ add_action('init', function () {
  * /creation/music/
  * ----------------------------------
  */
-add_action('init', function () {
+// add_action('init', function () {
 
-  add_rewrite_rule(
-    '^creation/(music|movie|artwork)/?$',
-    'index.php?creation_type=$matches[1]',
-    'top'
-  );
+//   add_rewrite_rule(
+//     '^creation/(music|movie|artwork)/?$',
+//     'index.php?creation_type=$matches[1]',
+//     'top'
+//   );
 
-});
+// });
 
 
 /**
@@ -190,15 +190,15 @@ add_action('init', function () {
  * creation_type タームリンク生成
  * ----------------------------------
  */
-add_filter('term_link', function ($url, $term, $taxonomy) {
+// add_filter('term_link', function ($url, $term, $taxonomy) {
 
-  if ($taxonomy !== 'creation_type') {
-    return $url;
-  }
+//   if ($taxonomy !== 'creation_type') {
+//     return $url;
+//   }
 
-  return home_url('/creation/' . $term->slug . '/');
+//   return home_url('/creation/' . $term->slug . '/');
 
-}, 10, 3);
+// }, 10, 3);
 
 
 /**
