@@ -278,6 +278,6 @@ add_action('wp_head', function () {
 //////////////////
 // Caution 緊急用
 //////////////////
-add_action('init', function () {
-  flush_rewrite_rules();
-});
+// add_action('init', function () {
+//   flush_rewrite_rules();
+// });
