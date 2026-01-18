@@ -58,6 +58,7 @@
   <p class="c-text">作品がまだありません。</p>
 <?php endif; ?>
 
+
 <?php
 // var_dump(is_post_type_archive('movie'));
 ?>
