@@ -143,18 +143,23 @@ add_filter('term_link', function ($url, $term, $taxonomy) {
     }
     return $url;
 }, 10, 3);
-/**
- * Creation アーカイブページのリダイレクト
- */
-
 add_action('init', function () {
-    add_rewrite_rule(
-        '^([^/]+)/?$',
-        'index.php?creation_type=$matches[1]',
-        'top'
-    );
-});
 
+  $reserved = [
+    'about',
+    'blog',
+    'contact',
+    'privacy',
+    'wp-admin',
+    'wp-login.php',
+  ];
+
+  add_rewrite_rule(  // creation_type 専用（music / movie / artwork のみ ※コンテンツ追加時は忘れないこと。 ）
+    '^(?!' . implode('|', $reserved) . ')(music|movie|artwork)/?$',
+    'index.php?creation_type=$matches[1]',
+    'top'
+  );
+});
 
 /* --------------------------------
  * WordPress バージョン非表示
