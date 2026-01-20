@@ -308,3 +308,9 @@ add_action('wp_head', function () {
 // add_action('init', function () {
 //   flush_rewrite_rules();
 // });
+
+add_action('init', function () {
+  if (is_admin()) {
+    flush_rewrite_rules();
+  }
+});
