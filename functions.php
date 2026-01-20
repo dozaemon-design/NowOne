@@ -225,6 +225,20 @@ add_action('init', function () {
 });
 
 /* --------------------------------
+ * 未ログイン wp-admin 制限（安全版）
+ * -------------------------------- */
+add_action('admin_init', function () {
+
+  if (
+    !is_user_logged_in()
+    && !wp_doing_ajax()
+  ) {
+    auth_redirect(); // wp-login.php に正規遷移
+  }
+
+});
+
+/* --------------------------------
  * YouTube動画ID取得
  * -------------------------------- */
 function nowone_get_youtube_id($url) {
