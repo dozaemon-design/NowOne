@@ -191,25 +191,26 @@ add_filter('xmlrpc_enabled', '__return_false');
 /* --------------------------------
  * 未ログイン管理画面アクセス禁止
  * -------------------------------- */
-add_action('init', function () {
-  if (is_admin() && !is_user_logged_in() && !defined('DOING_AJAX')) {
-    wp_safe_redirect(home_url());
-    exit;
-  }
-});
+// add_action('init', function () {
+//   if (is_admin() && !is_user_logged_in() && !defined('DOING_AJAX')) {
+//     wp_safe_redirect(home_url());
+//     exit;
+//   }
+// });
 
 /* --------------------------------
  * 未ログイン wp-admin 直アクセス 404
  * -------------------------------- */
-// add_action('init', function () {
-//     if (
-//         !is_user_logged_in()
-//         && strpos($_SERVER['REQUEST_URI'], '/wp-admin') !== false
-//     ) {
-//         status_header(404);
-//         exit;
-//     }
-// });
+add_action('init', function () {
+    if (
+        !is_user_logged_in()
+        && strpos($_SERVER['REQUEST_URI'], '/wp-admin') !== false
+        && strpos($_SERVER['REQUEST_URI'], 'wp-login.php') === false
+    ) {
+        wp_safe_redirect(home_url('/404'));
+        exit;
+    }
+});
 
 /* --------------------------------
  * YouTube動画ID取得
