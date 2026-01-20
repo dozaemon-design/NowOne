@@ -309,8 +309,9 @@ add_action('wp_head', function () {
 //   flush_rewrite_rules();
 // });
 
-add_action('init', function () {
-  if (is_admin()) {
-    flush_rewrite_rules();
-  }
-});
+// rewriteが効かなかったらDBが拾ってない可能性有り。下記をオンにしてDB確認する。phpMyAdminでは隠れてるので全部表示で確認すること。
+// add_action('init', function () {
+//   if (is_admin()) {
+//     flush_rewrite_rules();
+//   }
+// });
