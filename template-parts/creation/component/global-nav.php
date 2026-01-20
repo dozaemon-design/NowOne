@@ -20,12 +20,12 @@ $nav_items = [
     'icon' => 'icon_movie.svg',
     'alt'  => 'Movie Icon',
   ],
-  // 'about' => [
-  //   'url' => '/about/',
-  //   'label' => 'ABOUT',
-  //   'icon' => 'icon_about.svg',
-  //   'alt'  => 'about Icon',
-  // ],
+  'about' => [
+    'url' => '/about/',
+    'label' => 'ABOUT',
+    'icon' => 'icon_about.svg',
+    'alt'  => 'about Icon',
+  ],
 ];
 ?>
 
