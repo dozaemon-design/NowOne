@@ -107,7 +107,7 @@ function nowone_get_current_segment() {
 }
 
 /**
- *rewrith 設計
+ *rewrite 設計
 */
 
 /**
@@ -201,15 +201,15 @@ add_action('init', function () {
 /* --------------------------------
  * 未ログイン wp-admin 直アクセス 404
  * -------------------------------- */
-add_action('init', function () {
-    if (
-        !is_user_logged_in()
-        && strpos($_SERVER['REQUEST_URI'], '/wp-admin') !== false
-    ) {
-        status_header(404);
-        exit;
-    }
-});
+// add_action('init', function () {
+//     if (
+//         !is_user_logged_in()
+//         && strpos($_SERVER['REQUEST_URI'], '/wp-admin') !== false
+//     ) {
+//         status_header(404);
+//         exit;
+//     }
+// });
 
 /* --------------------------------
  * YouTube動画ID取得
