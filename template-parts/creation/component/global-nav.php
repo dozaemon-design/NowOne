@@ -26,6 +26,12 @@ $nav_items = [
     'icon' => 'icon_about.svg',
     'alt'  => 'about Icon',
   ],
+    'contact' => [
+    'url' => '/contact/',
+    'label' => 'CONTACT',
+    'icon' => 'icon_contact.svg',
+    'alt'  => 'contact Icon',
+  ],
 ];
 ?>
 

@@ -97,6 +97,15 @@ function nowone_enqueue_assets() {
 		filemtime(get_template_directory() . '/assets/js/creation/component/header.js'),
 		true
 	);
+	if (is_page('contact')) { // お問い合わせのみ読み込み
+		wp_enqueue_script(
+			'contact-form',
+			get_theme_file_uri('/assets/js/creation/component/contact.js'),
+			[],
+			null,
+			true
+		);
+	};
 } //end
 add_action('wp_enqueue_scripts', 'nowone_enqueue_assets');
 
