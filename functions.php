@@ -178,9 +178,10 @@ add_filter('the_generator', '__return_empty_string');
 /* CSS / JS の ?ver= をハッシュ化（セキュリティ強化 + キャッシュバスティング両立） */
 function nowone_hash_ver_param($src) {
   if (strpos($src, '?ver=')) {
-    preg_match('/?ver=(\d+)/', $src, $matches);
+    // プラグイン含め、あらゆる ver パラメータ値に対応
+    preg_match('/?ver=([^&"]+)/', $src, $matches);
     if (!empty($matches[1])) {
-      // filemtime の値をハッシュ化して隠す（最初の8文字）
+      // そのファイルのバージョン値を個別にハッシュ化（ファイルごと異なる値）
       $hashed_ver = md5($matches[1]);
       $hashed_ver = substr($hashed_ver, 0, 8);
       
@@ -193,6 +194,28 @@ function nowone_hash_ver_param($src) {
 }
 add_filter('style_loader_src', 'nowone_hash_ver_param', 9999);
 add_filter('script_loader_src', 'nowone_hash_ver_param', 9999);
+
+/* HTML 出力時に全ての ?ver= パラメータをハッシュ化（プラグイン漏れ対策） */
+add_action('template_redirect', function () {
+  // テンプレート読み込みが決定したら出力バッファを開始
+  ob_start(function ($html) {
+    return preg_replace_callback(
+      '/\?ver=([^&"\'\s]+)/',
+      function ($matches) {
+        $hashed = substr(md5($matches[1]), 0, 8);
+        return '?v=' . $hashed;
+      },
+      $html
+    );
+  });
+}, 9);
+
+add_action('shutdown', function () {
+  // ページの最後に出力バッファを確定
+  if (ob_get_level() > 0) {
+    ob_end_flush();
+  }
+});
 
 
 /* --------------------------------
