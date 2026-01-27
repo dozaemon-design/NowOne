@@ -25,7 +25,7 @@ $has_streaming =
 	$tc_url || $spotify_url || $apple_url;
 ?>
 
-<article class="c-single-music p-creation-single">
+<article class="c-single-creation p-creation-single">
 	<?php if ($img): ?>
 		<figure class="p-creation-single__img">
 			<?= render_creation_picture($img, 'single', true); ?>
@@ -37,20 +37,20 @@ $has_streaming =
 				<?php echo esc_html($title); ?>
 			</h1>
 			<?php if ($composer || $bpm || $music_key || $time):  //作曲者,bpm,コード,再生時間があれば ?>
-				<ul class="l-cluster c-single-music__labels ">
+				<ul class="l-cluster c-single-creation__labels ">
 					<?php if ($composer): ?>
-						<li class="c-single-music__label">Composer：<?php echo esc_html($composer); ?></li>
+						<li class="c-single-creation__label">Composer：<?php echo esc_html($composer); ?></li>
 					<?php endif; ?>
 					<?php if ($bpm): ?>
-						<li class="c-single-music__label">BPM：<?php echo esc_html($bpm); ?></li>
+						<li class="c-single-creation__label">BPM：<?php echo esc_html($bpm); ?></li>
 						<?php endif; ?>
-					<?php if ($music_key): ?><li class="c-single-music__label">Key：<?php echo esc_html($music_key); ?></li>
+					<?php if ($music_key): ?><li class="c-single-creation__label">Key：<?php echo esc_html($music_key); ?></li>
 						<?php endif; ?>
-					<?php if ($time): ?><li class="c-single-music__label">Time：<?php echo esc_html($time); ?></li><?php endif; ?>
+					<?php if ($time): ?><li class="c-single-creation__label">Time：<?php echo esc_html($time); ?></li><?php endif; ?>
 				</ul>
 			<?php endif; ?>
 			<?php if ($desc): //共通の説明文があれば ?>
-				<div class="c-text c-single-music__text">
+				<div class="c-text c-single-creation__text">
 					<?php echo wp_kses_post($desc); ?>
 				</div>
 			<?php endif; ?>

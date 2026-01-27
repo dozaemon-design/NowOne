@@ -14,7 +14,7 @@ $length  = $movie['movie_length'] ?? '';
 
 ?>
 
-<article class="c-single-movie p-creation-single">
+<article class="c-single-creation p-creation-single">
 
 <?php if ($video_id): ?>
   <div class="c-video js-youtube" data-video-id="<?= esc_attr($video_id); ?>">
@@ -26,21 +26,21 @@ $length  = $movie['movie_length'] ?? '';
 	>
   </div>
 <?php endif; ?>
-<div class="l-center c-single-movie__cautionary-note">画像をタップで再生されます</div>
+<div class="l-center c-single-creation__cautionary-note">画像をタップで再生されます</div>
 <article class="l-content l-content--inline">
 		<h1><?= esc_html($title); ?></h1>
 		<?php if ($dir || $length):  //director,再生時間があれば ?>
-			<ul class="l-cluster c-single-movie__labels">
+			<ul class="l-cluster c-single-creation__labels">
 				<?php if ($dir): ?>
-				<li class="c-single-movie__label">Director：<?= esc_html($dir); ?></li>
+				<li class="c-single-creation__label">Director：<?= esc_html($dir); ?></li>
 				<?php endif; ?>
 				<?php if ($length): ?>
-				<li class="c-single-movie__label">Length：<?= esc_html($length); ?></li>
+				<li class="c-single-creation__label">Length：<?= esc_html($length); ?></li>
 				<?php endif; ?>
 			</ul>
 		<?php endif; ?>
 		  <?php if ($desc): ?>
-		<div class="c-text c-single-movie__text"><?= wp_kses_post($desc); ?></div>
+		<div class="c-text c-single-creation__text"><?= wp_kses_post($desc); ?></div>
 		  <?php endif; ?>
 	</article>
 </article>
