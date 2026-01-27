@@ -13,10 +13,7 @@ function nowone_enqueue_assets() {
 	$app_css_path = get_template_directory() . '/assets/css/app.css';
 	$app_css_version = filemtime($app_css_path);
 	
-	// 画面に出力（デバッグ用）
-	echo "<!-- Debug: app.css path = " . $app_css_path . " -->";
-	echo "<!-- Debug: filemtime = " . var_export($app_css_version, true) . " -->";
-	
+
 	// ファイルが存在しない場合のフォールバック
 	if ($app_css_version === false) {
 		error_log('Warning: app.css not found at ' . $app_css_path);
