@@ -8,11 +8,26 @@ function nowone_enqueue_assets() {
 	/* =========================
 	 * CSS
 	 * ========================= */
+	
+	// デバッグ：filemtime が機能しているか確認
+	$app_css_path = get_template_directory() . '/assets/css/app.css';
+	$app_css_version = filemtime($app_css_path);
+	
+	// 画面に出力（デバッグ用）
+	echo "<!-- Debug: app.css path = " . $app_css_path . " -->";
+	echo "<!-- Debug: filemtime = " . var_export($app_css_version, true) . " -->";
+	
+	// ファイルが存在しない場合のフォールバック
+	if ($app_css_version === false) {
+		error_log('Warning: app.css not found at ' . $app_css_path);
+		$app_css_version = null; // null を指定すると ver パラメータが付かない
+	}
+	
 	wp_enqueue_style(
 		'nowone-app',
 		get_template_directory_uri() . '/assets/css/app.css',
 		array(),
-		filemtime(get_template_directory() . '/assets/css/app.css'),
+		$app_css_version,
 		'all'
 	);
 
@@ -37,20 +52,22 @@ function nowone_enqueue_assets() {
 		'splitting',
 		get_template_directory_uri() . '/assets/js/vendor/splitting.min.js',
 		[],
-		'1.0.6',
+		filemtime(get_template_directory() . '/assets/js/vendor/splitting.min.js'),
 		true
 	);
 	// Splitting用CSS
 	wp_enqueue_style(
 		'splitting',
-		get_template_directory_uri() . '/assets/css/vendor/splitting.css'
+		get_template_directory_uri() . '/assets/css/vendor/splitting.css',
+		[],
+		filemtime(get_template_directory() . '/assets/css/vendor/splitting.css')
 	);
 	// Home text用JS
 	wp_enqueue_script(
 		'home-text',
 		get_template_directory_uri() . '/assets/js/creation/production/home-text.js',
 		['splitting'],
-		null,
+		filemtime(get_template_directory() . '/assets/js/creation/production/home-text.js'),
 		true
 	);
 	wp_enqueue_script( // Base JS
@@ -102,7 +119,7 @@ function nowone_enqueue_assets() {
 			'contact-form',
 			get_theme_file_uri('/assets/js/creation/component/contact.js'),
 			[],
-			null,
+			filemtime(get_template_directory() . '/assets/js/creation/component/contact.js'),
 			true
 		);
 	};
@@ -132,7 +149,7 @@ add_action('wp_enqueue_scripts', 'nowone_enqueue_assets');
         'nowone-admin',
         get_template_directory_uri() . '/assets/js/admin.js',
         ['jquery'],
-        null,
+        filemtime(get_template_directory() . '/assets/js/admin.js'),
         true
 				);
 		}
