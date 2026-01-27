@@ -2,6 +2,9 @@
 /**
  * Theme bootstrap
  */
+// テーマ全体のバージョン定義（style.css の更新時刻を基準）
+define('NOWONE_THEME_VERSION', filemtime(get_template_directory() . '/style.css'));
+
 $inc_files = [
     'acf.php',
     'helpers-image.php',
@@ -172,15 +175,24 @@ add_action('init', function () {
 remove_action('wp_head', 'wp_generator');
 add_filter('the_generator', '__return_empty_string');
 
-/* CSS / JS の ?ver= を削除 */
-function nowone_remove_ver_param($src) {
+/* CSS / JS の ?ver= をハッシュ化（セキュリティ強化 + キャッシュバスティング両立） */
+function nowone_hash_ver_param($src) {
   if (strpos($src, '?ver=')) {
-    $src = remove_query_arg('ver', $src);
+    preg_match('/?ver=(\d+)/', $src, $matches);
+    if (!empty($matches[1])) {
+      // filemtime の値をハッシュ化して隠す（最初の8文字）
+      $hashed_ver = md5($matches[1]);
+      $hashed_ver = substr($hashed_ver, 0, 8);
+      
+      // ver パラメータを削除してから、ハッシュ化した値を追加
+      $src = remove_query_arg('ver', $src);
+      $src = add_query_arg('v', $hashed_ver, $src);
+    }
   }
   return $src;
 }
-add_filter('style_loader_src', 'nowone_remove_ver_param', 9999);
-add_filter('script_loader_src', 'nowone_remove_ver_param', 9999);
+add_filter('style_loader_src', 'nowone_hash_ver_param', 9999);
+add_filter('script_loader_src', 'nowone_hash_ver_param', 9999);
 
 
 /* --------------------------------

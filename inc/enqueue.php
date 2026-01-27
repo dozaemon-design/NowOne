@@ -9,22 +9,11 @@ function nowone_enqueue_assets() {
 	 * CSS
 	 * ========================= */
 	
-	// デバッグ：filemtime が機能しているか確認
-	$app_css_path = get_template_directory() . '/assets/css/app.css';
-	$app_css_version = filemtime($app_css_path);
-	
-
-	// ファイルが存在しない場合のフォールバック
-	if ($app_css_version === false) {
-		error_log('Warning: app.css not found at ' . $app_css_path);
-		$app_css_version = null; // null を指定すると ver パラメータが付かない
-	}
-	
 	wp_enqueue_style(
 		'nowone-app',
 		get_template_directory_uri() . '/assets/css/app.css',
 		array(),
-		$app_css_version,
+		NOWONE_THEME_VERSION,
 		'all'
 	);
 
@@ -41,7 +30,7 @@ function nowone_enqueue_assets() {
 		'nowone-easing',
 		get_template_directory_uri() . '/assets/js/lib/jquery.easing.1.3.js',
 		array('jquery'),
-		filemtime(get_template_directory() . '/assets/js/lib/jquery.easing.1.3.js'),
+		NOWONE_THEME_VERSION,
 		true
 	);
 	// Splitting.js
@@ -49,7 +38,7 @@ function nowone_enqueue_assets() {
 		'splitting',
 		get_template_directory_uri() . '/assets/js/vendor/splitting.min.js',
 		[],
-		filemtime(get_template_directory() . '/assets/js/vendor/splitting.min.js'),
+		NOWONE_THEME_VERSION,
 		true
 	);
 	// Splitting用CSS
@@ -57,35 +46,35 @@ function nowone_enqueue_assets() {
 		'splitting',
 		get_template_directory_uri() . '/assets/css/vendor/splitting.css',
 		[],
-		filemtime(get_template_directory() . '/assets/css/vendor/splitting.css')
+		NOWONE_THEME_VERSION
 	);
 	// Home text用JS
 	wp_enqueue_script(
 		'home-text',
 		get_template_directory_uri() . '/assets/js/creation/production/home-text.js',
 		['splitting'],
-		filemtime(get_template_directory() . '/assets/js/creation/production/home-text.js'),
+		NOWONE_THEME_VERSION,
 		true
 	);
 	wp_enqueue_script( // Base JS
 		'nowone-base',
 		get_template_directory_uri() . '/assets/js/base.js',
 		array('jquery'),
-		filemtime(get_template_directory() . '/assets/js/base.js'),
+		NOWONE_THEME_VERSION,
 		true
 	);
 	wp_enqueue_script( // Global Navigation JS
 		'nowone-global-nav',
 		get_template_directory_uri() . '/assets/js/creation/component/global-nav.js',
 		array('jquery'),
-		filemtime(get_template_directory() . '/assets/js/creation/component/global-nav.js'),
+		NOWONE_THEME_VERSION,
 		true
 	);
 	wp_enqueue_script( // YouTube embed JS
 		'nowone-youtube',
 		get_template_directory_uri() . '/assets/js/creation/component/youtube.js',
 		array('jquery'),
-		filemtime(get_template_directory() . '/assets/js/creation/component/youtube.js'),
+		NOWONE_THEME_VERSION,
 		true
 	);
 	if (is_front_page()) { //トップページのみ読み込み
@@ -93,7 +82,7 @@ function nowone_enqueue_assets() {
 			'nowone-home',
 			get_template_directory_uri() . '/assets/js/creation/production/home.js',
 			['jquery'],
-			filemtime(get_template_directory() . '/assets/js/creation/production/home.js'),
+			NOWONE_THEME_VERSION,
 			true
 		);
 	}
@@ -101,14 +90,14 @@ function nowone_enqueue_assets() {
 		'nowone-reveal',
 		get_template_directory_uri() . '/assets/js/creation/component/reveal.js',
 		array('jquery'),
-		filemtime(get_template_directory() . '/assets/js/creation/component/reveal.js'),
+		NOWONE_THEME_VERSION,
 		true
 	);
 	wp_enqueue_script( // list animation JS
 		'nowone-header',
 		get_template_directory_uri() . '/assets/js/creation/component/header.js',
 		array('jquery'),
-		filemtime(get_template_directory() . '/assets/js/creation/component/header.js'),
+		NOWONE_THEME_VERSION,
 		true
 	);
 	if (is_page('contact')) { // お問い合わせのみ読み込み
@@ -116,7 +105,7 @@ function nowone_enqueue_assets() {
 			'contact-form',
 			get_theme_file_uri('/assets/js/creation/component/contact.js'),
 			[],
-			filemtime(get_template_directory() . '/assets/js/creation/component/contact.js'),
+			NOWONE_THEME_VERSION,
 			true
 		);
 	};
@@ -132,7 +121,7 @@ add_action('wp_enqueue_scripts', 'nowone_enqueue_assets');
 			'nowone-admin',
 			get_template_directory_uri() . '/assets/css/admin.css',
 			[],
-			filemtime(get_template_directory() . '/assets/css/admin.css')
+			NOWONE_THEME_VERSION
 		);
 	});
 	/* =========================
@@ -146,7 +135,7 @@ add_action('wp_enqueue_scripts', 'nowone_enqueue_assets');
         'nowone-admin',
         get_template_directory_uri() . '/assets/js/admin.js',
         ['jquery'],
-        filemtime(get_template_directory() . '/assets/js/admin.js'),
+        NOWONE_THEME_VERSION,
         true
 				);
 		}
