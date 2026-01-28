@@ -20,7 +20,8 @@ $type = ($term && isset($term->slug)) ? $term->slug : 'default';
    */
   get_template_part(
     'template-parts/creation/archive/archive',
-    $type
+    $type,
+    ['type' => $type]
   );
   ?>
 
