@@ -386,8 +386,8 @@
                 },
                 {
                     "key": "field_6978754d612bc",
-                    "label": "artwork_druft_title",
-                    "name": "artwork_druft_title",
+                    "label": "artwork_druft_line_title",
+                    "name": "artwork_druft_line_title",
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
@@ -407,8 +407,55 @@
                 },
                 {
                     "key": "field_69787c49f839b",
-                    "label": "artwork_druft_img",
-                    "name": "artwork_druft_img",
+                    "label": "artwork_druft_line_img",
+                    "name": "artwork_druft_line_img",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "allow_in_bindings": 0,
+                    "preview_size": "medium"
+                },
+                {
+                    "key": "field_697b0192253af",
+                    "label": "artwork_druft_paint_title",
+                    "name": "artwork_druft_paint_title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_697b01b8253b0",
+                    "label": "artwork_druft_paint_img",
+                    "name": "artwork_druft_paint_img",
                     "aria-label": "",
                     "type": "image",
                     "instructions": "",
@@ -659,5 +706,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "modified": 1769503923
+    "modified": 1769669097
 }
