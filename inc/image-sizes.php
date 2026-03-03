@@ -40,12 +40,23 @@ add_image_size(
 /**
  * シングルページ用メイン画像
  * hero / detail view
- */
+*/
 add_image_size(
   'creation_detail',
   1980,
   1080,
   false
+  );
+
+/**
+ * 一覧・カード用（4:3）
+ * portfolio / card / list
+ */
+add_image_size(
+  'portfolio_thumb',
+  768,
+  576,
+  ['center', 'top'] // 横は中央、縦は上基準でトリミング（下側を削る）
 );
 
 /**
@@ -86,6 +97,7 @@ add_filter(
       [
         'creation_thumb'  => true,
         'creation_detail' => true,
+        'portfolio_thumb' => true,
         'popup_thumb'     => true,
       ]
     );

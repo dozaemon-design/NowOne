@@ -14,6 +14,8 @@ $inc_files = [
     'admin.php',
     'admin-columns.php',
     'enqueue.php',
+    'portfolio-access.php',
+    'admin-access.php',
 ];
 
 foreach ($inc_files as $file) {
@@ -108,6 +110,69 @@ function nowone_get_current_segment() {
   $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
   return explode('/', $path)[0] ?? '';
 }
+
+function nowone_get_portfolio_profile_post_id() {
+  static $cached = null;
+
+  if ($cached !== null) {
+    return $cached;
+  }
+
+  $post = get_page_by_path('profile', OBJECT, 'portfolio');
+  $cached = ($post && !is_wp_error($post)) ? (int) $post->ID : 0;
+  return $cached;
+}
+
+/**
+ * Portfolio 固定ページ（/portfolio-pages/ 配下）のテンプレート解決
+ *
+ * /portfolio/ は portfolio CPT のアーカイブと競合するため固定ページでは使わない。
+ * /portfolio-pages/ 配下の固定ページは page-portfolio-pages.php で統一して、
+ * template-parts/portfolio/page-{slug}.php に委譲する。
+ */
+add_filter('template_include', function ($template) {
+  if (!is_page()) {
+    return $template;
+  }
+
+  $root = get_page_by_path('portfolio-pages');
+  if (!$root || is_wp_error($root) || empty($root->ID)) {
+    return $template;
+  }
+
+  $page_id = get_queried_object_id();
+  if (!$page_id) {
+    return $template;
+  }
+
+  $ancestors = get_post_ancestors($page_id);
+  $is_in_portfolio_pages = ((int) $page_id === (int) $root->ID) || in_array((int) $root->ID, array_map('intval', $ancestors), true);
+  if (!$is_in_portfolio_pages) {
+    return $template;
+  }
+
+  $bridge = get_theme_file_path('page-portfolio-pages.php');
+  return file_exists($bridge) ? $bridge : $template;
+});
+
+add_action('pre_get_posts', function ($query) {
+  if (is_admin() || !$query->is_main_query()) {
+    return;
+  }
+
+  if (!($query->is_post_type_archive('portfolio') || $query->is_tax('portfolio_genre'))) {
+    return;
+  }
+
+  $profile_id = nowone_get_portfolio_profile_post_id();
+  if (!$profile_id) {
+    return;
+  }
+
+  $post__not_in = (array) $query->get('post__not_in');
+  $post__not_in[] = $profile_id;
+  $query->set('post__not_in', array_values(array_unique(array_map('intval', $post__not_in))));
+});
 
 /**
  *rewrite 設計

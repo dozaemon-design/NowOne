@@ -179,6 +179,44 @@ function nowone_register_portfolio_genre_taxonomy() {
 }
 add_action('init', 'nowone_register_portfolio_genre_taxonomy');
 
+/* =====================================================
+ * Portfolio Tag Taxonomy
+ * ===================================================== */
+// 使用ツールタグ
+function register_portfolio_tool_taxonomy() {
+
+    register_taxonomy(
+        'portfolio_tool',
+        'portfolio',
+        [
+            'label' => '使用ツール',
+            'public' => true,
+            'hierarchical' => false,
+            'show_admin_column' => true,
+            'show_in_rest' => true,
+        ]
+    );
+
+}
+add_action('init', 'register_portfolio_tool_taxonomy');
+
+// 役割タグ
+function register_portfolio_role_taxonomy() {
+
+    register_taxonomy(
+        'portfolio_role',
+        'portfolio',
+        [
+            'label' => '担当役割',
+            'public' => true,
+            'hierarchical' => false,
+            'show_admin_column' => true,
+            'show_in_rest' => true,
+        ]
+    );
+}
+add_action('init', 'register_portfolio_role_taxonomy');
+
 
 /* --------------------------------
  * taxonomyジャンル追加時変更必須（内容は自動同期）

@@ -98,3 +98,27 @@ function render_creation_picture(
 <?php
   return ob_get_clean();
 }
+
+function render_portfolio_acf_image($acf_value, string $size = 'portfolio_thumb', array $attrs = []) {
+  if (!is_array($acf_value) || empty($acf_value['ID'])) {
+    return '';
+  }
+
+  $attachment_id = (int) $acf_value['ID'];
+
+  if (!$attachment_id || !wp_attachment_is_image($attachment_id)) {
+    return '';
+  }
+
+  $default_attrs = [
+    'loading'  => 'lazy',
+    'decoding' => 'async',
+  ];
+
+  return wp_get_attachment_image(
+    $attachment_id,
+    $size,
+    false,
+    array_merge($default_attrs, $attrs)
+  );
+}

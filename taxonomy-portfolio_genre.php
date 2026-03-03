@@ -2,7 +2,9 @@
 
 <main class="l-main--portfolio p-portfolio-archive">
 
-  <h1 class="p-portfolio-archive__title">Portfolio</h1>
+  <h1 class="p-portfolio-archive__title">
+    <?php single_term_title(); ?>
+  </h1>
 
   <?php if (have_posts()) : ?>
     <ul class="p-portfolio-list">
