@@ -43,6 +43,17 @@ function nowone_enqueue_assets() {
 			NOWONE_THEME_VERSION,
 			'all'
 		);
+
+		// Page transition（portfolio配下 / contact は除外）
+		if (!is_page(['contact', 'contact-thanks'])) {
+			wp_enqueue_script(
+				'nowone-page-transition',
+				get_template_directory_uri() . '/assets/js/common/page-transition.js',
+				[],
+				NOWONE_THEME_VERSION,
+				true
+			);
+		}
 	}
 
 	/* =========================

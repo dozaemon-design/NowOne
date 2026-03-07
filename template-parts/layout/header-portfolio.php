@@ -150,14 +150,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>
         </ul>
 
         <?php
-        $portfolio_chips = [
-          ['type' => 'all', 'label' => 'ALL', 'url' => $portfolio_archive_url],
-          ['type' => 'term', 'slug' => 'web', 'label' => 'WEB'],
-          ['type' => 'term', 'slug' => 'app', 'label' => 'APP'],
-          ['type' => 'term', 'slug' => 'bnr', 'label' => 'BNR'],
-          ['type' => 'term', 'slug' => 'publish', 'label' => 'PUBLISH'],
-        ];
-
         $current_term_slug = null;
         if (is_tax('portfolio_genre')) {
           $queried_term = get_queried_object();
@@ -165,39 +157,71 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>
             $current_term_slug = $queried_term->slug;
           }
         }
+
+        // chips（ALL + 登録済みジャンルを自動反映。投稿0件は非表示）
+        $portfolio_terms = get_terms([
+          'taxonomy'   => 'portfolio_genre',
+          'hide_empty' => true,
+          'orderby'    => 'name',
+          'order'      => 'ASC',
+        ]);
+
+        // 既存の並び優先（追加分は後ろに回す）
+        $preferred_slugs = ['web', 'app', 'bnr', 'lp', 'publish'];
+        $terms_by_slug = [];
+        if (!is_wp_error($portfolio_terms) && !empty($portfolio_terms)) {
+          foreach ($portfolio_terms as $t) {
+            if ($t && !is_wp_error($t) && isset($t->slug)) {
+              $terms_by_slug[$t->slug] = $t;
+            }
+          }
+        }
+
+        $ordered_terms = [];
+        foreach ($preferred_slugs as $slug) {
+          if (isset($terms_by_slug[$slug])) {
+            $ordered_terms[] = $terms_by_slug[$slug];
+            unset($terms_by_slug[$slug]);
+          }
+        }
+        foreach ($terms_by_slug as $t) {
+          $ordered_terms[] = $t;
+        }
         ?>
         <div class="c-portfolio-nav__chips js-portfolio-chips" aria-label="Portfolio categories">
           <ul class="c-portfolio-nav__chipsList">
-            <?php foreach ($portfolio_chips as $chip) : ?>
-              <?php
-              $label = $chip['label'];
-              $url = $chip['url'] ?? '';
-              $is_current = false;
+            <?php
+            $chips = [];
+            $chips[] = [
+              'label' => 'ALL',
+              'url' => $portfolio_archive_url,
+              'is_current' => !is_tax('portfolio_genre'),
+            ];
 
-              if (($chip['type'] ?? '') === 'all') {
-                $is_current = !is_tax('portfolio_genre');
-              } else {
-                $slug = $chip['slug'] ?? '';
-                $is_current = ($current_term_slug && $slug) ? ($current_term_slug === $slug) : false;
-
-                $term = $slug ? get_term_by('slug', $slug, 'portfolio_genre') : null;
-                if (!$term || is_wp_error($term) || !isset($term->count) || (int) $term->count === 0) {
-                  continue;
-                }
-                $url = get_term_link($term);
-              }
-
-              if (!$url || is_wp_error($url)) {
+            foreach ($ordered_terms as $term) {
+              if (!$term || is_wp_error($term)) {
                 continue;
               }
-              ?>
-              <li class="c-portfolio-nav__chip<?php echo $is_current ? ' is-current' : ''; ?>">
+              $term_url = get_term_link($term);
+              if (is_wp_error($term_url) || !$term_url) {
+                continue;
+              }
+              $chips[] = [
+                'label' => $term->name,
+                'url' => $term_url,
+                'is_current' => ($current_term_slug && isset($term->slug)) ? ($current_term_slug === $term->slug) : false,
+              ];
+            }
+            ?>
+
+            <?php foreach ($chips as $chip) : ?>
+              <li class="c-portfolio-nav__chip<?php echo $chip['is_current'] ? ' is-current' : ''; ?>">
                 <a
                   class="c-portfolio-nav__chipLink"
-                  href="<?php echo esc_url($url); ?>"
-                  <?php echo $is_current ? 'aria-current="page"' : ''; ?>
+                  href="<?php echo esc_url($chip['url']); ?>"
+                  <?php echo $chip['is_current'] ? 'aria-current="page"' : ''; ?>
                 >
-                  <?php echo esc_html($label); ?>
+                  <?php echo esc_html($chip['label']); ?>
                 </a>
               </li>
             <?php endforeach; ?>
