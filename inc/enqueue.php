@@ -9,18 +9,18 @@ function nowone_enqueue_assets() {
 	 * CSS
 	 * ========================= */
 	// Portfolio関連のページ（シングル、アーカイブ、タクソノミー）ではポートフォリオ専用のスタイルを読み込み、それ以外のページでは共通のスタイルを読み込む
-	if (is_singular('portfolio') || is_post_type_archive('portfolio') || is_tax('portfolio_genre')) {
-		wp_enqueue_style(
-			'nowone-app-portfolio',
-			get_template_directory_uri() . '/assets/css/app-portfolio.css',
-			array(),
-			NOWONE_THEME_VERSION,
-			'all'
-		);
+		if (is_singular('portfolio') || is_post_type_archive('portfolio') || is_tax('portfolio_genre')) {
+			wp_enqueue_style(
+				'nowone-app-portfolio',
+				get_template_directory_uri() . '/assets/css/app-portfolio.css',
+				array(),
+				NOWONE_THEME_VERSION,
+				'all'
+			);
 
-		if (is_singular('portfolio')) {
-			wp_enqueue_script(
-				'nowone-portfolio-media-popup',
+			if (is_singular('portfolio')) {
+				wp_enqueue_script(
+					'nowone-portfolio-media-popup',
 				get_template_directory_uri() . '/assets/js/portfolio/media-popup.js',
 				[],
 				NOWONE_THEME_VERSION,

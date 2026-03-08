@@ -109,12 +109,14 @@ $portfolio_media_items = [
 	                制作期間：<?php echo esc_html($portfolio_start_date); ?><?php echo ($portfolio_start_date && $portfolio_end_date) ? ' ~ ' : ''; ?><?php echo esc_html($portfolio_end_date); ?>
 	              </time>
 	            </li>
-	          <?php endif; ?>
-	          <?php if ($portfolio_link): ?>
-	            <li>
-	              <a href="<?php echo esc_url($portfolio_link); ?>" class="p-portfolio--content__link" target="_blank" rel="noopener">Project Link</a>
-	            </li>
-	          <?php endif; ?>
+		          <?php endif; ?>
+		          <?php if ($portfolio_link): ?>
+		            <li>
+		              <a href="<?php echo esc_url($portfolio_link); ?>" class="p-portfolio--content__link" target="_blank" rel="noopener">
+										<img class="p-portfolio--content__icon" src="<?php echo get_template_directory_uri(); ?>/assets/img/portfolio/common/icon_link.svg" alt="icon link" width="100%" height="auto">Project Link
+									</a>
+		            </li>
+		          <?php endif; ?>
 	        </ul>
         </div>
         <?php if (has_post_thumbnail()) : ?>
