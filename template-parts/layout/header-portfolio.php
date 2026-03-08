@@ -132,21 +132,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>
         ?>
 
         <ul class="c-portfolio-nav__primary">
-          <li class="c-portfolio-nav__item<?php echo $is_profile ? ' is-current' : ''; ?>">
+          <!-- <li class="c-portfolio-nav__item<?php echo $is_profile ? ' is-current' : ''; ?>">
             <a class="c-portfolio-nav__link" href="<?php echo esc_url($profile_url); ?>" <?php echo $is_profile ? 'aria-current="page"' : ''; ?>>
               PROFILE
             </a>
-          </li>
+          </li> -->
           <li class="c-portfolio-nav__item<?php echo ($is_portfolio_section && !$is_profile) ? ' is-current' : ''; ?>">
             <a class="c-portfolio-nav__link" href="<?php echo esc_url($portfolio_archive_url); ?>" <?php echo ($is_portfolio_section && !$is_profile) ? 'aria-current="page"' : ''; ?>>
               PORTFOLIO
             </a>
           </li>
-          <li class="c-portfolio-nav__item">
+          <!-- <li class="c-portfolio-nav__item">
             <a class="c-portfolio-nav__link" href="<?php echo esc_url($contact_url); ?>">
               CONTACT
             </a>
-          </li>
+          </li> -->
         </ul>
 
         <?php

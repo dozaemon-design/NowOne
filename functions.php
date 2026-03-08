@@ -374,13 +374,15 @@ add_filter( 'wp_sitemaps_post_types', function( $post_types ) {
 	return $post_types;
 });
 
-/**
- * portfolio_genre を sitemap から除外
- */
-add_filter('wp_sitemaps_taxonomies', function ($taxonomies) {
-  unset($taxonomies['portfolio_genre']);
-  return $taxonomies;
-});
+	/**
+	 * portfolio taxonomies を sitemap から除外
+	 */
+	add_filter('wp_sitemaps_taxonomies', function ($taxonomies) {
+	  unset($taxonomies['portfolio_genre']);
+	  unset($taxonomies['portfolio_tool']);
+	  unset($taxonomies['portfolio_role']);
+	  return $taxonomies;
+	});
 
 
 // add_filter('get_the_archive_description', function ($description) {
