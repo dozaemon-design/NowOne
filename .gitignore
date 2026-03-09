@@ -3,12 +3,12 @@
 # テーマ（NowOne）のみを Git 管理
 # ─────────────────────────────
 
-# まず全部除外
-/*
-
 # macOS ゴミは絶対に除外
 .DS_Store
-**/.DS_Store
+# **/.DS_Store
+
+# まず全部除外
+/*
 
 # .AppleDouble .LSOverride対策
 ._*
