@@ -55,10 +55,10 @@ $has_streaming =
 				</div>
 			<?php endif; ?>
 			<?php if ($video_id): //youtubeの動画があれば ?>
-				<h3 class="c-media-badge c-media-badge--youtube">
+				<h2 class="c-media-badge c-media-badge--youtube">
 					<img src="<?= get_template_directory_uri(); ?>/assets/img/creation/single/youtube.svg" alt="YouTube icon">
 					<span class="c-media-badge__title">YouTube</span>
-				</h3>
+				</h2>
 				<div
 					class="c-video js-youtube"
 					data-video-id="<?= esc_attr($video_id); ?>"
@@ -78,7 +78,7 @@ $has_streaming =
 			</div>
 			<?php endif; ?>
 			<?php if ($has_streaming): ?>
-				<h3 class="c-media-badge c-media-badge--streaming">
+				<h2 class="c-media-badge c-media-badge--streaming">
 					<img
 						src="<?= get_template_directory_uri(); ?>/assets/img/creation/single/icon_streaming.svg"
 						alt="Streaming Icon"
@@ -88,7 +88,7 @@ $has_streaming =
 					<span class="c-media-badge__title">
 						Streaming Playback – <?= esc_html($title); ?>
 					</span>
-				</h3>
+				</h2>
 				<ul class="c-streaming-card c-streaming-card--streaming">
 					<?php if ($tc_url): ?>
 					<li class="c-streaming-card__item">

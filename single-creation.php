@@ -22,6 +22,12 @@ if (have_posts()) {
       $type
     );
     ?>
+    <?php
+    get_template_part(
+      'template-parts/creation/component/recommend',
+      $type
+    );
+    ?>
   </main>
 
 <?php
