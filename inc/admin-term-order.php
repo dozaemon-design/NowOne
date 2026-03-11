@@ -27,11 +27,25 @@ function nowone_is_orderable_taxonomy(string $taxonomy): bool {
 }
 
 function nowone_get_term_order_value(int $term_id): int {
+  if (!metadata_exists('term', $term_id, NOWONE_TERM_ORDER_META_KEY)) {
+    return PHP_INT_MAX;
+  }
   $value = get_term_meta($term_id, NOWONE_TERM_ORDER_META_KEY, true);
   if ($value === '' || $value === null) {
-    return 0;
+    return PHP_INT_MAX;
   }
   return (int) $value;
+}
+
+function nowone_get_term_order_for_input(int $term_id): string {
+  if (!metadata_exists('term', $term_id, NOWONE_TERM_ORDER_META_KEY)) {
+    return '';
+  }
+  $value = get_term_meta($term_id, NOWONE_TERM_ORDER_META_KEY, true);
+  if ($value === '' || $value === null) {
+    return '';
+  }
+  return (string) ((int) $value);
 }
 
 /**
@@ -55,12 +69,12 @@ add_action('registered_taxonomy', function (string $taxonomy) {
 
   // Edit form (existing term)
   add_action("{$taxonomy}_edit_form_fields", function (WP_Term $term) {
-    $value = nowone_get_term_order_value((int) $term->term_id);
+    $value = nowone_get_term_order_for_input((int) $term->term_id);
     ?>
     <tr class="form-field term-nowone-order-wrap">
       <th scope="row"><label for="nowone_term_order">表示順</label></th>
       <td>
-        <input name="nowone_term_order" id="nowone_term_order" type="number" step="1" min="0" value="<?php echo esc_attr((string) $value); ?>">
+        <input name="nowone_term_order" id="nowone_term_order" type="number" step="1" min="0" value="<?php echo esc_attr($value); ?>">
         <p class="description">数字が小さいほど先頭に表示されます（親term内の並びに反映）。</p>
       </td>
     </tr>
@@ -87,7 +101,7 @@ add_action('registered_taxonomy', function (string $taxonomy) {
     if ($column_name !== 'nowone_order') {
       return $out;
     }
-    $value = nowone_get_term_order_value($term_id);
+    $value = nowone_get_term_order_for_input($term_id);
     return ''
       . '<input type="number" class="nowone-term-order-input" data-term-id="' . esc_attr((string) $term_id) . '" value="' . esc_attr((string) $value) . '" step="1" min="0" style="width:5.5em;">'
       . '<span class="nowone-term-order" data-order="' . esc_attr((string) $value) . '" style="display:none;">' . esc_html((string) $value) . '</span>';
@@ -242,7 +256,7 @@ add_action('wp_ajax_nowone_update_term_order', function () {
 
   $taxonomy = isset($_POST['taxonomy']) ? sanitize_text_field(wp_unslash($_POST['taxonomy'])) : '';
   $term_id = isset($_POST['term_id']) ? (int) $_POST['term_id'] : 0;
-  $order = isset($_POST['order']) ? (int) sanitize_text_field(wp_unslash($_POST['order'])) : 0;
+  $order_raw = isset($_POST['order']) ? trim((string) sanitize_text_field(wp_unslash($_POST['order']))) : '';
 
   if (!$taxonomy || !$term_id) {
     wp_send_json_error(['message' => 'Invalid request'], 400);
@@ -260,6 +274,12 @@ add_action('wp_ajax_nowone_update_term_order', function () {
     wp_send_json_error(['message' => 'Forbidden'], 403);
   }
 
+  if ($order_raw === '') {
+    delete_term_meta($term_id, NOWONE_TERM_ORDER_META_KEY);
+    wp_send_json_success(['order' => '']);
+  }
+
+  $order = (int) $order_raw;
   update_term_meta($term_id, NOWONE_TERM_ORDER_META_KEY, $order);
   wp_send_json_success(['order' => $order]);
 });
@@ -274,8 +294,12 @@ add_action('created_term', function (int $term_id, int $tt_id, string $taxonomy)
   if (!isset($_POST['nowone_term_order'])) {
     return;
   }
-  $value = (int) sanitize_text_field(wp_unslash($_POST['nowone_term_order']));
-  update_term_meta($term_id, NOWONE_TERM_ORDER_META_KEY, $value);
+  $raw = trim((string) sanitize_text_field(wp_unslash($_POST['nowone_term_order'])));
+  if ($raw === '') {
+    delete_term_meta($term_id, NOWONE_TERM_ORDER_META_KEY);
+    return;
+  }
+  update_term_meta($term_id, NOWONE_TERM_ORDER_META_KEY, (int) $raw);
 }, 10, 3);
 
 add_action('edited_term', function (int $term_id, int $tt_id, string $taxonomy) {
@@ -285,8 +309,12 @@ add_action('edited_term', function (int $term_id, int $tt_id, string $taxonomy) 
   if (!isset($_POST['nowone_term_order'])) {
     return;
   }
-  $value = (int) sanitize_text_field(wp_unslash($_POST['nowone_term_order']));
-  update_term_meta($term_id, NOWONE_TERM_ORDER_META_KEY, $value);
+  $raw = trim((string) sanitize_text_field(wp_unslash($_POST['nowone_term_order'])));
+  if ($raw === '') {
+    delete_term_meta($term_id, NOWONE_TERM_ORDER_META_KEY);
+    return;
+  }
+  update_term_meta($term_id, NOWONE_TERM_ORDER_META_KEY, (int) $raw);
 }, 10, 3);
 
 /**
@@ -428,6 +456,93 @@ add_filter('get_terms', function ($terms, array $taxonomies, array $args) {
 }, 10, 3);
 
 /**
+ * Front: sort object terms (get_the_terms) by our order meta.
+ * - portfolio_role / portfolio_tool は get_the_terms() で表示しているためここで揃える
+ */
+add_filter('get_the_terms', function ($terms, int $post_id, string $taxonomy) {
+  if (empty($terms) || is_wp_error($terms)) {
+    return $terms;
+  }
+  if (!nowone_is_orderable_taxonomy($taxonomy)) {
+    return $terms;
+  }
+  if (!is_array($terms) || !isset($terms[0]) || !($terms[0] instanceof WP_Term)) {
+    return $terms;
+  }
+
+  $terms_by_id = [];
+  foreach ($terms as $t) {
+    if ($t instanceof WP_Term) {
+      $terms_by_id[(int) $t->term_id] = $t;
+    }
+  }
+  if (!$terms_by_id) {
+    return $terms;
+  }
+
+  $order_map = [];
+  foreach ($terms_by_id as $id => $t) {
+    $order_map[$id] = nowone_get_term_order_value($id);
+  }
+
+  $children_map = [];
+  foreach ($terms_by_id as $id => $t) {
+    $parent = (int) $t->parent;
+    $children_map[$parent][] = $t;
+  }
+
+  $sort_siblings = function (&$list) use ($order_map) {
+    usort($list, function (WP_Term $a, WP_Term $b) use ($order_map) {
+      $oa = $order_map[(int) $a->term_id] ?? PHP_INT_MAX;
+      $ob = $order_map[(int) $b->term_id] ?? PHP_INT_MAX;
+      if ($oa !== $ob) {
+        return $oa <=> $ob;
+      }
+      $na = (string) $a->name;
+      $nb = (string) $b->name;
+      $cmp = strnatcasecmp($na, $nb);
+      if ($cmp !== 0) {
+        return $cmp;
+      }
+      return ((int) $a->term_id) <=> ((int) $b->term_id);
+    });
+  };
+
+  foreach ($children_map as &$list) {
+    $sort_siblings($list);
+  }
+  unset($list);
+
+  $out = [];
+  $visited = [];
+
+  $walk = function (int $parent_id) use (&$walk, &$out, &$visited, $children_map) {
+    if (empty($children_map[$parent_id])) {
+      return;
+    }
+    foreach ($children_map[$parent_id] as $term) {
+      $id = (int) $term->term_id;
+      if (isset($visited[$id])) {
+        continue;
+      }
+      $visited[$id] = true;
+      $out[] = $term;
+      $walk($id);
+    }
+  };
+
+  $walk(0);
+
+  foreach ($terms_by_id as $id => $t) {
+    if (!isset($visited[$id])) {
+      $out[] = $t;
+    }
+  }
+
+  return $out;
+}, 10, 3);
+
+/**
  * Admin: show full term set for ordering UI.
  * - edit-tags.php の一覧で「順」入力→保存→並び替え を安定させるため、対象taxは全件取得。
  * - meta_key を query に入れると、meta未保存termが落ちる可能性があるため使わない。
@@ -457,12 +572,6 @@ add_action('pre_get_terms', function (WP_Term_Query $query) {
     }
   }
   if (!$target_taxonomy) {
-    return;
-  }
-
-  // Respect explicit ordering.
-  $orderby = $query->query_vars['orderby'] ?? '';
-  if (!empty($orderby)) {
     return;
   }
 
