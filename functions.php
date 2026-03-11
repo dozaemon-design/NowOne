@@ -156,19 +156,22 @@ add_filter('template_include', function ($template) {
   return file_exists($bridge) ? $bridge : $template;
 });
 
-add_action('pre_get_posts', function ($query) {
-  if (is_admin() || !$query->is_main_query()) {
-    return;
-  }
+	add_action('pre_get_posts', function ($query) {
+	  if (is_admin() || !$query->is_main_query()) {
+	    return;
+	  }
+	
+	  if (!($query->is_post_type_archive('portfolio') || $query->is_tax('portfolio_genre'))) {
+	    return;
+	  }
 
-  if (!($query->is_post_type_archive('portfolio') || $query->is_tax('portfolio_genre'))) {
-    return;
-  }
+	  // Portfolio archive / portfolio_genre taxonomy: 20件表示に固定
+	  $query->set('posts_per_page', 20);
 
-  $profile_id = nowone_get_portfolio_profile_post_id();
-  if (!$profile_id) {
-    return;
-  }
+	  $profile_id = nowone_get_portfolio_profile_post_id();
+	  if (!$profile_id) {
+	    return;
+	  }
 
   $post__not_in = (array) $query->get('post__not_in');
   $post__not_in[] = $profile_id;
