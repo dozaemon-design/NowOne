@@ -158,14 +158,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>
           }
         }
 
-        // chips（ALL + 登録済みジャンルを自動反映）
+        // chips（ALL + 登録済みジャンルを自動反映。投稿0件は非表示）
         $portfolio_terms = get_terms([
           'taxonomy'   => 'portfolio_genre',
-          'hide_empty' => false,
+          'hide_empty' => true,
+          'orderby'    => 'name',
+          'order'      => 'ASC',
         ]);
 
-        // termの表示順は inc/admin-term-order.php の並び替えを利用
-        $ordered_terms = (!is_wp_error($portfolio_terms) && !empty($portfolio_terms)) ? $portfolio_terms : [];
+        // 既存の並び優先（追加分は後ろに回す）
+        $preferred_slugs = ['web', 'app', 'bnr', 'lp', 'publish'];
+        $terms_by_slug = [];
+        if (!is_wp_error($portfolio_terms) && !empty($portfolio_terms)) {
+          foreach ($portfolio_terms as $t) {
+            if ($t && !is_wp_error($t) && isset($t->slug)) {
+              $terms_by_slug[$t->slug] = $t;
+            }
+          }
+        }
+
+        $ordered_terms = [];
+        foreach ($preferred_slugs as $slug) {
+          if (isset($terms_by_slug[$slug])) {
+            $ordered_terms[] = $terms_by_slug[$slug];
+            unset($terms_by_slug[$slug]);
+          }
+        }
+        foreach ($terms_by_slug as $t) {
+          $ordered_terms[] = $t;
+        }
         ?>
         <div class="c-portfolio-nav__chips js-portfolio-chips" aria-label="Portfolio categories">
           <ul class="c-portfolio-nav__chipsList">

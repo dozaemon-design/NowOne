@@ -416,10 +416,20 @@ add_filter('get_terms', function ($terms, array $taxonomies, array $args) {
 }, 10, 3);
 
 /**
- * Query-level ordering for non-hierarchical taxonomies (pagination friendly).
- * Hierarchical taxonomies are reordered later via get_terms filter.
+ * Admin: show full term set for ordering UI.
+ * - edit-tags.php の一覧で「順」入力→保存→並び替え を安定させるため、対象taxは全件取得。
+ * - meta_key を query に入れると、meta未保存termが落ちる可能性があるため使わない。
  */
 add_action('pre_get_terms', function (WP_Term_Query $query) {
+  if (!is_admin()) {
+    return;
+  }
+
+  $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+  if (!$screen || ($screen->base ?? '') !== 'edit-tags') {
+    return;
+  }
+
   $taxonomies = $query->query_vars['taxonomy'] ?? [];
   if (empty($taxonomies)) {
     return;
@@ -443,12 +453,8 @@ add_action('pre_get_terms', function (WP_Term_Query $query) {
   if (!empty($orderby)) {
     return;
   }
-  // Keep hierarchical listing behavior (core expects full set of terms).
-  if (is_taxonomy_hierarchical($target_taxonomy)) {
-    return;
-  }
 
-  $query->query_vars['meta_key'] = NOWONE_TERM_ORDER_META_KEY;
-  $query->query_vars['orderby'] = 'meta_value_num';
-  $query->query_vars['order'] = 'ASC';
+  // Coreは階層taxのみ全件取得に切り替えるため、非階層も合わせて全件取得に寄せる。
+  $query->query_vars['number'] = 0;
+  $query->query_vars['offset'] = 0;
 });
