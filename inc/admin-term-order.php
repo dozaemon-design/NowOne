@@ -301,6 +301,18 @@ add_filter('get_terms', function ($terms, array $taxonomies, array $args) {
     return $terms;
   }
 
+  // Avoid unexpected side effects on the front.
+  // - Adminのterm一覧（edit-tags.php）では常に適用
+  // - それ以外は明示 opt-in（get_terms(['nowone_order' => true])）の時だけ適用
+  $is_edit_tags = false;
+  if (is_admin()) {
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    $is_edit_tags = ($screen && ($screen->base ?? '') === 'edit-tags');
+  }
+  if (!$is_edit_tags && empty($args['nowone_order'])) {
+    return $terms;
+  }
+
   $target = false;
   foreach ($taxonomies as $tax) {
     if (nowone_is_orderable_taxonomy((string) $tax)) {
