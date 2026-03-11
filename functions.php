@@ -12,6 +12,7 @@ $inc_files = [
     'seed.php',
     'image-sizes.php',
     'admin.php',
+    'admin-term-order.php',
     'admin-columns.php',
     'enqueue.php',
     'portfolio-access.php',
