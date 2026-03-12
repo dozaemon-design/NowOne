@@ -2,7 +2,7 @@
 <main id="profile" class="l-main p-about">
     <section class="l-content l-content--inline">
         <h1 class="c-header--xl">Theme</h1>
-        <p class="l-wrap--sm">いま、創りたいものを創る。<br>ただ、それだけ。</p>
+        <p class="l-wrap--sm p-about--jp-text">いま、創りたいものを創る。<br>ただ、それだけ。</p>
         <h2 class="c-header--lg">Profile</h2>
         <p class="p-about--en-text l-wrap--sm">DTMer , Web / App Designer , DTP</p>
         <h2 class="c-header--lg">Equipment</h2>
