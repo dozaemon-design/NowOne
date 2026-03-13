@@ -32,7 +32,6 @@
             <li class="p-about__ulLists__items">己が成長すること</li>
             <li class="p-about__ulLists__items">健康的な食事をすること</li>
         </ul>
-        <!-- <p><?php the_content(); ?></p> -->
     </section>
 </main>
 <?php get_footer(); ?>

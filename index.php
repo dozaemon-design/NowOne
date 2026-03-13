@@ -36,7 +36,17 @@ $creations = new WP_Query($args);
           <li class="c-creation-card c-reveal js-reveal">
             <a href="<?php the_permalink(); ?>">
               <figure class="c-creation-card__thumb">
-                <?php the_post_thumbnail('creation_thumb'); ?>
+                <?php
+                $is_lcp = ($creations->current_post === 0);
+                $thumb_attrs = [
+                  'loading'  => $is_lcp ? 'eager' : 'lazy',
+                  'decoding' => 'async',
+                ];
+                if ($is_lcp) {
+                  $thumb_attrs['fetchpriority'] = 'high';
+                }
+                the_post_thumbnail('creation_thumb', $thumb_attrs);
+                ?>
               </figure>
               <div class="c-creation-card__body">
                 <?php
