@@ -17,14 +17,18 @@
  * - レイアウト制御はCSS責務
  * =========================================================
  */
-const header = document.querySelector('.l-header');
+const getHeaderEl = () => document.querySelector('.l-header, .l-header--portfolio');
 
 const setHeaderHeight = () => {
-  document.documentElement.style.setProperty(
-    '--header-h',
-    `${header.offsetHeight}px`
-  );
+  const header = getHeaderEl();
+  const height = header ? header.offsetHeight : 0;
+  document.documentElement.style.setProperty('--header-h', `${height}px`);
 };
 
-setHeaderHeight();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setHeaderHeight, { once: true });
+} else {
+  setHeaderHeight();
+}
+
 window.addEventListener('resize', setHeaderHeight);
