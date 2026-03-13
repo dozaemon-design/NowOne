@@ -72,29 +72,32 @@ function nowone_enqueue_assets() {
 		NOWONE_THEME_VERSION,
 		true
 	);
-	// Splitting.js
-	wp_enqueue_script(
-		'splitting',
-		get_template_directory_uri() . '/assets/js/vendor/splitting.min.js',
-		[],
-		NOWONE_THEME_VERSION,
-		true
-	);
-	// Splitting用CSS
-	wp_enqueue_style(
-		'splitting',
-		get_template_directory_uri() . '/assets/css/vendor/splitting.css',
-		[],
-		NOWONE_THEME_VERSION
-	);
-	// Home text用JS
-	wp_enqueue_script(
-		'home-text',
-		get_template_directory_uri() . '/assets/js/creation/production/home-text.js',
-		['splitting'],
-		NOWONE_THEME_VERSION,
-		true
-	);
+	// Home text（Splitting.js使用）
+	if (is_front_page() || is_page('contact-thanks')) {
+		// Splitting.js
+		wp_enqueue_script(
+			'splitting',
+			get_template_directory_uri() . '/assets/js/vendor/splitting.min.js',
+			[],
+			NOWONE_THEME_VERSION,
+			true
+		);
+		// Splitting用CSS
+		wp_enqueue_style(
+			'splitting',
+			get_template_directory_uri() . '/assets/css/vendor/splitting.css',
+			[],
+			NOWONE_THEME_VERSION
+		);
+		// Home text用JS
+		wp_enqueue_script(
+			'home-text',
+			get_template_directory_uri() . '/assets/js/creation/production/home-text.js',
+			['splitting'],
+			NOWONE_THEME_VERSION,
+			true
+		);
+	}
 	wp_enqueue_script( // Base JS
 		'nowone-base',
 		get_template_directory_uri() . '/assets/js/base.js',
@@ -128,14 +131,14 @@ function nowone_enqueue_assets() {
 	wp_enqueue_script( // list animation JS
 		'nowone-reveal',
 		get_template_directory_uri() . '/assets/js/creation/component/reveal.js',
-		array('jquery'),
+		[],
 		NOWONE_THEME_VERSION,
 		true
 	);
 	wp_enqueue_script( // list animation JS
 		'nowone-header',
 		get_template_directory_uri() . '/assets/js/creation/component/header.js',
-		array('jquery'),
+		[],
 		NOWONE_THEME_VERSION,
 		true
 	);
@@ -150,6 +153,39 @@ function nowone_enqueue_assets() {
 	};
 } //end
 add_action('wp_enqueue_scripts', 'nowone_enqueue_assets');
+
+/* =========================
+ * Contact Form 7 assets
+ * =========================
+ * - 基本はフォームページのみ読み込む（それ以外は停止）
+ * - 固定ページ以外（アーカイブ等）やウィジェット等でショートコードを使う場合は条件を追加する
+ */
+function nowone_should_load_cf7_assets(): bool {
+	if (is_admin()) {
+		return true;
+	}
+
+	// お問い合わせページ
+	if (is_page('contact')) {
+		return true;
+	}
+
+	// 念のため：本文内にショートコードがある場合
+	$post = get_post();
+	if ($post && isset($post->post_content) && has_shortcode($post->post_content, 'contact-form-7')) {
+		return true;
+	}
+
+	return false;
+}
+
+add_filter('wpcf7_load_js', function ($load) {
+	return nowone_should_load_cf7_assets();
+});
+
+add_filter('wpcf7_load_css', function ($load) {
+	return nowone_should_load_cf7_assets();
+});
 
 
 	/* =========================
