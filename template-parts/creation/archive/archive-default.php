@@ -31,7 +31,17 @@ $query = new WP_Query($query_args);
 
         <?php if (has_post_thumbnail()) : ?>
           <figure class="p-creation-card__thumb">
-            <?php the_post_thumbnail('creation_archive'); ?>
+            <?php
+            $is_lcp = ($paged === 1 && $query->current_post === 0);
+            $thumb_attrs = [
+              'loading'  => $is_lcp ? 'eager' : 'lazy',
+              'decoding' => 'async',
+            ];
+            if ($is_lcp) {
+              $thumb_attrs['fetchpriority'] = 'high';
+            }
+            the_post_thumbnail('creation_archive', $thumb_attrs);
+            ?>
           </figure>
         <?php endif; ?>
 

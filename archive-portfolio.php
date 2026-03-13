@@ -11,8 +11,17 @@
           <a class="l-cluster p-portfolio-list__link" href="<?php the_permalink(); ?>">
             <div class="p-portfolio-list__thumb">
               <?php
-              $thumb_html = get_the_post_thumbnail(get_the_ID(), 'portfolio_thumb');
-              echo preg_replace('/<img\\b(?![^>]*\\bdata-hover-zoom=)/', '<img data-hover-zoom="img"', $thumb_html, 1);
+              global $wp_query;
+              $is_lcp = (!is_paged() && $wp_query instanceof WP_Query && $wp_query->current_post === 0);
+              $thumb_attrs = [
+                'data-hover-zoom' => 'img',
+                'loading'         => $is_lcp ? 'eager' : 'lazy',
+                'decoding'        => 'async',
+              ];
+              if ($is_lcp) {
+                $thumb_attrs['fetchpriority'] = 'high';
+              }
+              echo get_the_post_thumbnail(get_the_ID(), 'portfolio_thumb', $thumb_attrs);
               ?>
             </div>
             <div class="p-portfolio-list__body">

@@ -13,6 +13,9 @@ $thumb_url = null;
 $thumb_alt = $title;
 $thumb_fallback_html = '';
 $title_tag = $args['title_tag'] ?? 'h2';
+$is_lcp = (bool) ($args['is_lcp'] ?? false);
+$img_loading = $is_lcp ? 'eager' : 'lazy';
+$img_fetchpriority = $is_lcp ? 'high' : '';
 if (!in_array($title_tag, ['h2', 'h3'], true)) {
   $title_tag = 'h2';
 }
@@ -21,14 +24,19 @@ if (is_array($image) && isset($image['sizes']['creation_thumb'])) {
   $thumb_url = $image['sizes']['creation_thumb'];
   $thumb_alt = $image['alt'] ?: $title;
 } elseif (has_post_thumbnail()) {
+  $thumb_attrs = [
+    'loading' => $img_loading,
+    'decoding' => 'async',
+    'alt' => $title,
+  ];
+  if ($img_fetchpriority) {
+    $thumb_attrs['fetchpriority'] = $img_fetchpriority;
+  }
+
   $thumb_fallback_html = get_the_post_thumbnail(
     get_the_ID(),
     'creation_thumb',
-    [
-      'loading' => 'lazy',
-      'decoding' => 'async',
-      'alt' => $title,
-    ]
+    $thumb_attrs
   );
 }
 ?>
@@ -42,7 +50,8 @@ if (is_array($image) && isset($image['sizes']['creation_thumb'])) {
           <img
             src="<?php echo esc_url($thumb_url); ?>"
             alt="<?php echo esc_attr($thumb_alt); ?>"
-            loading="lazy"
+            loading="<?php echo esc_attr($img_loading); ?>"
+            <?php echo $img_fetchpriority ? 'fetchpriority="' . esc_attr($img_fetchpriority) . '"' : ''; ?>
             decoding="async"
           >
         <?php else : ?>

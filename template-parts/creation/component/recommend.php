@@ -56,7 +56,13 @@ if (!$recommend_query->have_posts()) {
     <?php while ($recommend_query->have_posts()) : ?>
       <?php $recommend_query->the_post(); ?>
       <li class="c-recommend__item c-reveal js-reveal">
-        <?php get_template_part('template-parts/creation/component/card', '', ['title_tag' => 'h3']); ?>
+        <?php
+        $is_lcp = ($recommend_query->current_post === 0);
+        get_template_part('template-parts/creation/component/card', '', [
+          'title_tag' => 'h3',
+          'is_lcp' => $is_lcp,
+        ]);
+        ?>
       </li>
     <?php endwhile; ?>
     <?php wp_reset_postdata(); ?>

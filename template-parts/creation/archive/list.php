@@ -32,7 +32,12 @@ $query = new WP_Query($query_args);
 <ul class="c-creation-list">
 <?php while ($query->have_posts()) : $query->the_post(); ?>
   <li class="c-reveal js-reveal">
-    <?php get_template_part('template-parts/creation/component/card'); ?>
+    <?php
+    $is_lcp = ($paged === 1 && $query->current_post === 0);
+    get_template_part('template-parts/creation/component/card', '', [
+      'is_lcp' => $is_lcp,
+    ]);
+    ?>
   </li>
 <?php endwhile; ?>
 </ul>
@@ -49,4 +54,3 @@ get_template_part('template-parts/creation/component/pagenation', '', [
 <?php endif; ?>
 
 <?php wp_reset_postdata(); ?>
-
