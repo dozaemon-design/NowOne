@@ -176,4 +176,36 @@ $portfolio_media_items = [
 	        </li>
 	      <?php endforeach; ?>
 		      </ul>
+        <?php
+        $portfolio_archive_url = get_post_type_archive_link('portfolio');
+        if (!$portfolio_archive_url) {
+          $portfolio_archive_url = home_url('/portfolio/');
+        }
+
+        $back_url = $portfolio_archive_url;
+        $referer = wp_get_referer();
+        if ($referer) {
+          $home_host = wp_parse_url(home_url('/'), PHP_URL_HOST);
+          $ref_host = wp_parse_url($referer, PHP_URL_HOST);
+          $ref_path = (string) wp_parse_url($referer, PHP_URL_PATH);
+
+          $is_internal = ($home_host && $ref_host && strtolower($home_host) === strtolower($ref_host));
+          $is_listing = (
+            strpos($ref_path, '/portfolio') === 0 ||
+            strpos($ref_path, '/portfolio_genre') === 0 ||
+            strpos($ref_path, '/portfolio_role') === 0 ||
+            strpos($ref_path, '/portfolio_tool') === 0
+          );
+          $is_current = untrailingslashit($referer) === untrailingslashit(get_permalink($post_id));
+
+          if ($is_internal && $is_listing && !$is_current) {
+            $back_url = $referer;
+          }
+        }
+        ?>
+        <ul class="p-portfolio-back">
+          <li class="p-portfolio-back__item">
+            <a class="p-portfolio-back__link" href="<?php echo esc_url($back_url); ?>">一覧に戻る</a>
+          </li>
+        </ul>
 	</article>
