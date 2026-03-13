@@ -23,6 +23,15 @@ $apple_url = $music['music_applemusic_link'] ?? ''; // Apple Musicリンク取�
 
 $has_streaming =
 	$tc_url || $spotify_url || $apple_url;
+
+$back_url = get_post_type_archive_link('creation') ?: home_url('/');
+$music_term = get_term_by('slug', 'music', 'creation_type');
+if ($music_term && !is_wp_error($music_term)) {
+	$music_term_link = get_term_link($music_term);
+	if (!is_wp_error($music_term_link)) {
+		$back_url = $music_term_link;
+	}
+}
 ?>
 
 <article class="c-single-creation p-creation-single">
@@ -32,7 +41,7 @@ $has_streaming =
 		</figure>
 	<?php endif; ?>
 
-	<article class="l-content l-content--inline">
+	<section class="l-content l-content--inline">
 			<h1>
 				<?php echo esc_html($title); ?>
 			</h1>
@@ -119,7 +128,13 @@ $has_streaming =
 					<?php endif; ?>
 				</ul>
 			<?php endif; ?>
-	</article>
+			<?php
+			get_template_part('template-parts/component/back-link', '', [
+				'href' => $back_url,
+				'label' => '一覧に戻る',
+			]);
+			?>
+	</section>
 </article>
 
 		<?php

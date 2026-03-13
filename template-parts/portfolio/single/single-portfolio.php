@@ -203,9 +203,10 @@ $portfolio_media_items = [
           }
         }
         ?>
-        <ul class="p-portfolio-back">
-          <li class="p-portfolio-back__item">
-            <a class="p-portfolio-back__link" href="<?php echo esc_url($back_url); ?>">一覧に戻る</a>
-          </li>
-        </ul>
+        <?php
+        get_template_part('template-parts/component/back-link', '', [
+          'href' => $back_url,
+          'label' => '一覧に戻る',
+        ]);
+        ?>
 	</article>

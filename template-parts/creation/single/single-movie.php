@@ -12,6 +12,14 @@ $desc = get_field('creation_description'); // 共通フィールドから取得
 $dir  = $movie['movie_director'] ?? ''; // ディレクター名
 $length  = $movie['movie_length'] ?? '';
 
+$back_url = get_post_type_archive_link('creation') ?: home_url('/');
+$movie_term = get_term_by('slug', 'movie', 'creation_type');
+if ($movie_term && !is_wp_error($movie_term)) {
+  $movie_term_link = get_term_link($movie_term);
+  if (!is_wp_error($movie_term_link)) {
+    $back_url = $movie_term_link;
+  }
+}
 ?>
 
 <article class="c-single-creation p-creation-single">
@@ -27,7 +35,7 @@ $length  = $movie['movie_length'] ?? '';
   </div>
 <?php endif; ?>
 <div class="l-center c-single-creation__cautionary-note">画像をタップで再生されます</div>
-<article class="l-content l-content--inline">
+<section class="l-content l-content--inline">
 		<h1><?= esc_html($title); ?></h1>
 		<?php if ($dir || $length):  //director,再生時間があれば ?>
 			<ul class="l-cluster c-single-creation__labels">
@@ -42,7 +50,13 @@ $length  = $movie['movie_length'] ?? '';
 		  <?php if ($desc): ?>
 		<div class="c-text c-single-creation__text"><?= wp_kses_post($desc); ?></div>
 		  <?php endif; ?>
-	</article>
+		<?php
+		get_template_part('template-parts/component/back-link', '', [
+			'href' => $back_url,
+			'label' => '一覧に戻る',
+		]);
+		?>
+	</section>
 </article>
 <?php
 // $movie = get_field('movie_fields');
