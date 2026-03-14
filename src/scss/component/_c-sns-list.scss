@@ -1,0 +1,27 @@
+
+/* =========================
+   Card Layout Project
+    一覽リスト関連のプロジェクト用基本スタイル
+    -c-sns-list.scssと一対
+
+  ※設定禁止事項
+  •	font-size
+  •	color
+	•	border
+	•	padding
+	•	hover
+========================= */
+
+.c-sns-list {
+  display: flex;
+  justify-content: space-evenly ;
+  gap: var(--space-md);
+  padding: var(--space-xs) var(--space-sm) ;
+  background: var( --color-tertiary );
+  border-radius: var(--radius-md);
+  &__item{
+    align-content: center ;
+  }
+}
+
+

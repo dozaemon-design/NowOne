@@ -1,0 +1,28 @@
+
+/* =========================
+   Music Project
+    音楽関連のプロジェクト用スタイル
+  ※設定禁止事項
+  •	font-size
+	•	color
+	•	border
+	•	padding
+	•	hover
+========================= */
+
+// src/scss/project/_p-music.scss
+@use "../foundation/mixin" as m;
+@use "../foundation/variables" as v;
+
+// .p-music {
+// }
+
+.p-music-list {
+  display: grid;
+  gap: v.$space-md;
+  container-type: inline-size;
+}
+
+.p-music__item {
+  width: calc(100% / 3);
+}

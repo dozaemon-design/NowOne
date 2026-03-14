@@ -1,0 +1,24 @@
+/* =============================
+		Layout: Content Area
+ 		メインコンテンツエリア用スタイル
+		※設定事項
+	• l- は space scale を組み合わせるだけ
+	• c- は font / line-height / space を選ぶだけ
+	• p- は 例外を書く場所
+		※禁止事項
+			色
+			フォント
+			カードの並び
+			ボタンサイズ
+============================= */
+@use '../foundation/design-tokens' as dt;
+.l-content {
+  padding-top: var(--space-lg);
+	padding-bottom: var(--space-lg);
+	&--inline{
+		padding-inline: var(--space-lg) ;
+	    @media (max-width:dt.$bp-md ) {
+      padding: var(--space-md) var(--space-sm) ;
+    }
+	}
+}

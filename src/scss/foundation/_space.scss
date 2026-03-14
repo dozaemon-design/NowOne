@@ -1,0 +1,30 @@
+/* =========================
+   Foundation
+   Space Scale
+========================= */
+
+:root {
+  --space-3xs: 0.25rem; /* 4px */
+  --space-2xs: 0.5rem;  /* 8px */
+  --space-xs:  0.75rem; /* 12px */
+  --space-sm:  1rem;    /* 16px */
+  --space-md:  1.5rem;  /* 24px */
+  --space-lg:  2rem;    /* 32px */
+  --space-xl:  3rem;    /* 48px */
+  --space-2xl: 4rem;    /* 64px */
+}
+
+// :root { こういう考え方もある。
+//   /* 基本リズム */
+//   --font-base: 16px;
+//   --line-base: 1.5;
+//   --rhythm: calc(var(--font-base) * var(--line-base));
+
+//   /* space scale */
+//   --space-2xs: calc(var(--rhythm) * 0.25); /* 6px */
+//   --space-xs:  calc(var(--rhythm) * 0.5);  /* 12px */
+//   --space-sm:  calc(var(--rhythm) * 1);    /* 24px */
+//   --space-md:  calc(var(--rhythm) * 1.5);  /* 36px */
+//   --space-lg:  calc(var(--rhythm) * 2);    /* 48px */
+//   --space-xl:  calc(var(--rhythm) * 3);    /* 72px */
+// }

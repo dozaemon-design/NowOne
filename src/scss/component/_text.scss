@@ -1,0 +1,19 @@
+/* =============================
+   Component: text
+============================= */
+// 本文
+.c-text {
+  margin: 0;
+  font-size: var(--font-md);
+  line-height: var(--lh-base);
+}
+// リード文
+.c-text--lead {
+  font-size: var(--font-lg); /* 18px */
+  line-height: var(--lh-loose);
+}
+// 注釈・補足
+.c-text--note {
+  font-size: var(--font-sm); /* 14px */
+  color: var(--color-muted);
+}

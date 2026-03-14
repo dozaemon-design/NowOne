@@ -1,0 +1,13 @@
+/* =========================
+    header site logoコンポーネント
+    再利用前提
+ ========================= */
+
+@use '../foundation/design-tokens' as dt;
+
+// src/scss/component/_c-site-logo.scss
+.c-site-logo{
+		@media (max-width: dt.$bp-md){
+      width: 60vw ;
+		}
+}

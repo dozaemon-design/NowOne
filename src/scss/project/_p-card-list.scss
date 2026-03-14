@@ -1,0 +1,32 @@
+
+/* =========================
+   p-card-list
+    一覽リスト関連のプロジェクト用基本スタイル
+    -c-creation-card.scssと一対
+
+  ※設定禁止事項
+  •	font-size
+  •	color
+	•	border
+	•	padding
+	•	hover
+========================= */
+
+.p-card-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .p-card-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .p-card-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+

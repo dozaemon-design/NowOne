@@ -1,0 +1,28 @@
+/* =============================
+   p-media-list
+   - media を縦に並べる
+============================= */
+
+.p-media-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+// 区切り線一覽
+.p-media-list > * + * {
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--c-gray-700);
+}
+
+// レスポンシブで横→縦
+.p-media-list {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+@media (min-width: var(--bp-md)) {
+  .p-media-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

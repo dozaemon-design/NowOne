@@ -1,0 +1,83 @@
+
+/* =========================
+   Home Project
+    index.phpページ用スタイル
+  ※設定禁止事項
+  •	font-size
+	•	color
+	•	border
+	•	padding
+	•	hover
+========================= */
+@use '../foundation/design-tokens' as dt;
+.p-home {
+  position: relative;
+  width: 100%;
+  height: 100svh ;
+  @media (max-width:dt.$bp-md){
+    height: calc(100svh - var(--header-h));
+  }
+  &__title{
+    margin-bottom: 0 ;
+    --parallax-y: 0px;
+    transform: translateY(var(--parallax-y));
+    will-change: transform;
+    font-size: var(--font-fluid-home);
+    font-family: var(--font-jp);
+    font-weight: var(--font-w-sm);
+    line-height: 2.5;
+    text-shadow:
+      0 0 12px rgba(255,255,255,.15),
+      0 0 24px rgba(255,255,255,.08);
+  }
+  &__list{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+}
+
+#bg-lines {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+}
+
+.p-home__titleWrap {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  // height: calc(100svh - var(--space-lg)*2) ;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+////////////////////////
+// splitting.js 依存css
+.js-split {
+  .char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.6em) scale(0.96);
+    filter: blur(6px);
+  }
+
+  &.is-visible {
+    .char {
+      animation: charFade 1.2s cubic-bezier(.2,.6,.2,1) forwards;
+      animation-delay: calc(var(--char-index) * 0.06s);
+    }
+  }
+}
+
+@keyframes charFade {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+////////////////////////

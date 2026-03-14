@@ -1,0 +1,41 @@
+/* =============================
+   Component: hover invert
+   - hover/focus-within で反転
+   - 色はCSS変数で受け取る
+============================= */
+
+.c-hover-invert {
+  --c-hover-invert-bg: var(--color-tertiary);
+  --c-hover-invert-fg: var(--color-primary);
+  --c-hover-invert-border: var(--color-primary);
+
+  --c-hover-invert-chip-bg: var(--color-primary);
+  --c-hover-invert-chip-fg: var(--color-tertiary);
+  --c-hover-invert-chip-border: var(--color-primary);
+
+  --c-hover-invert-badge-bg: var(--color-primary);
+  --c-hover-invert-badge-fg: var(--color-tertiary);
+
+  transition: background-color .35s ease, border-color .35s ease, color .35s ease;
+}
+
+.c-hover-invert:hover,
+.c-hover-invert:focus-within {
+  background-color: var(--c-hover-invert-bg);
+  color: var(--c-hover-invert-fg);
+  border-color: var(--c-hover-invert-border);
+}
+
+.c-hover-invert:hover [data-hover-invert="chip"],
+.c-hover-invert:focus-within [data-hover-invert="chip"] {
+  background-color: var(--c-hover-invert-chip-bg);
+  color: var(--c-hover-invert-chip-fg);
+  border-color: var(--c-hover-invert-chip-border);
+}
+
+.c-hover-invert:hover [data-hover-invert="badge"],
+.c-hover-invert:focus-within [data-hover-invert="badge"] {
+  background-color: var(--c-hover-invert-badge-bg);
+  color: var(--c-hover-invert-badge-fg);
+}
+

@@ -1,0 +1,37 @@
+/* =========================
+    音楽カードコンポーネント
+    再利用前提
+ ========================= */
+
+.c-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.c-list > li + li {
+  margin-top: var(--space-xs);
+}
+
+.c-list--ordered {
+  counter-reset: list;
+}
+
+.c-list--ordered > li {
+  counter-increment: list;
+}
+
+.c-list--ordered > li::before {
+  content: counter(list) ".";
+  margin-right: 0.5em;
+}
+
+.c-list--marker > li::before {
+  content: "–";
+  margin-right: 0.5em;
+}
+
+.c-list--divided > li + li {
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}

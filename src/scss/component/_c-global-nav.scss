@@ -1,0 +1,201 @@
+/* =========================
+   Component: Global Nav
+   PCデフォルト
+========================= */
+
+.c-global-nav {
+  font-family: var(--font-en);
+  font-weight: var(--font-w-sm);
+
+  /* PCでは隠さない・動かさない */
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  transition: none;
+
+&__list {
+    padding: var(--space-lg) 0;
+  }
+
+  &__item {
+    margin-bottom: var(--space-md);
+    rotate: -10deg ;
+  }
+
+  &__link { //aタグwrap
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100% ;
+    // padding-right: 5rem ;
+    padding-bottom: var(--space-3xs);
+    text-decoration: none;
+    font-size: var(--font-g-nav) ;
+      img{
+        max-width: 3.3rem;
+      }
+    //装飾
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      background-color: currentColor;
+      transition-timing-function: cubic-bezier(.4,0,.2,1);
+    }
+
+    /* 横線 */
+    &::before {
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 1px;
+      transition: width 0.3s ease;
+    }
+
+    /* 縦線（矢印） */
+    &::after {
+      right: 4px;
+      bottom: -2px;
+      width: 1px;
+      height: 0;
+      transform: rotate(-45deg);
+      transition: height 0.3s ease;
+    }
+
+    &:hover {
+      &::before {
+        width: 100%;
+      }
+      &::after {
+        height: 16px;
+        transition-delay: 0.2s;
+      }
+    }
+    // 装飾終わり
+  }
+  /* 現在地 */
+  &__item.is-current {
+    .c-global-nav__link {
+      font-weight: var(--font-w-g-nav);
+      &::before {
+        width: 100%;
+      }
+      &::after {
+        height: 16px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .c-global-nav {
+    width: 90vw;
+    max-width: 420px;
+    height: 100dvh;
+    // background: var(--color-bg);
+
+    transform: translateX(100%);
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+      transform 0.35s ease,
+      opacity 0.2s ease,
+      visibility 0.2s;
+  }
+
+  .c-global-nav.is-open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+
+// .c-global-nav {
+//   // pointer-events: auto;
+
+//   // font-family: var(--font-en);
+//   // font-optical-sizing: auto;
+//   // font-weight: var(--font-w-sm);
+
+//   // background: var(--color-bg);
+//   // color: var(--color-text);
+
+//   // height: 100%;
+//   // padding: var(--space-lg);
+
+//   // /* 初期状態 */
+//   // transform: translateX(100%);
+//   // opacity: 0;
+//   // visibility: hidden;
+
+//   // transition:
+//   //   transform 0.35s var(--ease-default),
+//   //   opacity 0.2s ease,
+//   //   visibility 0.2s;
+
+//   // &.is-open {
+//   //   transform: translateX(0);
+//   //   opacity: 1;
+//   //   visibility: visible;
+//   // }
+
+//   /* ===== List ===== */
+//   &__list {
+//     margin: 0;
+//     padding: 0;
+//     list-style: none;
+//   }
+
+//   &__item {
+//     position: relative;
+//     margin-bottom: var(--space-md);
+//   }
+
+//   &__link {
+//     display: inline-block;
+//     position: relative;
+//     padding-right: var(--space-md);
+//     text-decoration: none;
+//     color: inherit;
+
+//     &::before,
+//     &::after {
+//       content: '';
+//       position: absolute;
+//       background-color: currentColor;
+//       transition-timing-function: cubic-bezier(.4,0,.2,1);
+//     }
+
+//     /* 横線 */
+//     &::before {
+//       left: 0;
+//       bottom: 0;
+//       width: 0;
+//       height: 1px;
+//       transition: width 0.3s;
+//     }
+
+//     /* 縦線（矢印） */
+//     &::after {
+//       right: 0;
+//       bottom: -1px;
+//       width: 1px;
+//       height: 0;
+//       transform: rotate(-45deg);
+//       transition: height 0.3s;
+//     }
+
+//     &:hover {
+//       &::before { width: 100%; }
+//       &::after  { height: 16px; }
+//     }
+
+//     &[aria-current="page"] {
+//       &::before { width: 100%; }
+//       &::after  { height: 16px; }
+//     }
+//   }
+// }

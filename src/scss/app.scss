@@ -1,0 +1,30 @@
+/* =========================
+   Foundation
+   ========================= */
+@use 'foundation';
+
+/* =========================
+   Layout
+   ========================= */
+@use 'layout';
+
+
+/* =========================
+   Setting Theme
+   ========================= */
+@use 'setting/theme';
+
+/* =========================
+   Component
+   ========================= */
+@use "component";
+
+/* =========================
+   Project
+   ========================= */
+@use "project";
+   // @use "project/p-global-nav"; // プロジェクト固有のグローバルナビゲーション
+// @use "project/p-creation-list";
+
+
+// @use "project/p-creation-single"; // Singleページ 共通用

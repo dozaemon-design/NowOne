@@ -1,0 +1,38 @@
+
+/* =========================
+   Music Project
+    音楽関連のプロジェクト用スタイル
+  ※設定禁止事項
+  •	font-size
+	•	color
+	•	border
+	•	padding
+	•	hover
+========================= */
+@use '../foundation/design-tokens' as dt;
+// .l-main{
+//   &.p-creation-single{
+//   padding: 0 ;
+//     @media (max-width:dt.$bp-md ) {
+//       padding: 0 var(--space-sm) ;
+//     }
+//   }
+// } //shingleのみpaddingキャンセル
+
+.l-content{
+  &.p-creation-single{
+  padding-top: 0 ;
+  padding-inline: var(--space-lg) ;
+  }
+} //shingleのみpadding付随
+
+.l-wrap--lg{
+  padding: var(--space-lg) ;
+}
+
+.p-creation-single{
+  &__img { max-width: 1024px; }
+  &--draft__img { max-width: calc( 1024px - var( --space-lg ) );
+  img{ border-radius: var(--radius-md);}
+  }
+}

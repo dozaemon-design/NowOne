@@ -1,0 +1,109 @@
+/* =============================
+   Component: page transition
+   - 8分割の縦スライスでページ遷移演出（clone版）
+============================= */
+
+.c-page-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  pointer-events: none;
+  visibility: hidden;
+  background: transparent;
+  --c-page-transition-bleed: 140px;
+}
+
+.c-page-transition.is-active {
+  visibility: visible;
+}
+
+/* 欠けた時の保険：背面をフェードで塗りつぶす */
+.c-page-transition::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-prymary);
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.c-page-transition[data-state='leave']::before {
+  opacity: 1;
+  transition-delay: .08s;
+}
+
+.c-page-transition__slice {
+  background: var(--color-prymary);
+  transform: translateY(0%) skewX(-10deg);
+  transform-origin: bottom;
+  opacity: 1;
+  will-change: transform, opacity;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 0 1px var(--color-prymary);
+}
+
+$c-page-transition-slices: 8;
+$c-page-transition-stagger: 0.06s;
+
+@for $i from 1 through $c-page-transition-slices {
+  .c-page-transition__slice:nth-of-type(#{$i}) {
+    --c-page-transition-delay: #{($i - 1) * $c-page-transition-stagger};
+  }
+}
+
+.c-page-transition__capture {
+  position: absolute;
+  left: calc(var(--c-page-transition-x, 0px) - var(--c-page-transition-bleed));
+  top: 0;
+  width: calc(100vw + (var(--c-page-transition-bleed) * 2));
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform, opacity;
+  transform: skewX(10deg);
+  transform-origin: bottom;
+  backface-visibility: hidden;
+}
+
+.c-page-transition[data-state='leave'] .c-page-transition__slice {
+  animation: none;
+}
+
+.c-page-transition[data-state='enter'] .c-page-transition__slice {
+  animation: c-page-transition-enter 1.2s ease forwards var(--c-page-transition-delay, 0s);
+}
+
+.c-page-transition[data-state='leave'] .c-page-transition__capture {
+  animation: c-page-transition-leave-capture 1.05s ease forwards var(--c-page-transition-delay, 0s);
+}
+
+@keyframes c-page-transition-leave-capture {
+  from {
+    transform: skewX(10deg) translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  to {
+    transform: skewX(10deg) translate3d(clamp(32px, 10vw, 120px), -110%, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes c-page-transition-enter {
+  from {
+    transform: translateY(0%) skewX(-10deg);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-110%) skewX(-10deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-page-transition {
+    display: none;
+  }
+}

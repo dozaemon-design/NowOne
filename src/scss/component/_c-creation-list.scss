@@ -1,0 +1,33 @@
+
+/* =========================
+   Card Layout Project
+    一覽リスト関連のプロジェクト用基本スタイル
+    -c-creation-card.scssと一対
+
+  ※設定禁止事項
+  •	font-size
+  •	color
+	•	border
+	•	padding
+	•	hover
+========================= */
+// 共通一覽
+@use '../foundation/design-tokens' as dt;
+.c-creation-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-md);
+
+  @media (max-width: dt.$bp-lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: dt.$bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
+
+  @media (max-width: dt.$bp-sm) {
+    grid-template-columns: 1fr;
+  }
+}

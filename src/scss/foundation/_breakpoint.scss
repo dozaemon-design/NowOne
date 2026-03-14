@@ -1,0 +1,21 @@
+/* =============================
+   Breakpoints
+============================= */
+
+:root {
+  --bp-sm: 30em;  /* 480px */
+  --bp-md: 48em;  /* 768px */
+  --bp-lg: 64em;  /* 1024px */
+}
+$bp-sm: 30em ;  /* 480px */
+$bp-md: 48em ;  /* 768px */
+$bp-lg: 64em;  /* 1024px */
+
+// 使用例
+// @media (max-width: var(--bp-md)) {
+//   ...
+// }
+
+// @media (min-width: var(--bp-lg)) {
+//   ...
+// }

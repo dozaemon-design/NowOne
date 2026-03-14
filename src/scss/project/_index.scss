@@ -1,0 +1,8 @@
+// ドメインページ特化
+@forward 'p-home'; //top page
+@forward 'p-creation-single'; //creation-single page
+@forward 'p-about'; //about page
+@forward 'p-contact-thanks'; //contact-thanks page
+
+// portfolio theme用のデザイン特化
+@forward 'p-portfolio'; //contact-thanks page

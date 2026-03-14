@@ -1,0 +1,16 @@
+/* =========================
+   Footer Component
+    ドメイン専用フッタースタイル
+========================= */
+.c-footer{
+	background-color: var(--color-secondary);
+	color: var(--color-primary);
+}
+
+.c-copyright {
+	font-size: var(--font-md);
+	font-family: var(--font-en);
+	letter-spacing: 0.05em;
+	line-height: 1.6;
+	color: var(--color-primary);
+}

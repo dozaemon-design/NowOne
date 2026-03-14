@@ -1,0 +1,19 @@
+/* =========================
+    creationカード アニメーションコンポーネント
+    再利用前提
+ ========================= */
+// 一覽用アニメーション
+.c-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+  transition-delay: var(--delay, 0s);
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+// end

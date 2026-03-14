@@ -1,0 +1,30 @@
+/* =========================
+  Layout: Main
+ メインレイアウト用スタイル
+	• l- は space scale を組み合わせるだけ
+	• c- は font / line-height / space を選ぶだけ
+	• p- は 例外を書く場所
+
+  ※禁止事項
+    色
+    フォント
+    カードの並び
+    ボタンサイズ
+========================= */
+@use '../foundation/design-tokens' as dt;
+.l-wrap {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+  @media (max-width:dt.$bp-md ) {
+    // display: block;
+    grid-template-columns: 1fr;
+  }
+}
+//     .child {
+//   /* 何も書いてなくても */
+//   min-width: auto; // ← これが効く
+// }
+
+.l-wrap > * {
+  min-width: 0;
+}

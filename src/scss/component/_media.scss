@@ -1,0 +1,47 @@
+/* =============================
+   Component: media
+============================= */
+
+.c-media {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.c-media__media {
+  flex-shrink: 0;
+}
+
+.c-media__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.c-media__body {
+  display: block;
+}
+
+.c-media__title {
+  margin: 0 0 var(--space-xs);
+  font-weight: 600;
+}
+
+.c-media__text {
+  margin: 0;
+}
+// 横並び
+.c-media--row {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+// 逆並び
+.c-media--reverse {
+  flex-direction: row-reverse;
+}
+
+// 中央揃え
+.c-media--center {
+  align-items: center;
+}

@@ -1,0 +1,24 @@
+/* =========================
+  Layout: Main
+ メインレイアウト用スタイル
+	• l- は space scale を組み合わせるだけ
+	• c- は font / line-height / space を選ぶだけ
+	• p- は 例外を書く場所
+
+  ※禁止事項
+    色
+    フォント
+    カードの並び
+    ボタンサイズ
+========================= */
+@use '../foundation/design-tokens' as dt;
+.l-main {
+  // padding-inline: var(--space-lg);
+}
+
+.l-main--portfolio {
+  padding: var(--space-lg) var(--space-lg) ;
+  @media (max-width:dt.$bp-md){
+    padding: var(--space-sm) var(--space-sm) ; ;
+  }
+}

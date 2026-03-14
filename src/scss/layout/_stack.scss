@@ -1,0 +1,49 @@
+/* =============================
+		Layout: Stack Area
+ 		縦積み用スタイル
+		※設定事項
+	• l- は space scale を組み合わせるだけ
+	• c- は font / line-height / space を選ぶだけ
+	• p- は 例外を書く場所
+		※禁止事項
+			色
+			フォント
+			カードの並び
+			ボタンサイズ
+============================= */
+
+/* 文書フロー用 */
+.l-stack {
+  > * + * {
+    margin-top: var(--space-md);
+  }
+}
+
+/* 強制縦レイアウト用 */
+.l-stack--flex {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+
+
+// .l-stack {
+//   display: flex;
+//   flex-direction: column;
+//   gap: var(--space-lg);
+// }
+
+// .l-content {
+//   padding: v.$space-lg;
+// 	&--pt-m{
+// 		padding-top: v.$space-md ;
+// 	}
+// 	&--pt-lg{
+// 		padding-top: v.$space-lg ;
+// 	}
+// 	&--ps-sm{
+// 		padding-right: v.$space-sm ;
+// 		padding-left: v.$space-sm ;
+// 	}
+// }

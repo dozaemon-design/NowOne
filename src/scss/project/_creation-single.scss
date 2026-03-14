@@ -1,0 +1,47 @@
+
+/* =========================
+   Music Project
+    音楽関連のプロジェクト用スタイル
+  ※設定禁止事項
+  •	font-size
+	•	color
+	•	border
+	•	padding
+	•	hover
+========================= */
+
+// src/scss/project/_p-creation_single.scss
+.p-creation-single {
+  &__img { max-width: 1024px; }
+}
+
+// シングルページのみ、.l-contentのpaddingを0にする
+.l-content {
+	&.p-creation-single {
+		padding: var(--space-xs);
+	}
+}
+
+.p-creation-single__youtube-badge {
+  margin: var(--space-lg) 0 0 0;
+    img {
+    // width: v.$img-size-xl;
+    background-color: red;
+    border-radius: var(--radius-md);
+    display: inline;
+    margin-right: 1rem;
+    vertical-align: middle;
+    }
+}
+
+.p-creation-single__streaming-badge {
+  margin: var(--space-lg) 0 0 0;
+    img {
+    // width: v.$img-size-xl;
+    background-color: var(--color-thrtiary);
+    border-radius: 4px;
+    display: inline;
+    margin-right: 1rem;
+    vertical-align: middle;
+    }
+}

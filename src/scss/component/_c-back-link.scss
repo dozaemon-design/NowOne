@@ -1,0 +1,40 @@
+/* =========================
+   Back Link Component
+   - 共通「一覧に戻る」ボタン
+========================= */
+
+.c-back-link {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-lg);
+  list-style: none;
+  padding: 0;
+}
+
+.c-back-link__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  width: fit-content;
+  font-family: var(--font-jp);
+  padding: var(--space-3xs) var(--space-sm);
+  border: .5px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: transparent;
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease;
+
+  &::before {
+    content: "";
+    width: .55em;
+    height: .55em;
+    border-left: .5px solid currentColor;
+    border-bottom: .5px solid currentColor;
+    transform: rotate(45deg);
+  }
+
+  &:hover {
+    background: var(--color-tertiary);
+    color: var(--color-prymary, var(--color-primary));
+    border-color: var(--color-tertiary);
+  }
+}

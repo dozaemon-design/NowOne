@@ -1,0 +1,11 @@
+/* =========================
+   Foundation
+   Fluid typography
+========================= */
+
+:root {
+  /* fluid text scale */
+  --font-fluid-sm: clamp(0.875rem, 0.85rem + 0.2vw, 1rem);
+  --font-fluid-md: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);  /* 16px → 18px */
+  --font-fluid-lg: clamp(1.125rem, 1.05rem + 0.4vw, 1.25rem);
+}

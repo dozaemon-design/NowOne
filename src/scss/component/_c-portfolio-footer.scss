@@ -1,0 +1,16 @@
+/* =========================
+   Footer Component
+    ドメイン専用フッタースタイル
+========================= */
+.c-footer--portfolio{
+	background-color: var(--color-secondary);
+	padding: var(--space-md) 0 ;
+}
+
+.c-footer--portfolio__copyright {
+	font-size: var(--font-md);
+	font-family: var(--font-primary);
+	letter-spacing: 0.05em;
+	line-height: 1.6;
+	color: var(--color-tertiary);
+}

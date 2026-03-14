@@ -1,0 +1,125 @@
+
+/* =========================
+   Home Project
+    index.phpページ用スタイル
+  ※設定禁止事項
+  •	font-size
+	•	color
+	•	border
+	•	padding
+	•	hover
+========================= */
+@use '../foundation/design-tokens' as dt;
+
+.p-about {
+  &--jp-text{
+    font-family: var(--font-jp);
+    font-size: var( --font-xl) ;
+  }
+  &--en-text{
+    font-family: var(--font-en);
+    font-size: var( --font-xl) ;
+  }
+  &__dtLists{
+    gap: 0 ;
+    grid-template-columns: 0.3fr 1fr;
+    margin-bottom: var(--space-md) ;
+    padding: var(--space-sm) ;
+    @media (max-width:dt.$bp-sm) {
+      grid-template-columns: 1fr 1fr;
+    }
+    @media (max-width:340px) {
+      grid-template-columns: 1fr;
+    }
+    &__items{
+      display: flex;
+      align-items: center;
+      font-family: var(--font-en);
+      border-bottom: 1px solid var(--color-tertiary) ;
+      padding-bottom: var(--space-xs) ;
+      margin-bottom: var(--space-sm);
+      @media (max-width:340px) {
+        border: none ;
+      }
+    }
+    &__label{
+      position: relative;
+      p{
+      display: inline-block;
+      color: var(--color-prymary) ;
+      font-weight: var(--font-w-lg);
+      background: var(--color-tertiary);
+      margin: 0 ;
+      padding: var(--space-2xs) var(--space-xs) ;
+      border-radius: var(--radius-sm);
+        &::after{
+          content: "";
+          width: 62px;
+          /* height: 0rem; */
+          position: absolute;
+          right: 8px;
+          bottom: 14px;
+          rotate: 30deg;
+          border-bottom: 1px solid var(--color-tertiary) ;
+          @media (max-width:340px) {
+            border: none ;
+          }
+        }
+      }
+    }
+  }
+  &__ulLists{
+    &__items{
+      list-style-type: disc;
+      margin: 0 1rem var(--space-xs);
+      font-family: var(--font-jp);
+    }
+  }
+
+}
+
+
+// #bg-lines {
+//   position: fixed;
+//   inset: 0;
+//   width: 100vw;
+//   height: 100vh;
+//   z-index: -1;
+// }
+
+// .p-home__titleWrap {
+//   position: relative;
+//   z-index: 1;
+//   height: 100%;
+//   // height: calc(100svh - var(--space-lg)*2) ;
+
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// }
+// ////////////////////////
+// // splitting.js 依存css
+// .js-split {
+//   .char {
+//     display: inline-block;
+//     opacity: 0;
+//     transform: translateY(0.6em) scale(0.96);
+//     filter: blur(6px);
+//   }
+
+//   &.is-visible {
+//     .char {
+//       animation: charFade 1.2s cubic-bezier(.2,.6,.2,1) forwards;
+//       animation-delay: calc(var(--char-index) * 0.06s);
+//     }
+//   }
+// }
+
+// @keyframes charFade {
+//   to {
+//     opacity: 1;
+//     transform: translateY(0) scale(1);
+//     filter: blur(0);
+//   }
+// }
+// ////////////////////////

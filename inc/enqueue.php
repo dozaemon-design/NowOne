@@ -4,12 +4,16 @@
  */
 
 function nowone_enqueue_assets() {
+	$is_portfolio_context = (is_singular('portfolio') || is_post_type_archive('portfolio') || is_tax('portfolio_genre'));
+	$has_app_bundle = file_exists(get_theme_file_path('/assets/build/app.js'));
+	$has_portfolio_bundle = file_exists(get_theme_file_path('/assets/build/app-portfolio.js'));
+	$use_bundle = $is_portfolio_context ? $has_portfolio_bundle : $has_app_bundle;
 
 	/* =========================
 	 * CSS
 	 * ========================= */
 	// Portfolio関連のページ（シングル、アーカイブ、タクソノミー）ではポートフォリオ専用のスタイルを読み込み、それ以外のページでは共通のスタイルを読み込む
-		if (is_singular('portfolio') || is_post_type_archive('portfolio') || is_tax('portfolio_genre')) {
+		if ($is_portfolio_context) {
 			wp_enqueue_style(
 				'nowone-app-portfolio',
 				get_template_directory_uri() . '/assets/css/app-portfolio.css',
@@ -18,23 +22,26 @@ function nowone_enqueue_assets() {
 				'all'
 			);
 
-			if (is_singular('portfolio')) {
-				wp_enqueue_script(
-					'nowone-portfolio-media-popup',
-				get_template_directory_uri() . '/assets/js/portfolio/media-popup.js',
-				[],
-				NOWONE_THEME_VERSION,
-				true
-			);
-		}
+			// JSをbundle化していない場合のみ個別読み込み
+			if (!$has_portfolio_bundle) {
+				if (is_singular('portfolio')) {
+					wp_enqueue_script(
+						'nowone-portfolio-media-popup',
+						get_template_directory_uri() . '/assets/js/portfolio/media-popup.js',
+						[],
+						NOWONE_THEME_VERSION,
+						true
+					);
+				}
 
-		wp_enqueue_script(
-			'nowone-portfolio-nav-chips',
-			get_template_directory_uri() . '/assets/js/portfolio/portfolio-nav-chips.js',
-			[],
-			NOWONE_THEME_VERSION,
-			true
-		);
+				wp_enqueue_script(
+					'nowone-portfolio-nav-chips',
+					get_template_directory_uri() . '/assets/js/portfolio/portfolio-nav-chips.js',
+					[],
+					NOWONE_THEME_VERSION,
+					true
+				);
+			}
 	} else {
 		wp_enqueue_style(
 			'nowone-app',
@@ -65,13 +72,26 @@ function nowone_enqueue_assets() {
 	/* =========================
 	 * JS
 	 * ========================= */
-	wp_enqueue_script( // jQuery Easing JS
-		'nowone-easing',
-		get_template_directory_uri() . '/assets/js/lib/jquery.easing.1.3.js',
-		array('jquery'),
-		NOWONE_THEME_VERSION,
-		true
-	);
+	if ($use_bundle) {
+		$bundle_file = $is_portfolio_context ? '/assets/build/app-portfolio.js' : '/assets/build/app.js';
+		$bundle_handle = $is_portfolio_context ? 'nowone-bundle-portfolio' : 'nowone-bundle';
+		wp_enqueue_script(
+			$bundle_handle,
+			get_template_directory_uri() . $bundle_file,
+			['jquery'],
+			NOWONE_THEME_VERSION,
+			true
+		);
+	} else {
+		wp_enqueue_script( // jQuery Easing JS
+			'nowone-easing',
+			get_template_directory_uri() . '/assets/js/lib/jquery.easing.1.3.js',
+			array('jquery'),
+			NOWONE_THEME_VERSION,
+			true
+		);
+	}
+
 	// Home text（Splitting.js使用）
 	if (is_front_page() || is_page('contact-thanks')) {
 		// Splitting.js
@@ -98,27 +118,45 @@ function nowone_enqueue_assets() {
 			true
 		);
 	}
-	wp_enqueue_script( // Base JS
-		'nowone-base',
-		get_template_directory_uri() . '/assets/js/base.js',
-		array('jquery'),
-		NOWONE_THEME_VERSION,
-		true
-	);
-	wp_enqueue_script( // Global Navigation JS
-		'nowone-global-nav',
-		get_template_directory_uri() . '/assets/js/creation/component/global-nav.js',
-		array('jquery'),
-		NOWONE_THEME_VERSION,
-		true
-	);
-	wp_enqueue_script( // YouTube embed JS
-		'nowone-youtube',
-		get_template_directory_uri() . '/assets/js/creation/component/youtube.js',
-		array('jquery'),
-		NOWONE_THEME_VERSION,
-		true
-	);
+
+	if (!$use_bundle) {
+		wp_enqueue_script( // Base JS
+			'nowone-base',
+			get_template_directory_uri() . '/assets/js/base.js',
+			array('jquery'),
+			NOWONE_THEME_VERSION,
+			true
+		);
+		wp_enqueue_script( // Global Navigation JS
+			'nowone-global-nav',
+			get_template_directory_uri() . '/assets/js/creation/component/global-nav.js',
+			array('jquery'),
+			NOWONE_THEME_VERSION,
+			true
+		);
+		wp_enqueue_script( // YouTube embed JS
+			'nowone-youtube',
+			get_template_directory_uri() . '/assets/js/creation/component/youtube.js',
+			array('jquery'),
+			NOWONE_THEME_VERSION,
+			true
+		);
+		wp_enqueue_script( // list animation JS
+			'nowone-reveal',
+			get_template_directory_uri() . '/assets/js/creation/component/reveal.js',
+			[],
+			NOWONE_THEME_VERSION,
+			true
+		);
+		wp_enqueue_script( // header height css var
+			'nowone-header',
+			get_template_directory_uri() . '/assets/js/creation/component/header.js',
+			[],
+			NOWONE_THEME_VERSION,
+			true
+		);
+	}
+
 	if (is_front_page()) { //トップページのみ読み込み
 		wp_enqueue_script(
 			'nowone-home',
@@ -128,20 +166,6 @@ function nowone_enqueue_assets() {
 			true
 		);
 	}
-	wp_enqueue_script( // list animation JS
-		'nowone-reveal',
-		get_template_directory_uri() . '/assets/js/creation/component/reveal.js',
-		[],
-		NOWONE_THEME_VERSION,
-		true
-	);
-	wp_enqueue_script( // list animation JS
-		'nowone-header',
-		get_template_directory_uri() . '/assets/js/creation/component/header.js',
-		[],
-		NOWONE_THEME_VERSION,
-		true
-	);
 	if (is_page('contact')) { // お問い合わせのみ読み込み
 		wp_enqueue_script(
 			'contact-form',

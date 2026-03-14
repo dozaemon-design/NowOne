@@ -1,0 +1,54 @@
+/* =============================
+   Mixins（最終版）
+   設計思想：
+   - 最終手段。基本使用しない。
+============================= */
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+@mixin hover {
+  @media (hover: hover) {
+    &:hover { @content; }
+  }
+}
+
+// @use "breakpoint" as bp;
+
+/* -----------------------------
+   SP only（〜767px）
+----------------------------- */
+// @mixin sp {
+//   @media (max-width: bp.$bp-sp-max) {
+//     @content;
+//   }
+// }
+
+/* -----------------------------
+   PC and up（768px〜）
+----------------------------- */
+// @mixin pc {
+//   @media (min-width: bp.$bp-pc-min) {
+//     @content;
+//   }
+// }
+
+/* -----------------------------
+   任意指定（保険・局所対応）
+----------------------------- */
+// @mixin mq-max($width) {
+//   @media (max-width: $width) {
+//     @content;
+//   }
+// }
+
+// @mixin mq-min($width) {
+//   @media (min-width: $width) {
+//     @content;
+//   }
+// }

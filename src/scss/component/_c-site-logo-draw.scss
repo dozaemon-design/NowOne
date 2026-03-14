@@ -1,0 +1,65 @@
+/* =============================
+   Component: site logo draw
+   - SVGの線を描くアニメーション（共通ヘッダー）
+============================= */
+
+.c-site-logo__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--color-tertiary);
+}
+
+.c-site-logo__svg--draw path {
+  fill: transparent;
+  stroke: currentColor;
+  stroke-opacity: 1;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  paint-order: stroke fill;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation:
+    c-site-logo-draw 1s ease forwards var(--c-site-logo-delay, 0s),
+    c-site-logo-fill .25s ease forwards calc(var(--c-site-logo-delay, 0s) + 1.15s),
+    c-site-logo-stroke-out .25s ease forwards calc(var(--c-site-logo-delay, 0s) + 1.45s);
+}
+
+/* path数が増えても破綻しにくいよう、先頭から順に遅延を自動付与 */
+$c-site-logo-max-paths: 80;
+$c-site-logo-stagger: 0.035s;
+
+@for $i from 1 through $c-site-logo-max-paths {
+  .c-site-logo__svg--draw path:nth-of-type(#{$i}) {
+    --c-site-logo-delay: #{($i - 1) * $c-site-logo-stagger};
+  }
+}
+
+@keyframes c-site-logo-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes c-site-logo-fill {
+  to {
+    fill: currentColor;
+  }
+}
+
+@keyframes c-site-logo-stroke-out {
+  to {
+    stroke-opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-site-logo__svg--draw path {
+    animation: none;
+    stroke-dashoffset: 0;
+    stroke-opacity: 0;
+    fill: currentColor;
+  }
+}

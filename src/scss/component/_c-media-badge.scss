@@ -1,0 +1,32 @@
+/* =========================
+   Title Component
+    見た目のパターン
+    h2でもdivでも使える
+    再利用前提
+========================= */
+.c-media-badge {
+  display: flex;
+  align-items: flex-start ;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+
+  img {
+    width: var(--img-size-lg);
+    height: auto;
+    border-radius: 4px;
+    display: block;
+  }
+
+  &__title {
+    font-size: var(--font-lg);
+    font-weight: 600;
+  }
+
+  &--youtube img {
+    background-color: var(--color-youtube);
+  }
+
+  &--streaming img {
+    background-color: var(--color-tertiary);
+  }
+}

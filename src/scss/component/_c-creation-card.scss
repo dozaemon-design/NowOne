@@ -1,0 +1,209 @@
+/* ==================================
+   c-creation-card
+   - ドメイン特化カード
+   - トップ / 一覧 共通
+   - 汎用 c-card の代替ではない
+   - 演出・構造込みで凍結
+================================== */
+.c-creation-card {
+  display: flex;
+  position: relative;
+  overflow: visible;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-primary);
+  min-width: 0 ; // 縮んでほしい子要素
+  // hoverボーダーアニメーション
+  // 共通部分一括指定
+  &::before,
+  &::after,
+  &__border,
+  &__border::before,
+  &__border::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+  }
+  // 上
+  &::before {
+    top: 0;
+    left: 0;
+    height: 0.7px;
+    width: 0;
+    background: var(--color-border);
+    transition: width 0.25s var(--ease-default) 0.75s; // 上の線は最後に逆表示
+  }
+  // 右
+  &::after {
+    top: 0;
+    right: 0;
+    width: 0.7px;
+    height: 0;
+    background: var(--color-border);
+    transition: height 0.25s var(--ease-default) 0.5s; // 右の線は3番目に逆表示
+  }
+  // 下・左 用ラッパ
+  &__border {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  // 下
+    &::before {
+      bottom: 0;
+      right: 0;
+      height: 0.7px;
+      width: 0;
+      background: var(--color-border);
+      transition: width 0.25s var(--ease-default) 0.25s;
+    }
+  // 左
+    &::after {
+      bottom: 0;
+      left: 0;
+      width: 0.7px;
+      height: 0;
+      background: var(--color-border);
+      transition: height 0.25s var(--ease-default) 0.0s;
+    }
+  }
+  &:hover {
+    &::before {
+      width: 100%; transition-delay: 0s, 0.25s;
+    }
+    &::after { height: 100%; transition-delay: 0.25s, 0.25s; }
+
+    .c-creation-card__border {
+      &::before { width: 100%; transition-delay: 0.5s, 0.75s;} // 下の線は3番目に表示
+      &::after { height: 100%; transition-delay: 0.75s, 0.95s;} // 左の線は最後に表示
+    }
+    img {
+      transform: scale(1.05);
+    }
+  }
+// こう変えろって言われたけど、適合するか検証（危ないので…）するのに時間かかるから一旦コメントアウトしておく
+// .c-creation-card {
+//   position: relative;
+
+//   &::before,
+//   &::after,
+//   &__border::before,
+//   &__border::after {
+//     content: "";
+//     position: absolute;
+//     background: var(--color-border);
+//     transition-timing-function: v.$ease-default;
+//   }
+
+//   // 上
+//   &::before {
+//     top: 0;
+//     left: 0;
+//     height: 0.7px;
+//     width: 0;
+//     transition: width 0.25s 0s;
+//   }
+
+//   // 右
+//   &::after {
+//     top: 0;
+//     right: 0;
+//     width: 0.7px;
+//     height: 0;
+//     transition: height 0.25s 0.25s;
+//   }
+
+//   // 下
+//   &__border::before {
+//     bottom: 0;
+//     right: 0;
+//     height: 0.7px;
+//     width: 0;
+//     transition: width 0.25s 0.5s;
+//   }
+
+//   // 左
+//   &__border::after {
+//     bottom: 0;
+//     left: 0;
+//     width: 0.7px;
+//     height: 0;
+//     transition: height 0.25s 0.75s;
+//   }
+
+//   &:hover {
+//     &::before { width: 100%; }
+//     &::after  { height: 100%; }
+
+//     .c-creation-card__border {
+//       &::before { width: 100%; }
+//       &::after  { height: 100%; }
+//     }
+
+//     img {
+//       transform: scale(1.05);
+//     }
+//   }
+// }
+
+  &__thumb {
+    aspect-ratio: 1 / 1; // 正方形固定（YouTube思想）
+    background: var(--color-black);
+    overflow: hidden;
+    // margin-bottom: var(--space-xs) ;
+    border-radius: var(--radius-md);
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s var(--ease-default);
+      }
+  }
+
+  &:active {// スマホ対応 タップ感のため縮小
+    transform: scale(0.94);
+  }
+  &:focus-within{
+    outline: none; // フォーカス時のアウトライン削除
+  }
+  &:focus-visible { // キーボードフォーカス表示
+    outline: none; // フォーカス時のアウトライン削除
+    border: 1px solid var(--color-border) ;
+  }
+
+  &__body {
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    padding: var(--space-xs);
+    flex: 1;
+  }
+  &__labels{
+    display: flex ;
+    overflow: visible;
+    flex-direction: row;
+    gap: var(--space-xs);}
+  &__label {
+    align-self: flex-start;
+    font-family: var(--font-en);
+    font-size: var(--font-sm);
+    padding: 0.1em 0.5em;
+    border: 1px solid var(--color-border);
+    border-radius: 2px;
+    line-height: 1.2;
+  }
+
+  &__title { // h2,h3変更
+    font-size: var(--font-lg);
+    font-weight: 900;
+    line-height: var(--lh-base);
+    margin-bottom: 0 ;
+
+    // 2行で揃えて高さを均一化
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}

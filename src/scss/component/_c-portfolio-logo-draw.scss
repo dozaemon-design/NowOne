@@ -1,0 +1,67 @@
+/* =============================
+   Component: portfolio logo draw
+   - SVGの線を描くアニメーション
+============================= */
+
+.c-portfolio-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--color-tertiary);
+}
+
+.c-portfolio-logo--draw path {
+  fill: transparent;
+  stroke: currentColor;
+  stroke-opacity: 1;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  paint-order: stroke fill;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation:
+    c-portfolio-logo-draw 1.4s ease forwards var(--c-portfolio-logo-delay, 0s),
+    c-portfolio-logo-fill .45s ease forwards calc(var(--c-portfolio-logo-delay, 0s) + 1.15s),
+    c-portfolio-logo-stroke-out .25s ease forwards calc(var(--c-portfolio-logo-delay, 0s) + 1.45s);
+}
+
+/* path数が変わっても破綻しにくいよう、先頭から順に少しずつ遅延 */
+.c-portfolio-logo--draw path:nth-of-type(1) { --c-portfolio-logo-delay: 0s; }
+.c-portfolio-logo--draw path:nth-of-type(2) { --c-portfolio-logo-delay: .08s; }
+.c-portfolio-logo--draw path:nth-of-type(3) { --c-portfolio-logo-delay: .16s; }
+.c-portfolio-logo--draw path:nth-of-type(4) { --c-portfolio-logo-delay: .24s; }
+.c-portfolio-logo--draw path:nth-of-type(5) { --c-portfolio-logo-delay: .32s; }
+.c-portfolio-logo--draw path:nth-of-type(6) { --c-portfolio-logo-delay: .40s; }
+.c-portfolio-logo--draw path:nth-of-type(7) { --c-portfolio-logo-delay: .48s; }
+.c-portfolio-logo--draw path:nth-of-type(8) { --c-portfolio-logo-delay: .56s; }
+.c-portfolio-logo--draw path:nth-of-type(9) { --c-portfolio-logo-delay: .64s; }
+.c-portfolio-logo--draw path:nth-of-type(10) { --c-portfolio-logo-delay: .72s; }
+
+@keyframes c-portfolio-logo-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes c-portfolio-logo-fill {
+  to {
+    fill: currentColor;
+  }
+}
+
+@keyframes c-portfolio-logo-stroke-out {
+  to {
+    stroke-opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-portfolio-logo--draw path {
+    animation: none;
+    stroke-dashoffset: 0;
+    stroke-opacity: 0;
+    fill: currentColor;
+  }
+}

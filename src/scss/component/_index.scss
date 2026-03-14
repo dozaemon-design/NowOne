@@ -1,0 +1,30 @@
+@forward 'heading';
+@forward 'text';
+@forward 'card';
+@forward 'list';
+@forward 'button';
+@forward 'link';
+@forward 'media';
+// ドメイン特化
+@forward 'c-site-logo';
+@forward 'c-site-logo-draw'; // siteロゴ線描画
+@forward 'c-page-transition'; // page遷移演出
+@forward 'c-global-nav'; //共通グローバルナビ
+@forward 'c-portfolio-nav'; //portfolio専用グローバルナビパーツ
+@forward 'c-portfolio-logo-draw'; //portfolioロゴ線描画
+@forward 'c-menu-toggle'; //共通グローバルナビパーツ
+@forward 'c-sns-list';
+@forward 'c-creation-list'; //共通一覽
+@forward 'c-creation-card'; //共通一覽
+@forward 'c-recommend'; //レコメンドブロック
+@forward 'c-streaming-card'; //共通詳細
+@forward 'c-media-badge'; //詳細タイトルアイコン用
+@forward 'c-single-creation'; //作品詳細（music, movie, artwork共通）
+@forward 'c-back-link'; // 共通「一覧に戻る」
+@forward 'c-form'; //form page
+@forward 'c-video'; // youtube再生時とのサイズ一致処理
+@forward 'c-reveal'; // サムネイルカードアニメーション
+@forward 'c-hover-invert'; // hover/focusで反転
+@forward 'c-hover-zoom'; // hover/focusで画像拡大
+@forward 'c-footer'; // 共通footerナビパーツ
+@forward 'c-portfolio-footer'; // Portfolio-footerナビパーツ

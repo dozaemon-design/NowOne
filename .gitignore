@@ -19,12 +19,28 @@
 # assets 配下すべて許可
 !/assets/
 !/assets/**
+# build artifacts (CIで生成するためコミットしない)
+/assets/build/
+/assets/build/**
 # inc 配下すべて許可
 !/inc/
 !/inc/**
 # template-parts 配下すべて許可
 !/template-parts/
 !/template-parts/**
+
+# build / tooling
+!/package.json
+!/package-lock.json
+!/pnpm-lock.yaml
+!/yarn.lock
+!/vite.config.*
+!/tsconfig.json
+!/.nvmrc
+
+# sources
+!/src/
+!/src/**
 
 # PHP テンプレート
 !/*.php

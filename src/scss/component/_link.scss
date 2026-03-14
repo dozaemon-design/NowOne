@@ -1,0 +1,21 @@
+/* =============================
+   Component: link
+============================= */
+
+.c-link {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.c-link:hover,
+.c-link:focus-visible {
+  text-decoration-thickness: 2px;
+}
+// 外部リンク
+.c-link--external::after {
+  content: "↗";
+  margin-left: 0.25em;
+  font-size: 0.85em;
+}
+

@@ -1,0 +1,227 @@
+
+/* =========================
+   Home Project
+    index.phpページ用スタイル
+  ※設定禁止事項
+  •	font-size
+	•	color
+	•	border
+	•	padding
+	•	hover
+========================= */
+@use '../foundation/design-tokens' as dt;
+
+.c-form {
+  // max-width: 720px;
+  // margin-inline: auto;
+
+  // CF7固有キャンセル
+  .wpcf7 form .wpcf7-response-output {
+    border: 1px solid var(--color-caution);
+    margin: var(--space-md) 0 var(--space-md) 0;
+  }
+
+  .wpcf7-not-valid {
+    padding: var(--space-sm) ;
+    border-color: var(--color-caution);
+  } // 入力エラー
+  .wpcf7-not-valid-tip{
+    color: var(--color-caution);
+    padding-top: var(--space-xs) ;
+  }
+}// c-form-end
+
+.c-form__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md) ;
+}
+
+.c-form__term {
+  font-weight: 900;
+  // font-size: 0.85rem;
+  p{
+    margin-bottom: var(--space-xs) ;
+  }
+}
+.c-form__desc{
+  color: var(--color-prymary) ;
+  input,textarea{
+    width: 100%;
+    padding: var(--space-xs) var(--space-sm);
+    background-color: var(--color-tertiary);
+    border-radius: var(--radius-md);
+    border: none ;
+  }
+}
+
+.wpcf7{
+  width: 70% ;
+  margin-inline: auto;
+  @media (max-width: dt.$bp-md){
+    width: 100% ;
+  }
+}
+/* =========================
+   Input Area
+========================= */
+.c-form__input {
+  display: grid;
+  gap: 1.5rem;
+  color: var(--color-prymary) ;
+}
+
+.c-form__field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.c-form__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.c-form__control input,
+.c-form__control textarea {
+  width: 100%;
+  // padding: 0.6rem 0.75rem;
+  padding: var(--space-md) ;
+}
+
+.c-form__actions {
+  display: grid;
+  gap: 1rem;
+  justify-content: center;
+  button{
+    font-size: var(--font-md);
+    // padding: var(--space-xs --space-md);
+  }
+  br{
+    display: none;
+  }
+}
+
+.c-form__btn--confirm {
+  justify-self: center;
+  padding: var(--space-xs) 4rem;
+  font-weight: 600;
+  border: 1px solid var(--color-tertiary);
+  border-radius: var(--radius-sm);
+  white-space: nowrap; // bottun時必至
+  transition: 0.7s;
+  &:hover{
+    opacity: 0.5 ;
+    transition: 0.7s;
+  }
+}
+
+/* =========================
+   Confirm Area
+========================= */
+.c-form__confirm {
+  display: grid;
+  gap: 2rem;
+  .c-form__desc{
+    color: var(--color-muted) ;
+    width: 100%;
+    padding: var(--space-xs) var(--space-sm);
+    background-color: var(--color-tertiary);
+    border-radius: var(--radius-md);
+    border: none ;
+  }
+  .c-form__actions{
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    place-content: center;
+    text-align: center;
+    /* justify-self: center; */
+  }
+  .c-form__btn--submit{ // 送信ボタン
+    width: 100%;
+    justify-self: center;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    color: var(--color-tertiary);
+    background-color: unset ;
+    border: 1px solid var(--color-tertiary);
+    border-radius: var(--radius-sm);
+    white-space: nowrap; // bottun時必至
+    cursor: pointer;
+    transition: 0.7s;
+    &:hover{
+      opacity: 0.5 ;
+      transition: 0.7s;
+    }
+  }
+  .c-form__btn--back{ // 戻るボタン
+    width: 100%;
+    padding: var(--space-xs) var(--space-2xl);
+    background:var(--color-muted);
+    color: var(--color-tertiary);
+    border: 1px solid var(--color-prymary);
+    border-radius: var(--radius-sm);
+    white-space: nowrap; // bottun時必至
+    transition: 0.7s;
+    &:hover{
+      opacity: 0.5 ;
+      transition: 0.7s;
+    }
+  }
+}
+
+.c-form__confirm-actions {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.c-form__back,
+.c-form__submit {
+  padding: 0.75rem 2rem;
+}
+
+
+
+.c-form__thanks{
+  &__title{
+    font-size: var(--font-fluid-thanks);
+    font-family: var(--font-en);
+  }
+}
+
+
+/* =========================
+   CF7 Kill Zone
+========================= */
+// .wpcf7-spinner {
+//   display: none !important;
+// }
+
+.screen-reader-response {
+  position: absolute;
+  inset: auto auto 0 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.wpcf7-response-output {
+  border: 1px solid var(--color-caution);
+}
+
+/* 初期状態は非表示 */
+.wpcf7-spinner {
+  visibility: hidden;
+  opacity: 0;
+  display: none ;
+}
+
+/* 送信中のみ表示 */
+.wpcf7-form.submitting .wpcf7-spinner {
+  visibility: visible;
+  opacity: 1;
+  display: block ;
+}

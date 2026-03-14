@@ -1,0 +1,169 @@
+/* =========================
+   Component: Global Nav
+    - ポートフォリオのグローバルナビ
+========================= */
+@use '../foundation/design-tokens' as dt;
+
+.c-portfolio-nav {
+  font-family: var(--font-en);
+  font-weight: var(--font-w-sm);
+
+  /* PCでは隠さない・動かさない */
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  transition: none;
+
+  &__list,
+  &__primary {
+    display: flex;
+    // padding: var(--space-lg) 0;
+    gap: var(--space-lg);
+    align-items: center;
+  }
+
+  &__item {
+    // margin-bottom: var(--space-md);
+    // rotate: -10deg ;
+  }
+
+  &__link { //aタグwrap
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100% ;
+    padding: var(--space-3xs) var(--space-md)  var(--space-3xs) 0;
+    text-decoration: none;
+    font-size: var(--font-g-nav) ;
+      img{
+        max-width: 3.3rem;
+      }
+    //装飾
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      background-color: currentColor;
+      transition-timing-function: cubic-bezier(.4,0,.2,1);
+    }
+
+    /* 横線 */
+    &::before {
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 1px;
+      transition: width 0.3s ease;
+    }
+
+    /* 縦線（矢印） */
+    &::after {
+      right: 4px;
+      bottom: -2px;
+      width: 1px;
+      height: 0;
+      transform: rotate(-45deg);
+      transition: height 0.3s ease;
+    }
+
+    &:hover {
+      &::before {
+        width: 100%;
+      }
+      &::after {
+        height: 16px;
+        transition-delay: 0.2s;
+      }
+    }
+    // 装飾終わり
+  }
+  /* 現在地 */
+  &__item.is-current {
+    .c-portfolio-nav__link {
+      font-weight: var(--font-w-g-nav);
+      &::before {
+        width: 100%;
+      }
+      &::after {
+        height: 16px;
+      }
+    }
+  }
+}
+
+.c-portfolio-nav__chips {
+  margin-top: var(--space-sm);
+}
+
+.c-portfolio-nav__chipsList {
+  display: flex;
+  gap: var(--space-xs);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  // padding-bottom: var(--space-2xs);
+}
+
+.c-portfolio-nav__chip {
+  scroll-snap-align: center;
+  flex: 0 0 auto;
+}
+
+.c-portfolio-nav__chipLink {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-lg);
+  font-weight: var(--font-w-md);
+  color: var(--color-text);
+  background: transparent;
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease;
+}
+
+.c-portfolio-nav__chip.is-current .c-portfolio-nav__chipLink,
+.c-portfolio-nav__chipLink[aria-current="page"] {
+  background: var(--color-tertiary);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .c-portfolio-nav__primary {
+    gap: var(--space-3xs);
+  }
+
+  .c-portfolio-nav__link {
+    font-size: var(--font-xl);
+  }
+  .c-portfolio-nav__chipLink {
+    font-size: var(--font-sm);
+    padding: 0 var(--space-2xs);
+  }
+}
+@media (max-width: 768px) {
+  // .c-portfolio-nav {
+  //   width: 90vw;
+  //   max-width: 420px;
+  //   height: 100dvh;
+  //   // background: var(--color-bg);
+
+  //   transform: translateX(100%);
+  //   opacity: 0;
+  //   visibility: hidden;
+
+  //   transition:
+  //     transform 0.35s ease,
+  //     opacity 0.2s ease,
+  //     visibility 0.2s;
+  // }
+
+  .c-portfolio-nav.is-open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+  }
+}

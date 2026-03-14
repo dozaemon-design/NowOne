@@ -1,0 +1,79 @@
+/* =========================
+   Navigation Animation Component
+    ナビゲーションのアニメーションスタイル
+    ナビゲーションの「アニメーション」だけ
+    ※設定事項
+    • l- は space scale を組み合わせるだけ
+    • c- は font / line-height / space を選ぶだけ
+    • p- は 例外を書く場所
+
+  ========================= */
+// component/_c-menu-toggle.scss
+@use '../foundation/design-tokens' as dt;
+
+.c-menu-toggle {
+  position: fixed;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  z-index: 1100;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: 1px solid currentColor;
+  cursor: pointer;
+  color: var(--color-tertiary); // ← currentColor の基準
+
+  @media (min-width: dt.$bp-md) {
+    // SP = タッチUI / PC = 常時表示 displayでコントロールする
+    display: none;
+  }
+  // Xボタンデザイン
+  &__line {
+    position: relative;
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: currentColor;
+    transition: background-color 0.2s ease;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: currentColor;
+      transition: transform 0.3s ease;
+    }
+
+    &::before {
+      top: -8px;
+    }
+
+    &::after {
+      top: 8px;
+    }
+  }
+
+  &[aria-expanded="true"] {
+    .c-menu-toggle__line {
+      background-color: var(--color-bg);
+      transition: background-color 0.2s ease;
+      &::before {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+
+      &::after {
+        transform: rotate(-45deg) translate(5px, -5px);
+      }
+    }
+  }
+}
+
+/* Lock body scroll when modal is open */
+body.is-locked {
+  overflow: hidden;
+}

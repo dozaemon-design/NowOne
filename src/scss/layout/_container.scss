@@ -1,0 +1,18 @@
+/* =============================
+		Layout: Center Area
+ 		コンテンツ幅用スタイル
+		※設定事項
+	• l- は space scale を組み合わせるだけ
+	• c- は font / line-height / space を選ぶだけ
+	• p- は 例外を書く場所
+		※禁止事項
+			色
+			フォント
+			カードの並び
+			ボタンサイズ
+============================= */
+.l-container {
+  max-width: 72rem; /* 1152px */
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+}

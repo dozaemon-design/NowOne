@@ -1,0 +1,38 @@
+/* =============================
+   Component: c-card
+============================= */
+
+// src/scss/component/_c-card.scss
+.c-card {
+  display: block;
+  background: #fff;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.c-card--shadow {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+/* 内部要素 */
+.c-card__media img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.c-card__body {
+  padding: 1.25rem;
+}
+
+.c-card__title {
+  margin-bottom: 0.5rem;
+}
+
+.c-card__text {
+  margin-bottom: 1rem;
+}
+
+.c-card__link {
+  margin-top: auto;
+}

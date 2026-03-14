@@ -1,0 +1,152 @@
+/* =========================
+   Global Navigation Styles
+    グローバルナビゲーション用スタイル
+  ※設定禁止事項
+  •	font-size
+	•	color
+	•	border
+	•	padding
+	•	hover
+========================= */
+
+.p-global-nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 90vw;
+  max-width: 420px;
+  height: 100dvh;
+  transition:
+    transform 0.35s ease,
+    opacity 0.2s ease,
+    visibility 0.2s;
+    z-index: 1000;
+  // 初期状態：画面外
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+
+  &.is-open{
+      transform: translateX(0);
+      opacity: 1;
+      visibility: visible;
+      // @include m.sp {
+      //   padding: v.$space-md ;
+      // }
+      // @include m.pc {
+      //   padding: v.$space-lg ;
+      // }
+    }
+
+  /* ---------------------------------
+  * PC表示
+  * --------------------------------- */
+  // @include m.pc {
+  //   position: static;     // fixed解除
+  //   transform: none;      // スライド解除
+  //   opacity: 1;
+  //   visibility: visible;
+  //   width: auto;
+  //   max-width: none;
+  //   height: auto;
+  //   background: transparent;
+  //   color: inherit;
+  //   transition: none;     // アニメーション無効
+  // }
+}
+
+.p-global-nav__list {
+  padding: 2rem 0 2rem 0 ;
+  // @include m.sp{
+  //   padding: 5rem 0 1rem 0 ;
+  // }
+}
+
+.p-global-nav__item {
+  position: relative;
+  margin-bottom: 1.5rem;
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    background-color: currentColor;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+  }
+
+  // 横線
+  &::before {
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 1px;
+    transition-property: width;
+    transition-delay: 0.3s; // ← 非hover時は後から消える
+  }
+
+  // 縦線
+    transform: rotate(-10deg);
+    transition: height 0.3s ease;
+    transition-delay: 0.3s; // 横線の後に出る
+    &::after {
+      right: 6px;
+      bottom: -1px;
+      width: 1px;
+      height: 0;
+      transform: rotate(-45deg);
+      transition-property: height;
+      transition-delay: 0s;
+    }
+  // hover時のアニメーション
+  &:hover {
+    &::before {
+      width: 100%;
+      transition-delay: 0s; // 横線は即スタート
+    }
+    &::after {
+      height: 16px; // 矢印の高さ
+      transition-delay: 0.3s; // 縦線は後から
+    }
+  }
+
+  // 現在地（is-current）は常に完成形
+  &.is-current {
+    &::before {
+      width: 100%;
+    }
+
+    &::after {
+      height: 16px;
+    }
+  }
+}
+
+
+.p-global-nav__link {
+  position: relative;
+  display: block;
+  // padding-bottom: v.$space-md;
+  color: #eaeaea;
+  text-decoration: none;
+  img{
+    display: inline;
+    vertical-align: middle;
+    // height:v.$space-xl;
+    // margin-right: v.$space-sm;
+  }
+  // @include m.pc {
+  //   transition: opacity 0.2s ease;
+  // }
+
+  .p-global-nav__item:hover & {
+    // @include m.pc {
+    //   opacity: 0.85;
+    // }
+  }
+
+  .p-global-nav__item.is-current & {
+    // font-weight: v.$font-weight-normal;
+    opacity: 1;
+  }
+
+}
