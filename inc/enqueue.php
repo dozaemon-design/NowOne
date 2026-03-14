@@ -82,6 +82,9 @@ function nowone_enqueue_assets() {
 			NOWONE_THEME_VERSION,
 			true
 		);
+		// Viteの出力はESM（importを含む）なので type="module" で読み込む
+		// - WPのバージョン/環境差で script attributes が効かないケースがあるため、後段の script_loader_tag でも保険を入れる
+		wp_script_add_data($bundle_handle, 'type', 'module');
 	} else {
 		wp_enqueue_script( // jQuery Easing JS
 			'nowone-easing',
@@ -177,6 +180,26 @@ function nowone_enqueue_assets() {
 	};
 } //end
 add_action('wp_enqueue_scripts', 'nowone_enqueue_assets');
+
+/**
+ * Ensure Vite bundles are loaded as ESM.
+ * - Fixes "Cannot use import statement outside a module"
+ */
+add_filter('script_loader_tag', function ($tag, $handle, $src) {
+	if (!in_array($handle, ['nowone-bundle', 'nowone-bundle-portfolio'], true)) {
+		return $tag;
+	}
+	// 既に type="module" の場合はそのまま
+	if (preg_match('/\btype=(["\'])module\1/i', $tag)) {
+		return $tag;
+	}
+	// type が付いている場合は module に差し替える（type="text/javascript" 等を潰す）
+	if (preg_match('/\btype=(["\']).*?\1/i', $tag)) {
+		return preg_replace('/\btype=(["\']).*?\1/i', 'type="module"', $tag, 1);
+	}
+	// type が無い場合は付与
+	return preg_replace('/^<script\b/i', '<script type="module"', $tag, 1);
+}, 10, 3);
 
 /* =========================
  * Contact Form 7 assets
