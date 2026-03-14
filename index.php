@@ -30,7 +30,7 @@ $creations = new WP_Query($args);
   </section>
 
   <section class="l-content l-content--inline">
-    <h2 class="c-heading--xl">New Creations</h2>
+    <h2 class="c-creation__title">New Creations</h2>
       <ul class="c-creation-list">
         <?php while ($creations->have_posts()) : $creations->the_post(); ?>
           <li class="c-creation-card c-reveal js-reveal">
