@@ -137,3 +137,4 @@ grad.addColorStop(1, `rgba(255,255,255,${alpha * 0.25})`);
 }
 
 draw();
+

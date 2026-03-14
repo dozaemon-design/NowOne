@@ -21,27 +21,6 @@ function nowone_enqueue_assets() {
 				NOWONE_THEME_VERSION,
 				'all'
 			);
-
-			// JSをbundle化していない場合のみ個別読み込み
-			if (!$has_portfolio_bundle) {
-				if (is_singular('portfolio')) {
-					wp_enqueue_script(
-						'nowone-portfolio-media-popup',
-						get_template_directory_uri() . '/assets/js/portfolio/media-popup.js',
-						[],
-						NOWONE_THEME_VERSION,
-						true
-					);
-				}
-
-				wp_enqueue_script(
-					'nowone-portfolio-nav-chips',
-					get_template_directory_uri() . '/assets/js/portfolio/portfolio-nav-chips.js',
-					[],
-					NOWONE_THEME_VERSION,
-					true
-				);
-			}
 	} else {
 		wp_enqueue_style(
 			'nowone-app',
@@ -53,13 +32,17 @@ function nowone_enqueue_assets() {
 
 		// Page transition（portfolio配下 / contact は除外）
 		if (!is_page(['contact', 'contact-thanks'])) {
-			wp_enqueue_script(
-				'nowone-page-transition',
-				get_template_directory_uri() . '/assets/js/common/page-transition.js',
-				[],
-				NOWONE_THEME_VERSION,
-				true
-			);
+			$page_transition_bundle = '/assets/build/page-transition.js';
+			if (file_exists(get_theme_file_path($page_transition_bundle))) {
+				wp_enqueue_script(
+					'nowone-page-transition',
+					get_template_directory_uri() . $page_transition_bundle,
+					[],
+					NOWONE_THEME_VERSION,
+					true
+				);
+				wp_script_add_data('nowone-page-transition', 'type', 'module');
+			}
 		}
 	}
 
@@ -85,14 +68,6 @@ function nowone_enqueue_assets() {
 		// Viteの出力はESM（importを含む）なので type="module" で読み込む
 		// - WPのバージョン/環境差で script attributes が効かないケースがあるため、後段の script_loader_tag でも保険を入れる
 		wp_script_add_data($bundle_handle, 'type', 'module');
-	} else {
-		wp_enqueue_script( // jQuery Easing JS
-			'nowone-easing',
-			get_template_directory_uri() . '/assets/js/lib/jquery.easing.1.3.js',
-			array('jquery'),
-			NOWONE_THEME_VERSION,
-			true
-		);
 	}
 
 	// Home text（Splitting.js使用）
@@ -113,70 +88,44 @@ function nowone_enqueue_assets() {
 			NOWONE_THEME_VERSION
 		);
 		// Home text用JS
-		wp_enqueue_script(
-			'home-text',
-			get_template_directory_uri() . '/assets/js/creation/production/home-text.js',
-			['splitting'],
-			NOWONE_THEME_VERSION,
-			true
-		);
-	}
-
-	if (!$use_bundle) {
-		wp_enqueue_script( // Base JS
-			'nowone-base',
-			get_template_directory_uri() . '/assets/js/base.js',
-			array('jquery'),
-			NOWONE_THEME_VERSION,
-			true
-		);
-		wp_enqueue_script( // Global Navigation JS
-			'nowone-global-nav',
-			get_template_directory_uri() . '/assets/js/creation/component/global-nav.js',
-			array('jquery'),
-			NOWONE_THEME_VERSION,
-			true
-		);
-		wp_enqueue_script( // YouTube embed JS
-			'nowone-youtube',
-			get_template_directory_uri() . '/assets/js/creation/component/youtube.js',
-			array('jquery'),
-			NOWONE_THEME_VERSION,
-			true
-		);
-		wp_enqueue_script( // list animation JS
-			'nowone-reveal',
-			get_template_directory_uri() . '/assets/js/creation/component/reveal.js',
-			[],
-			NOWONE_THEME_VERSION,
-			true
-		);
-		wp_enqueue_script( // header height css var
-			'nowone-header',
-			get_template_directory_uri() . '/assets/js/creation/component/header.js',
-			[],
-			NOWONE_THEME_VERSION,
-			true
-		);
+		$home_text_bundle = '/assets/build/home-text.js';
+		if (file_exists(get_theme_file_path($home_text_bundle))) {
+			wp_enqueue_script(
+				'home-text',
+				get_template_directory_uri() . $home_text_bundle,
+				['splitting'],
+				NOWONE_THEME_VERSION,
+				true
+			);
+			wp_script_add_data('home-text', 'type', 'module');
+		}
 	}
 
 	if (is_front_page()) { //トップページのみ読み込み
-		wp_enqueue_script(
-			'nowone-home',
-			get_template_directory_uri() . '/assets/js/creation/production/home.js',
-			['jquery'],
-			NOWONE_THEME_VERSION,
-			true
-		);
+		$home_bundle = '/assets/build/home.js';
+		if (file_exists(get_theme_file_path($home_bundle))) {
+			wp_enqueue_script(
+				'nowone-home',
+				get_template_directory_uri() . $home_bundle,
+				['jquery'],
+				NOWONE_THEME_VERSION,
+				true
+			);
+			wp_script_add_data('nowone-home', 'type', 'module');
+		}
 	}
 	if (is_page('contact')) { // お問い合わせのみ読み込み
-		wp_enqueue_script(
-			'contact-form',
-			get_theme_file_uri('/assets/js/creation/component/contact.js'),
-			[],
-			NOWONE_THEME_VERSION,
-			true
-		);
+		$contact_bundle = '/assets/build/contact.js';
+		if (file_exists(get_theme_file_path($contact_bundle))) {
+			wp_enqueue_script(
+				'nowone-contact',
+				get_template_directory_uri() . $contact_bundle,
+				[],
+				NOWONE_THEME_VERSION,
+				true
+			);
+			wp_script_add_data('nowone-contact', 'type', 'module');
+		}
 	};
 } //end
 add_action('wp_enqueue_scripts', 'nowone_enqueue_assets');
@@ -185,10 +134,19 @@ add_action('wp_enqueue_scripts', 'nowone_enqueue_assets');
  * Ensure Vite bundles are loaded as ESM.
  * - Fixes "Cannot use import statement outside a module"
  */
-add_filter('script_loader_tag', function ($tag, $handle, $src) {
-	if (!in_array($handle, ['nowone-bundle', 'nowone-bundle-portfolio'], true)) {
-		return $tag;
-	}
+	add_filter('script_loader_tag', function ($tag, $handle, $src) {
+		$module_handles = [
+			'nowone-bundle',
+			'nowone-bundle-portfolio',
+			'nowone-page-transition',
+			'home-text',
+			'nowone-home',
+			'nowone-contact',
+			'nowone-admin',
+		];
+		if (!in_array($handle, $module_handles, true)) {
+			return $tag;
+		}
 	// 既に type="module" の場合はそのまま
 	if (preg_match('/\btype=(["\'])module\1/i', $tag)) {
 		return $tag;
@@ -250,18 +208,22 @@ add_filter('wpcf7_load_css', function ($load) {
 	 * Admin JS
 	 * ========================= */
 	function nowone_admin_scripts( $hook ) {
+	
+	    if ( $hook !== 'post.php' && $hook !== 'post-new.php' ) return;
+	
+		$admin_bundle = '/assets/build/admin.js';
+		if (!file_exists(get_theme_file_path($admin_bundle))) return;
 
-    if ( $hook !== 'post.php' && $hook !== 'post-new.php' ) return;
-
-    wp_enqueue_script(
-        'nowone-admin',
-        get_template_directory_uri() . '/assets/js/admin.js',
-        ['jquery'],
-        NOWONE_THEME_VERSION,
-        true
-				);
-		}
-		add_action( 'admin_enqueue_scripts', 'nowone_admin_scripts' );
+	    wp_enqueue_script(
+	        'nowone-admin',
+	        get_template_directory_uri() . $admin_bundle,
+	        ['jquery'],
+	        NOWONE_THEME_VERSION,
+	        true
+					);
+		wp_script_add_data('nowone-admin', 'type', 'module');
+			}
+			add_action( 'admin_enqueue_scripts', 'nowone_admin_scripts' );
 
 	// Creation Type タクソノミーのチェックボックスを上部に固定
 		add_filter('wp_terms_checklist_args', function ($args, $post_id) {

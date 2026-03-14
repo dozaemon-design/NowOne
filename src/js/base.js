@@ -20,3 +20,4 @@ const lockBody = () =>
 
 const unlockBody = () =>
   document.body.classList.remove('is-locked');
+

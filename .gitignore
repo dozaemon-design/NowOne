@@ -9,8 +9,6 @@
 # 必要なものだけ許可
 !.gitignore
 
-# VSCode
-!.vscode/
 !/.github/
 
 !/acf-json/
