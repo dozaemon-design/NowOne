@@ -2,22 +2,54 @@
 /*===============================
  * IMAGE helpers
  * シングルページ専用
- * Webp対応用
- * Plug-inで実装するかは要件等。
+ * WebP/AVIF はプラグイン側（例：Converter for Media等）に任せる
+ * - 生成先ディレクトリや配信方式（rewrite / <picture>）が環境依存のため、テーマ側で拡張子固定のURLを組み立てない
 ===============================*/
+
+function nowone_get_attachment_id_from_acf($img): ?int {
+  if (empty($img)) return null;
+
+  if (is_numeric($img)) {
+    $id = (int) $img;
+    return $id > 0 ? $id : null;
+  }
+
+  if (is_array($img)) {
+    $id = $img['id'] ?? $img['ID'] ?? null;
+    if (is_numeric($id)) {
+      $id = (int) $id;
+      return $id > 0 ? $id : null;
+    }
+
+    // ACFの返り値がURLの場合に備える
+    $url = $img['url'] ?? null;
+    if (is_string($url) && $url !== '') {
+      $maybe_id = attachment_url_to_postid($url);
+      return $maybe_id ? (int) $maybe_id : null;
+    }
+  }
+
+  if (is_string($img) && $img !== '') {
+    $maybe_id = attachment_url_to_postid($img);
+    return $maybe_id ? (int) $maybe_id : null;
+  }
+
+  return null;
+}
 
 function get_img_data($img, $size = 'full') {
   if (!$img) return null;
 
-  $id = is_array($img) ? ($img['ID'] ?? null) : $img;
+  $id = nowone_get_attachment_id_from_acf($img);
   if (!$id) return null;
 
   $meta = wp_get_attachment_metadata($id);
   $size_meta = $meta['sizes'][$size] ?? null;
 
   return [
+    'id'     => $id,
+    'size'   => $size,
     'url'    => wp_get_attachment_image_url($id, $size),
-    'webp'   => wp_get_attachment_image_url($id, "{$size}_webp"),
     'alt'    => get_post_meta($id, '_wp_attachment_image_alt', true),
     'width'  => $size_meta['width']  ?? $meta['width'],
     'height' => $size_meta['height'] ?? $meta['height'],
@@ -66,7 +98,7 @@ function get_creation_image(
 }
 
 function render_creation_picture(
-  ?array $img,
+  $img,
   string $context = 'single',
   bool $is_lcp = false
 ) {
@@ -77,26 +109,32 @@ function render_creation_picture(
     'single'  => '(max-width: 768px) 100vw, 800px',
   ];
 
-  ob_start();
-?>
-<picture>
-  <?php if (!empty($img['webp']) && str_ends_with($img['webp'], '.webp')): ?>
-    <source srcset="<?= esc_url($img['webp']); ?>" type="image/webp">
-  <?php endif; ?>
+  // get_img_data() の返り値 / ACFそのまま / ID を許容
+  $attachment_id = null;
+  $size = 'full';
 
-  <img
-    src="<?= esc_url($img['url']); ?>"
-    alt="<?= esc_attr($img['alt']); ?>"
-    width="<?= esc_attr($img['width']); ?>"
-    height="<?= esc_attr($img['height']); ?>"
-    loading="<?= $is_lcp ? 'eager' : 'lazy'; ?>"
-    <?= $is_lcp ? 'fetchpriority="high"' : ''; ?>
-    decoding="async"
-    sizes="<?= esc_attr($sizes[$context] ?? '100vw'); ?>"
-  >
-</picture>
-<?php
-  return ob_get_clean();
+  if (is_array($img) && !empty($img['id'])) {
+    $attachment_id = (int) $img['id'];
+    $size = (string) ($img['size'] ?? $size);
+  } else {
+    $attachment_id = nowone_get_attachment_id_from_acf($img);
+  }
+
+  if (!$attachment_id || !wp_attachment_is_image($attachment_id)) {
+    return '';
+  }
+
+  $attrs = [
+    'loading'   => $is_lcp ? 'eager' : 'lazy',
+    'decoding'  => 'async',
+    'sizes'     => $sizes[$context] ?? '100vw',
+  ];
+  if ($is_lcp) {
+    $attrs['fetchpriority'] = 'high';
+  }
+
+  // 画像フォーマットの出し分け（WebP/AVIF）はWP/プラグイン側のフィルタに委譲
+  return wp_get_attachment_image($attachment_id, $size, false, $attrs);
 }
 
 function render_portfolio_acf_image($acf_value, string $size = 'portfolio_thumb', array $attrs = []) {

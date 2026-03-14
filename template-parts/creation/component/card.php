@@ -9,9 +9,7 @@ $link  = get_permalink();
 // ACF thumbnail
 $image = get_field('fg_thumb');
 
-$thumb_url = null;
-$thumb_alt = $title;
-$thumb_fallback_html = '';
+$thumb_html = '';
 $title_tag = $args['title_tag'] ?? 'h2';
 $is_lcp = (bool) ($args['is_lcp'] ?? false);
 $img_loading = $is_lcp ? 'eager' : 'lazy';
@@ -20,43 +18,33 @@ if (!in_array($title_tag, ['h2', 'h3'], true)) {
   $title_tag = 'h2';
 }
 
-if (is_array($image) && isset($image['sizes']['creation_thumb'])) {
-  $thumb_url = $image['sizes']['creation_thumb'];
-  $thumb_alt = $image['alt'] ?: $title;
-} elseif (has_post_thumbnail()) {
-  $thumb_attrs = [
-    'loading' => $img_loading,
-    'decoding' => 'async',
-    'alt' => $title,
-  ];
-  if ($img_fetchpriority) {
-    $thumb_attrs['fetchpriority'] = $img_fetchpriority;
-  }
+$thumb_attrs = [
+  'loading' => $img_loading,
+  'decoding' => 'async',
+  'sizes' => '(max-width: 768px) 100vw, 33vw',
+];
+if ($img_fetchpriority) {
+  $thumb_attrs['fetchpriority'] = $img_fetchpriority;
+}
 
-  $thumb_fallback_html = get_the_post_thumbnail(
-    get_the_ID(),
-    'creation_thumb',
-    $thumb_attrs
-  );
+$acf_attachment_id = function_exists('nowone_get_attachment_id_from_acf')
+  ? nowone_get_attachment_id_from_acf($image)
+  : (is_array($image) ? (int) ($image['ID'] ?? 0) : 0);
+
+if ($acf_attachment_id && wp_attachment_is_image($acf_attachment_id)) {
+  // ACF優先：IDベースで出力（WebP/AVIF等はプラグイン/フィルタに委譲）
+  $thumb_html = wp_get_attachment_image($acf_attachment_id, 'creation_thumb', false, $thumb_attrs);
+} elseif (has_post_thumbnail()) {
+  $thumb_html = get_the_post_thumbnail(get_the_ID(), 'creation_thumb', $thumb_attrs);
 }
 ?>
 
 <article class="c-creation-card">
   <a href="<?php echo esc_url($link); ?>" class="c-creation-card__link">
 
-    <?php if ($thumb_url || $thumb_fallback_html) : ?>
+    <?php if ($thumb_html) : ?>
       <figure class="c-creation-card__thumb">
-        <?php if ($thumb_url) : ?>
-          <img
-            src="<?php echo esc_url($thumb_url); ?>"
-            alt="<?php echo esc_attr($thumb_alt); ?>"
-            loading="<?php echo esc_attr($img_loading); ?>"
-            <?php echo $img_fetchpriority ? 'fetchpriority="' . esc_attr($img_fetchpriority) . '"' : ''; ?>
-            decoding="async"
-          >
-        <?php else : ?>
-          <?php echo $thumb_fallback_html; ?>
-        <?php endif; ?>
+        <?php echo $thumb_html; ?>
       </figure>
     <?php endif; ?>
     <div  class="c-creation-card__body">

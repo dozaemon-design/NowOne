@@ -41,11 +41,23 @@ $creations = new WP_Query($args);
                 $thumb_attrs = [
                   'loading'  => $is_lcp ? 'eager' : 'lazy',
                   'decoding' => 'async',
+                  'sizes'    => '(max-width: 768px) 100vw, 33vw',
                 ];
                 if ($is_lcp) {
                   $thumb_attrs['fetchpriority'] = 'high';
                 }
-                the_post_thumbnail('creation_thumb', $thumb_attrs);
+
+                // ACF（fg_thumb）優先：IDベースで出力（WebP/AVIFはプラグイン/フィルタに委譲）
+                $acf_thumb = get_field('fg_thumb');
+                $acf_thumb_id = function_exists('nowone_get_attachment_id_from_acf')
+                  ? nowone_get_attachment_id_from_acf($acf_thumb)
+                  : (is_array($acf_thumb) ? (int) ($acf_thumb['ID'] ?? 0) : 0);
+
+                if ($acf_thumb_id && wp_attachment_is_image($acf_thumb_id)) {
+                  echo wp_get_attachment_image($acf_thumb_id, 'creation_thumb', false, $thumb_attrs);
+                } else {
+                  the_post_thumbnail('creation_thumb', $thumb_attrs);
+                }
                 ?>
               </figure>
               <div class="c-creation-card__body">
