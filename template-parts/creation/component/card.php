@@ -21,7 +21,8 @@ if (!in_array($title_tag, ['h2', 'h3'], true)) {
 $thumb_attrs = [
   'loading' => $img_loading,
   'decoding' => 'async',
-  'sizes' => '(max-width: 768px) 100vw, 33vw',
+  // `.c-creation-list` のグリッドに合わせて最適な候補を選ばせる（過大な画像選択を防ぐ）
+  'sizes' => '(max-width: 480px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw',
 ];
 if ($img_fetchpriority) {
   $thumb_attrs['fetchpriority'] = $img_fetchpriority;
