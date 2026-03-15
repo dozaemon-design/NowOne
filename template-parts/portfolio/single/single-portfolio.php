@@ -122,7 +122,14 @@ $portfolio_media_items = [
         <?php if (has_post_thumbnail()) : ?>
           <div class="p-portfolio--content__media">
             <figure class="p-portfolio--content__thumb">
-              <?php the_post_thumbnail('portfolio_thumb'); ?>
+              <?php
+              echo get_the_post_thumbnail(get_the_ID(), 'portfolio_thumb', [
+                'loading'  => 'eager',
+                'decoding' => 'async',
+                'fetchpriority' => 'high',
+                'sizes'    => '(max-width: 768px) 100vw, 50vw',
+              ]);
+              ?>
             </figure>
           </div>
 	      <?php endif; ?>
@@ -133,7 +140,10 @@ $portfolio_media_items = [
 		        $img = $item['img'] ?? null;
 		        $title = (string) ($item['title'] ?? '');
 		        $img_html = ($img && function_exists('render_portfolio_acf_image'))
-		          ? render_portfolio_acf_image($img, 'portfolio_thumb', ['data-hover-zoom' => 'img'])
+		          ? render_portfolio_acf_image($img, 'portfolio_thumb', [
+                'data-hover-zoom' => 'img',
+                'sizes' => '(max-width: 768px) 100vw, (max-width: 1024px) 364px, 33vw',
+              ])
 		          : '';
 		        if (!$img_html) {
 		          continue;

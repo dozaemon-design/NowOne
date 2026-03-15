@@ -17,6 +17,8 @@
                 'data-hover-zoom' => 'img',
                 'loading'         => $is_lcp ? 'eager' : 'lazy',
                 'decoding'        => 'async',
+                // 2カラム一覧 + サムネ/本文が横並びなので、実寸に近い値で候補を選ばせる
+                'sizes'           => '(max-width: 768px) 100vw, 25vw',
               ];
               if ($is_lcp) {
                 $thumb_attrs['fetchpriority'] = 'high';
