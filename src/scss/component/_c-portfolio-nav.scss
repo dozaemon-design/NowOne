@@ -121,11 +121,28 @@
   font-weight: var(--font-w-md);
   color: var(--color-text);
   background: transparent;
-  transition: background-color .25s ease, color .25s ease, border-color .25s ease;
+  transition: background-color .5s ease, color .5s ease, border-color .5s ease;
+}
+
+.c-portfolio-nav__chipLink:hover,
+.c-portfolio-nav__chipLink:focus-visible {
+  background: var(--color-tertiary);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 .c-portfolio-nav__chip.is-current .c-portfolio-nav__chipLink,
 .c-portfolio-nav__chipLink[aria-current="page"] {
+  background: var(--color-tertiary);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+// 現在地チップはhover/focusしても不動（見た目を変えない）
+.c-portfolio-nav__chip.is-current .c-portfolio-nav__chipLink:hover,
+.c-portfolio-nav__chip.is-current .c-portfolio-nav__chipLink:focus-visible,
+.c-portfolio-nav__chipLink[aria-current="page"]:hover,
+.c-portfolio-nav__chipLink[aria-current="page"]:focus-visible {
   background: var(--color-tertiary);
   color: var(--color-primary);
   border-color: var(--color-primary);
