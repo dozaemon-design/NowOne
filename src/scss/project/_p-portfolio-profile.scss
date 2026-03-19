@@ -1,0 +1,269 @@
+@use '../foundation/design-tokens' as dt;
+
+.p-portfolio-profile {
+  width: min(100%, 960px);
+  margin-inline: auto;
+
+  &__title {
+    margin-bottom: var(--space-md);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 0.95;
+  }
+
+  &__thumb {
+    overflow: clip;
+    margin-bottom: var(--space-lg);
+    border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+    border-radius: 20px;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &__content {
+    display: grid;
+    gap: var(--space-md);
+    padding: clamp(1rem, 2vw, 1.5rem);
+    border: 1px solid color-mix(in srgb, var(--color-border) 40%, transparent);
+    border-radius: var(--radius-md);
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--color-secondary) 24%, transparent), transparent 18rem),
+      linear-gradient(135deg, color-mix(in srgb, var(--color-tertiary) 6%, transparent), transparent 45%);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .12);
+
+  }
+
+  &__section {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  &__heading {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin: var(--space-sm) 0 0;
+    padding-bottom: var(--space-xs);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+
+    &::before {
+      content: "";
+      width: 1.1em;
+      height: 1px;
+      background: currentColor;
+      opacity: .72;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: min( 200px, 40% );
+      height: 1px;
+      background: currentColor;
+      opacity: .3;
+    }
+  }
+
+  &__bio {
+    margin-bottom: 0;
+    font-size: var(--font-md);
+    line-height: 2;
+    color: color-mix(in srgb, var(--color-text) 94%, transparent);
+  }
+
+  &__skills {
+    display: grid;
+    grid-template-columns: minmax(120px, 160px) minmax(0, 1fr);
+    gap: var(--space-sm) var(--space-md);
+    margin: 0;
+    padding: var(--space-sm);
+    // border: 1px solid color-mix(in srgb, var(--color-border) 30%, transparent);
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--color-primary) 18%, transparent);
+  }
+
+  &__skillTitle {
+    margin: 0;
+    font-family: var(--font-primary);
+    font-size: var(--font-lg);
+    line-height: 1.4;
+    letter-spacing: .04em;
+    color: var(--color-primary);
+    padding: var(--space-sm) var(--space-xs) ;
+    background: var(--color-tertiary);
+    border-radius: 14px 0 0 14px ;
+      @media (max-width:dt.$bp-md){
+        border-radius: 14px 14px 0 0;
+        text-align: center;
+      }
+  }
+
+  &__skillBody {
+    margin: 0;
+    min-width: 0;
+    color: color-mix(in srgb, var(--color-text) 92%, transparent);
+  }
+
+  &__skillList,
+  &__textList {
+    display: grid;
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__skillItem,
+  &__textItem {
+    padding: .7rem .9rem;
+    border: 1px solid color-mix(in srgb, var(--color-border) 18%, transparent);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--color-secondary) 18%, transparent);
+    transition: transform .35s ease, border-color .35s ease, background-color .35s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--color-tertiary) 45%, transparent);
+      background: color-mix(in srgb, var(--color-tertiary) 10%, transparent);
+    }
+  }
+
+  &__skillItem {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  &__textItem {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  &__skillName {
+    display: block;
+    min-width: 0;
+    font-weight: 600;
+  }
+}
+
+.p-portfolio-profile__rating {
+  --rating: 0;
+  --fill-width: 0%;
+  display: inline-grid;
+  grid-template-columns: auto 88px auto;
+  align-items: center;
+  gap: .55rem;
+  min-width: 164px;
+  white-space: nowrap;
+  font-family: var(--font-en);
+  font-size: var(--font-sm);
+  line-height: 1;
+  color: var(--color-tertiary);
+}
+
+.p-portfolio-profile__ratingValue {
+  min-width: 2.6em;
+  text-align: right;
+  opacity: .82;
+}
+
+.p-portfolio-profile__ratingTrack {
+  position: relative;
+  display: block;
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--color-tertiary) 14%, transparent), color-mix(in srgb, var(--color-tertiary) 5%, transparent));
+}
+
+.p-portfolio-profile__ratingFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--fill-width);
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, #f7cf62 0%, #ffc94b 48%, #ffe594 100%);
+  box-shadow: 0 0 16px rgba(255, 206, 84, .28);
+  transition: width .8s cubic-bezier(.22, 1, .36, 1);
+}
+
+.p-portfolio-profile__ratingFill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, .66) 45%, transparent 70%);
+  transform: translateX(-120%);
+  animation: profile-rating-sheen 2.2s ease-in-out infinite;
+}
+
+.p-portfolio-profile__ratingStars {
+  font-size: .85rem;
+  letter-spacing: .1em;
+  color: #f7cf62;
+}
+
+.p-portfolio-profile__rating:not(.is-visible) .p-portfolio-profile__ratingFill {
+  width: 0;
+}
+
+@keyframes profile-rating-sheen {
+  0%,
+  65% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@media (max-width: dt.$bp-md) {
+  .p-portfolio-profile {
+    &__skills {
+      grid-template-columns: 1fr;
+    }
+
+    &__skillItem {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    &__textItem {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    &__rating {
+      grid-template-columns: auto minmax(72px, 1fr) auto;
+      min-width: 0;
+    }
+
+    &__skillRating {
+      justify-self: start;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-portfolio-profile__skillItem,
+  .p-portfolio-profile__textItem,
+  .p-portfolio-profile__ratingFill {
+    transition: none;
+  }
+
+  .p-portfolio-profile__ratingFill::after {
+    animation: none;
+  }
+}

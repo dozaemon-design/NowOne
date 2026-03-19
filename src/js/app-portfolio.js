@@ -4,3 +4,4 @@ import './creation/component/reveal.js';
 import './creation/component/header.js';
 import './portfolio/portfolio-nav-chips.js';
 import './portfolio/media-popup.js';
+import './portfolio/profile-skills.js';
