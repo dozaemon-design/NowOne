@@ -129,6 +129,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>
 
         $is_profile = is_singular('portfolio') && (get_post_field('post_name', get_queried_object_id()) === 'profile');
         $is_portfolio_section = (is_post_type_archive('portfolio') || is_tax('portfolio_genre') || is_singular('portfolio'));
+
+        global $wp;
+        $current_request_path = '';
+        if (isset($wp) && isset($wp->request)) {
+          $current_request_path = trim((string) $wp->request, '/');
+        }
+
+        // chips の is-current を付けないページは明示指定で管理する
+        $chip_current_excluded_paths = [
+          'portfolio/profile',
+          'portfolio/contact',
+          'contact',
+        ];
+        $should_disable_chip_current = in_array($current_request_path, $chip_current_excluded_paths, true);
         ?>
 
         <ul class="c-portfolio-nav__primary">
@@ -195,7 +209,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>
             $chips[] = [
               'label' => 'ALL',
               'url' => $portfolio_archive_url,
-              'is_current' => !is_tax('portfolio_genre'),
+              'is_current' => (!$should_disable_chip_current && !is_tax('portfolio_genre')),
             ];
 
             foreach ($ordered_terms as $term) {
@@ -209,7 +223,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>
               $chips[] = [
                 'label' => $term->name,
                 'url' => $term_url,
-                'is_current' => ($current_term_slug && isset($term->slug)) ? ($current_term_slug === $term->slug) : false,
+                'is_current' => (
+                  !$should_disable_chip_current
+                  && $current_term_slug
+                  && isset($term->slug)
+                ) ? ($current_term_slug === $term->slug) : false,
               ];
             }
             ?>
