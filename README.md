@@ -22,6 +22,86 @@ define('GTM_ID', 'GTM-XXXXXXX');
       ↓
  URL / テンプレート / クエリ判定に使用
 
+# functions.php Refactoring Policy
+## 目的
+- `functions.php` を肥大化させず、テーマの起動ファイルとして扱う
+- 機能追加時に「どこへ書くべきか」を迷わない状態を維持する
+- WordPress のフック処理を責務単位で分離し、保守しやすくする
+
+## 基本方針
+- `functions.php` には「定数定義」「共通読み込み」「初期化呼び出し」だけを残す
+- 実処理は `inc/` 配下へ分割する
+- `add_action()` / `add_filter()` は責務ごとのファイル内に閉じ込める
+- 1ファイル1責務を基本にする
+
+## 推奨ファイル構成
+```txt
+functions.php                 // テーマ全体の入口。読み込みと初期化のみ
+inc/
+├── theme-support.php         // add_theme_support, title-tag など
+├── head-cleanup.php          // emoji, wp_head, block style 整理
+├── seo.php                   // meta description, sitemap 制御
+├── rewrite-creation.php      // creation 系 permalink / rewrite
+├── security.php              // XML-RPC, wp-admin 制限
+├── helpers.php               // 純粋関数
+├── enqueue.php               // CSS / JS 読み込み
+└── portfolio.php             // portfolio 固有ロジック
+```
+
+## 実装ルール
+- 純粋関数は `helpers.php` か機能別 helper に置く
+- rewrite やアクセス制御のような影響範囲の広い処理は独立ファイルに分ける
+- 匿名関数を多用しすぎず、意図が続く処理は名前付き関数に寄せる
+- ファイル先頭に「このファイルの責務」を短く書く
+
+## コメント方針
+- コメントは「何をしているか」より「なぜ必要か」を優先して書く
+- WordPress 仕様に引っ張られる回避コードには理由を残す
+- 自明な代入や単純分岐にはコメントを書きすぎない
+
+例:
+```php
+/**
+ * 公開フロントだけで WordPress 標準の inline style を整理する。
+ * 管理画面とログイン中の確認環境は壊さないため除外する。
+ */
+function nowone_should_trim_wp_frontend_assets() {
+    return !is_admin() && !is_user_logged_in() && !is_customize_preview();
+}
+```
+
+## functions.php の最終イメージ
+```php
+<?php
+/**
+ * Theme bootstrap
+ * テーマ全体の読み込みと初期化のみを担当する。
+ */
+
+define('NOWONE_THEME_VERSION', filemtime(get_template_directory() . '/style.css'));
+
+$inc_files = [
+    'theme-support.php',
+    'helpers.php',
+    'seo.php',
+    'rewrite-creation.php',
+    'security.php',
+    'enqueue.php',
+];
+
+foreach ($inc_files as $file) {
+    $path = get_template_directory() . '/inc/' . $file;
+    if (file_exists($path)) {
+        require_once $path;
+    }
+}
+```
+
+## 判断基準
+- `functions.php` に 1つ機能を追加したくなったら、まず `inc/` に分けられないか考える
+- その処理が「SEO」「rewrite」「admin」「assets」など名前を付けられるなら分離対象
+- 逆に、全体ブート処理そのものだけは `functions.php` に残してよい
+
 # System Design
 theme/
 ├── archive-creation.php        ← 投稿タイプの入口
