@@ -244,6 +244,52 @@ add_action('init', function () {
 remove_action('wp_head', 'wp_generator');
 add_filter('the_generator', '__return_empty_string');
 
+/* --------------------------------
+ * 公開フロントの WordPress 標準出力を整理
+ * - 管理画面 / ログインユーザーには適用しない
+ * -------------------------------- */
+function nowone_should_trim_wp_frontend_assets() {
+  return !is_admin() && !is_user_logged_in() && !is_customize_preview();
+}
+
+add_action('init', function () {
+  if (!nowone_should_trim_wp_frontend_assets()) {
+    return;
+  }
+
+  // Emoji.
+  remove_action('wp_head', 'print_emoji_detection_script', 7);
+  remove_action('wp_print_styles', 'print_emoji_styles');
+  remove_filter('the_content_feed', 'wp_staticize_emoji');
+  remove_filter('comment_text_rss', 'wp_staticize_emoji');
+  remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
+
+  // Block / theme.json related styles on the public frontend.
+  remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
+  remove_action('wp_footer', 'wp_enqueue_global_styles', 1);
+  remove_action('wp_enqueue_scripts', 'wp_enqueue_stored_styles');
+  remove_action('wp_footer', 'wp_enqueue_stored_styles', 1);
+
+  // Stop adding sizes="auto" and the matching inline CSS fix.
+  add_filter('wp_img_tag_add_auto_sizes', '__return_false');
+  remove_action('wp_head', 'wp_enqueue_img_auto_sizes_contain_css_fix', 0);
+  remove_action('wp_head', 'wp_print_auto_sizes_contain_css_fix', 1);
+}, 20);
+
+add_action('wp_enqueue_scripts', function () {
+  if (!nowone_should_trim_wp_frontend_assets()) {
+    return;
+  }
+
+  wp_dequeue_style('wp-emoji-styles');
+  wp_deregister_style('wp-emoji-styles');
+  wp_dequeue_style('wp-block-library');
+  wp_dequeue_style('wp-block-library-theme');
+  wp_dequeue_style('classic-theme-styles');
+  wp_dequeue_style('global-styles');
+  wp_dequeue_style('global-styles-css-custom-properties');
+}, 100);
+
 /* CSS / JS の ?ver= をハッシュ化（セキュリティ強化 + キャッシュバスティング両立） */
 function nowone_hash_ver_param($src) {
   if (strpos($src, '?ver=')) {
