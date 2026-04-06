@@ -1,0 +1,84 @@
+/* =========================
+   Page Top Button
+========================= */
+.c-footer,
+.c-footer--portfolio {
+  position: relative;
+}
+
+.c-page-top {
+  --page-top-size: 4.5rem;
+  --page-top-offset: var(--space-md);
+
+  position: fixed;
+  right: var(--page-top-offset);
+  bottom: var(--page-top-offset);
+  z-index: var(--z-header);
+  display: grid;
+  place-items: center;
+  gap: var(--space-3xs);
+  inline-size: var(--page-top-size);
+  block-size: var(--page-top-size);
+  padding: var(--space-xs);
+  border: 1px solid var(--color-tertiary);
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--color-secondary) 92%, transparent);
+  color: var(--color-tertiary);
+  font-family: var(--font-en);
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(0.75rem);
+  transition:
+    opacity var(--motion-base) var(--ease-default),
+    transform var(--motion-base) var(--ease-default),
+    background-color var(--motion-fast) var(--ease-default),
+    color var(--motion-fast) var(--ease-default),
+    border-color var(--motion-fast) var(--ease-default),
+    visibility var(--motion-base) var(--ease-default);
+
+  &:focus-visible {
+    background: var(--color-tertiary);
+    color: var(--color-prymary, var(--color-primary));
+    border-color: var(--color-prymary, var(--color-primary));
+    outline: 2px solid var(--color-tertiary);
+    outline-offset: 3px;
+  }
+
+  &.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  &.is-stopped {
+    position: absolute;
+    right: var(--page-top-offset);
+    bottom: calc(100% + var(--page-top-offset));
+  }
+
+  @media (max-width: 1023px) {
+    --page-top-size: 3.75rem;
+    --page-top-offset: var(--space-sm);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .c-page-top:hover {
+    background: var(--color-tertiary);
+    color: var(--color-prymary, var(--color-primary));
+    border-color: var(--color-prymary, var(--color-primary));
+  }
+}
+
+.c-page-top__icon {
+  font-size: var(--font-lg);
+}
+
+.c-page-top__label {
+  font-size: var(--font-xs);
+  letter-spacing: 0.12em;
+}
