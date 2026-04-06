@@ -36,13 +36,23 @@
     inset: 0;
     z-index: 0;
     background: color-mix(in srgb, var(--color-bg) 14%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-tertiary) 52%, transparent);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     pointer-events: none;
     transition:
       background-color 0.25s ease,
       border-color 0.25s ease;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border: 1px solid color-mix(in srgb, var(--color-tertiary) 58%, transparent);
+    mix-blend-mode: difference;
+    pointer-events: none;
+    transition: border-color 0.25s ease;
   }
 
   @media (min-width: dt.$bp-md) {
@@ -95,7 +105,11 @@
 
     &::before {
       background-color: var(--color-tertiary);
+    }
+
+    &::after {
       border-color: var(--color-tertiary);
+      mix-blend-mode: normal;
     }
 
     .c-menu-toggle__line {
