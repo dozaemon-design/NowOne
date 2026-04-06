@@ -14,24 +14,20 @@
   right: var(--page-top-offset);
   bottom: var(--page-top-offset);
   z-index: var(--z-header);
+  isolation: isolate;
   display: grid;
   place-items: center;
   gap: var(--space-3xs);
   inline-size: var(--page-top-size);
   block-size: var(--page-top-size);
   padding: var(--space-xs);
-  border: 1px solid color-mix(in srgb, var(--color-tertiary) 52%, transparent);
+  border: 0;
   border-radius: 9999px;
-  background:
-    linear-gradient(180deg, color-mix(in srgb, #000 4%, transparent), color-mix(in srgb, #000 10%, transparent)),
-    color-mix(in srgb, var(--color-bg) 8%, transparent);
+  background: transparent;
   color: var(--color-tertiary);
   font-family: var(--font-en);
   line-height: 1;
   cursor: pointer;
-  mix-blend-mode: difference;
-  backdrop-filter: blur(10px) saturate(120%);
-  -webkit-backdrop-filter: blur(10px) saturate(120%);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -44,13 +40,33 @@
     border-color var(--motion-fast) var(--ease-default),
     visibility var(--motion-base) var(--ease-default);
 
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border: 1px solid color-mix(in srgb, var(--color-tertiary) 52%, transparent);
+    border-radius: inherit;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, #000 4%, transparent), color-mix(in srgb, #000 10%, transparent)),
+      color-mix(in srgb, var(--color-bg) 8%, transparent);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    pointer-events: none;
+    transition:
+      background-color var(--motion-fast) var(--ease-default),
+      border-color var(--motion-fast) var(--ease-default);
+  }
+
   &:focus-visible {
-    background: var(--color-tertiary);
     color: var(--color-prymary, var(--color-primary));
-    border-color: var(--color-prymary, var(--color-primary));
-    mix-blend-mode: normal;
     outline: 2px solid var(--color-tertiary);
     outline-offset: 3px;
+
+    &::before {
+      background: var(--color-tertiary);
+      border-color: var(--color-prymary, var(--color-primary));
+    }
   }
 
   &.is-visible {
@@ -74,18 +90,33 @@
 
 @media (hover: hover) and (pointer: fine) {
   .c-page-top:hover {
-    background: var(--color-tertiary);
     color: var(--color-prymary, var(--color-primary));
-    border-color: var(--color-prymary, var(--color-primary));
-    mix-blend-mode: normal;
+
+    &::before {
+      background: var(--color-tertiary);
+      border-color: var(--color-prymary, var(--color-primary));
+    }
   }
 }
 
 .c-page-top__icon {
+  position: relative;
+  z-index: 1;
   font-size: var(--font-lg);
+  mix-blend-mode: difference;
 }
 
 .c-page-top__label {
+  position: relative;
+  z-index: 1;
   font-size: var(--font-xs);
   letter-spacing: 0.12em;
+  mix-blend-mode: difference;
+}
+
+.c-page-top:hover .c-page-top__icon,
+.c-page-top:hover .c-page-top__label,
+.c-page-top:focus-visible .c-page-top__icon,
+.c-page-top:focus-visible .c-page-top__label {
+  mix-blend-mode: normal;
 }
