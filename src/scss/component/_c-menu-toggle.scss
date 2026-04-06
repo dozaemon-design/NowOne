@@ -20,11 +20,14 @@
   height: 44px;
   display: grid;
   place-items: center;
-  background: none;
+  background: color-mix(in srgb, var(--color-bg) 14%, transparent);
   border: 1px solid currentColor;
   cursor: pointer;
   color: var(--color-tertiary); // ← currentColor の基準
   mix-blend-mode: difference;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-tertiary) 8%, transparent);
   transition:
     color 0.25s ease,
     background-color 0.25s ease,
