@@ -24,6 +24,7 @@
   border: 1px solid currentColor;
   cursor: pointer;
   color: var(--color-tertiary); // ← currentColor の基準
+  mix-blend-mode: difference;
   transition:
     color 0.25s ease,
     background-color 0.25s ease,
@@ -76,6 +77,7 @@
     background-color: var(--color-tertiary);
     border-color: var(--color-tertiary);
     color: var(--color-bg);
+    mix-blend-mode: normal;
 
     .c-menu-toggle__line {
       background-color: transparent;
