@@ -86,8 +86,13 @@ function nowone_get_portfolio_profile_post_id() {
     return $cached;
   }
 
-  $post = get_page_by_path('profile', OBJECT, 'portfolio');
-  $cached = ($post && !is_wp_error($post)) ? (int) $post->ID : 0;
+  $posts  = get_posts([
+    'name'        => 'profile',
+    'post_type'   => 'portfolio',
+    'post_status' => 'publish',
+    'numberposts' => 1,
+  ]);
+  $cached = !empty($posts) ? (int) $posts[0]->ID : 0;
   return $cached;
 }
 

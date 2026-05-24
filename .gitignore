@@ -56,3 +56,9 @@
 # .AppleDouble .LSOverride対策
 ._*
 **/._*
+
+# Claude Code 関連はローカル限定（公開リポに含めない）
+# allowlist 形式の都合で明示的にも除外しておく
+/CLAUDE.md
+/.claude/
+/.claude/**
